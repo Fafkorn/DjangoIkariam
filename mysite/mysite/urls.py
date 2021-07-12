@@ -1,5 +1,4 @@
 """mysite URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
@@ -20,9 +19,7 @@ from . import settings
 from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
-    path('polls/', include('polls.urls')),
     path('helper/', include('helper.urls')),
     path('admin/', admin.site.urls),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
