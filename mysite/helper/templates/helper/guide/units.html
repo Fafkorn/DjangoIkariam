@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/guide/units.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+    <title>Poradnik - Jednostki</title>
+    {% load helper_extras %}
+</head>
+<body>
+    {% load widget_tweaks %}
+
+    {% include "helper/navigation.html" %}
+
+    <div class="main-div">
+        {% for unit in units %}
+            <div class="card-div">
+                <table>
+                    <tr>
+                        <td><img src="{{unit.big_image_path.url}}" alt="img" width="169" height="154"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            {{unit.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="break-line"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if unit.wood_costs != 0 %}<img title="Drewno" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{unit.wood_costs}} {% endif %}
+                            {% if unit.wine_costs != 0 %}<img title="Wino" src="{% static "helper/icons/icon_wine.png" %}" alt="" width="25px" height="20" > {{unit.wine_costs}} {% endif %}
+                            {% if unit.crystal_costs != 0 %}<img title="Kryształ" src="{% static "helper/icons/icon_glass.png" %}" alt="" width="25px" height="20" > {{unit.crystal_costs}} {% endif %}
+                            {% if unit.sulfur_costs != 0 %}<img title="Siarka" src="{% static "helper/icons/icon_sulfur.png" %}" alt="" width="25px" height="20" > {{unit.sulfur_costs}} {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <img title="Koszty utrzymania" src="{% static "helper/upkeep.png" %}" alt="" width="25px" height="20" > {{unit.hour_costs}}
+                            <img title="Obywatele" src="{% static "helper/icons/icon_citizen.png" %}" alt="" width="19px" height="20" > {{unit.men_costs}}
+                            <img title="Czas budowy" src="{% static "helper/icons/icon_time.png" %}" alt="" width="19px" height="20" > {{unit.time|get_time}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="break-line"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img title="Obrażenia" src="{% static "helper/icons/damage.png" %}" alt="" width="25px" height="25" > {{unit.damage}}
+                            {% if unit.damage_upgrade > 0 %} (+{{unit.damage_upgrade}}) {% endif %}
+                            <img title="Pancerz" src="{% static "helper/icons/armor.png" %}" alt="" width="25px" height="25" > {{unit.armor}}
+                            {% if unit.damage_upgrade > 0 %} (+{{unit.armor_upgrade}}) {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img title="Punkty zdrowia" src="{% static "helper/icons/hit_points_icon.png" %}" alt="" width="25px" height="25" > {{unit.hit_points}}
+                            <img title="Szybkość" src="{% static "helper/icons/speed_icon.png" %}" alt="" width="25px" height="25" > {{unit.speed}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="break-line"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Wielkość: {{unit.size}}</td>
+                    </tr>
+                    <tr>
+                        <td>Koszary: {{unit.barracks_level}}</td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

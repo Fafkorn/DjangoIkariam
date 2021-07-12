@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'helper/admin.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+        <title>Admin</title>
+    </head>
+<body>
+    <div class="main-div" style="width: 350px; float: left;">
+        <h5>Ranking</h5>
+        <form action="{% url 'helper:web_scrap' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <textarea name="textarea"></textarea>
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+        <hr>
+        <h5>Wyspa</h5>
+        <form action="{% url 'helper:web_scrap_island' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <textarea name="textarea"></textarea>
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+        <hr>
+        <h5>Miasto</h5>
+        <form action="{% url 'helper:web_scrap_town' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <textarea name="textarea"></textarea>
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+    </div>
+    <div class="main-div" style="width: 350px; float: left;">
+        <h5>Wszystkie wyspy</h5>
+        <form action="{% url 'helper:web_scrap_all_islands' %}" method="post">
+            {% csrf_token %}
+            <label>Cookie</label>
+            <input class="form-control" type="text" maxlength="2000" name="cookie">
+            <label>Hasło</label>
+            <input class="form-control" type="text" maxlength="5" name="password">
+            <label></label>
+            <button type="submit" class="btn btn-success submit-btn">Przeszukaj</button>
+        </form>
+    </div>
+</body>
+</html>

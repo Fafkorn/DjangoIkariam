@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'helper/users.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+        <title>Użytkownicy</title>
+        <script>
+            $(function(){
+                $('#order-select').change(function(){
+                    $('#order-form').submit();
+                });
+            });
+        </script>
+        {% load helper_extras %}
+
+    </head>
+
+    <body>
+        {% load widget_tweaks %}
+
+        {% include "helper/navigation.html" %}
+
+        <div class="main-div">
+            <div class="row visited-users-div">
+                {% for user in visited_users %}
+                    <a class="btn btn-info btn-visit" href="{% url 'helper:user_towns' user.id %}">{{user.user_name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="page-div">
+            <div>
+                <form action="{% url 'helper:add_user' %}" method="post">
+                    {% csrf_token %}
+                    <input style="width: 200px; float: left" class="form-control"  type="text" name="user_name" placeholder="Nazwa użytkownika">
+                    <button  class="btn btn-success btn-action" type="submit">Dodaj</button>
+                </form>
+
+            </div>
+            <div>
+                {% if buttons %}
+                {% for button in buttons %}
+                    <a href="{% url 'helper:users' %}?page={{button.1}}&username_search={{username_search}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
+                {% endfor %}
+                {% block content %}
+                    <div style="display: inline-block">
+                        <form action="{% url 'helper:users'%}" method="get" id="order-form" class="form-inline" >
+                            {% csrf_token %}
+                            <label style="margin-left: 15px; margin-right: 5px;">Sortuj według</label>
+                            {% render_field my_filter.form.order_by class="form-control order-select" id="order-select"  %}
+                            <button class="btn btn-success btn-action" type="submit" style="display: inline-block">Zastosuj</button>
+                        </form>
+                    </div>
+                {% endblock %}
+                {% else %}
+                <h5>Nie znaleziono graczy</h5>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="users-div">
+            {% if users_list %}
+                <table class="table">
+                    <tr>
+                        <th>#</th>
+                        <th>Nazwa</th>
+                        <th>Całkowity wynik</th>
+                        <th>Mistrzowie budowy</th>
+                        <th>Poziomy budynków</th>
+                        <th>Naukowcy</th>
+                        <th>Poziomy badań</th>
+                        <th>Generałowie</th>
+                        <th>Złoto</th>
+                        <th>Punkty ofensywy</th>
+                        <th>Punkty obrony</th>
+                        <th>Handlarz</th>
+                        <th>Surowce</th>
+                        <th>Datki</th>
+                        <th>Punkty Abordażu</th>
+                    </tr>
+                    {% for user in users_list %}
+                        <tr>
+                            <td>{{forloop.counter|get_pos:page_num }}</td>
+                            <td><a class="player-a" href="{% url 'helper:user_towns' user.id %}">
+                                {{ user.user_name }}
+                                {% if user.alliance %}
+                                    [{{user.alliance}}]
+                                {% endif %}
+                            </a></td>
+                            <td>{{user.score|number_commas}}</td>
+                            <td>{{user.master_builders|number_commas}}</td>
+                            <td>{{user.building_levels|number_commas}}</td>
+                            <td>{{user.scientists|number_commas}}</td>
+                            <td>{{user.research_level|number_commas}}</td>
+                            <td>{{user.generals|number_commas}}</td>
+                            <td>{{user.gold|number_commas}}</td>
+                            <td>{{user.offensive|number_commas}}</td>
+                            <td>{{user.defensive|number_commas}}</td>
+                            <td>{{user.trading|number_commas}}</td>
+                            <td>{{user.resources|number_commas}}</td>
+                            <td>{{user.donations|number_commas}}</td>
+                            <td>{{user.piracy|number_commas}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+
+
+    </body>
+</html>
+
+
+

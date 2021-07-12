@@ -1,0 +1,36 @@
+body {
+    background: #18191a;
+    text-decoration:none;
+    box-sizing: border-box;
+}
+
+.main-div {
+    background: #242526;
+    border: 1px solid #666;
+    margin: 4px;
+    border-radius: 15px;
+    padding: 10px;
+    color: #e4e6eb;
+    margin-bottom: 10px;
+    width: 800px;
+}
+
+.user-a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-a:hover {
+    text-decoration: none;
+    color: lightgreen;
+}
+
+.order-a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.order-a:hover {
+    text-decoration: none;
+    color: lightgreen;
+}

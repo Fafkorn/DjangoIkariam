@@ -1,0 +1,137 @@
+body {
+    background: #18191a;
+    text-decoration:none;
+    box-sizing: border-box;
+}
+
+.main-div {
+    background: #242526;
+    border: 1px solid #666;
+    margin: 4px;
+    border-radius: 15px;
+    padding: 10px;
+    color: #e4e6eb;
+}
+
+.player-info-div {
+    float: left;
+    width: 400px;
+}
+
+.edit-name-div {
+    width: 275px;
+}
+
+.add-town-edit-user-div {
+    float: left;
+    display: inline-block;
+}
+
+.score-costs-div {
+    width: 200px;
+    float: left;
+}
+
+.info-div {
+    width: 800px;
+}
+
+.action-button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 20px;
+    padding: 0;
+    float: left;
+    margin: 4px;
+}
+
+table {
+    width: 100%;
+}
+
+.confirm-button {
+    color: lightgreen;
+}
+
+.delete-button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 20px;
+    padding: 0;
+    float: right;
+    margin: 4px;
+    color: red;
+}
+
+.update-button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 20px;
+    padding: 0;
+    float: right;
+    margin: 4px;
+    color: lightgreen;
+}
+
+.my-form-control {
+    float: left;
+    width: 250px;
+    display: inline;
+    margin: 1px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+}
+
+.add-button {
+    margin-top: 12px;
+    display: inline;
+    width: 100%;
+}
+
+.delete-user-button {
+    margin-top: 12px;
+    display: inline;
+    width: 100%;
+}
+
+hr {
+    background: #e4e6eb;
+}
+
+.break-line {
+    border-bottom:1px solid #e4e6eb;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.form-control:focus {
+  border-color: #00aa00;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 150, 0, 0.6);
+}
+
+.form-control {
+    background: #363636;
+    border-color: #1a1a1a;
+    color: #ddd;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+

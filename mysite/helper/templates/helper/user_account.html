@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script type="text/javascript">window.delete = function() { var isValid = confirm('Czy na pewno chcesz usunąć?');if (!isValid) { event.preventDefault();}}</script>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'helper/user_account.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+        <title>Konto - {{user.user_name}}</title>
+        {% load helper_extras %}
+    </head>
+    <body>
+    {% load widget_tweaks %}
+
+    {% include "helper/navigation.html" %}
+
+    <div class="">
+        <div class="main-div" style="width: 682px;">
+            <div class="row">
+                <div class="col">
+                     <h5 style="font-weight: 700;">{{user.user_name}}</h5>
+                </div>
+                <div class="col">
+                    <h5><img src="{% static "helper/upkeep.png" %}" alt="something" width="16px" height="16"> {{sum_costs|number_commas}}</h5>
+                </div>
+                <div class="col">
+                    <h5><img src="{% static "helper/army.png" %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
+                </div>
+                <div class="col">
+                    <form action="{% url 'helper:enable_towns' user.id %}" method="post">
+                        {% csrf_token %}
+                        <button title="Uaktualnij dane" type="submit" class="btn btn-success update-button" method="post">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form action="{% url 'helper:delete_user' user.id %}" method="post" onsubmit="window.delete()">
+                        {% csrf_token %}
+                        <button title="Usuń gracza" type="submit" class="btn btn-danger delete-button" method="post">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="main-div player-info-div">
+            <h5>Punkty</h5>
+            <table>
+                <tr>
+                    <td>Ranking ogólny</td>
+                    <td>{{user.score|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Mistrzowie budowy</td>
+                    <td>{{user.master_builders|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Naukowcy</td>
+                    <td>{{user.scientists|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Generałowie</td>
+                    <td>{{user.generals|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Złoto</td>
+                    <td>{{user.gold|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Datki</td>
+                    <td>{{user.donations|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Populacja</td>
+                    <td>{{user.get_population|number_commas}}</td>
+                </tr>
+                <tr class="break-line">
+                    <td colspan="100%"></td>
+                </tr>
+                <tr>
+                    <td>Poziomy budynków</td>
+                    <td>{{user.building_levels|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Poziomy badań</td>
+                    <td>{{user.research_level|number_commas}}</td>
+                </tr>
+
+                <tr>
+                    <td>Punkty ofensywy</td>
+                    <td>{{user.offensive|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Punkty obrony</td>
+                    <td>{{user.defensive|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Handlarz</td>
+                    <td>{{user.trading|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Surowce</td>
+                    <td>{{user.resources|number_commas}}</td>
+                </tr>
+                <tr>
+                    <td>Punkty abordażu</td>
+                    <td>{{user.piracy|number_commas}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="">
+            <div class="add-town-edit-user-div">
+                <div class="main-div edit-name-div">
+                    <form action="{% url 'helper:edit_user_name' user.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Nazwa gracza</label>
+                        <input class="form-control"  maxlength="50" type="text" name="user_name"/>
+                        <button class="btn btn-success add-button" type="submit" >Zmień</button>
+                    </form>
+                </div>
+                <div class="main-div">
+                    <form action="{% url 'helper:save_researches' user.id %}" method="post">
+                        {% csrf_token %}
+                        <input  type="hidden" value="{{user.id}}"/>
+                        <label >Przyszłość żeglugi</label>
+                        <input class="form-control" type="number" value="{{user.shipping_future}}" name="shipping_future"/>
+
+                        <label >Przyszłość gospodarki</label>
+                        <input class="form-control" type="number" value="{{user.economy_future}}" name="economy_future"/>
+
+                        <label >Przyszłość nauki</label>
+                        <input class="form-control" type="number" value="{{user.science_future}}" name="science_future"/>
+
+                        <label >Przyszłość wojska</label>
+                        <input class="form-control" type="number" value="{{user.military_future}}" name="military_future"/>
+
+                        <button  class="btn btn-success add-button" type="submit">Zapisz</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

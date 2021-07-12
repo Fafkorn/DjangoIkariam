@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'helper/user_buildings.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+        <title>Budynki - {{user.user_name}}</title>
+    </head>
+
+    <body>
+
+    {% load widget_tweaks %}
+
+    {% include "helper/navigation.html" %}
+
+        <table class="table-bordered">
+          <tr>
+            <th>Miasto</th>
+              {% for building in buildings %}
+            <th><img src="{{building.image_icon_path.url}}" alt="img" width="32px" height="24"></th>
+              {% endfor %}
+          </tr>
+         {% for town in building_instances %}
+         <tr>
+                  <th>{{town.0.building_town.town_name}}</th>
+                  {% for building_instance in town %}
+                        {% if building_instance.level > 0%}
+                            <td is_upgrading="{{building_instance.is_upgraded}}" class="developing_td"  style="text-align:center;">
+                                <a href="{% url 'helper:building' building_instance.id %}">
+                                {% if building_instance.level == building_instance.building_type.max_level %}
+                                <div class="max-level">
+                                  {{building_instance.level}}
+                                </div>
+                                {% else %}
+                                <div class="not-max-level">
+                                  {{building_instance.level}}
+                                </div>
+                                {% endif %}
+
+                                </a>
+                            </td>
+                        {% else %}
+                            <td style="text-align:center;">
+                                <a href="{% url 'helper:building' building_instance.id %}">
+                                <div class="level-div">
+                                    -
+                                </div>
+                                </a>
+                            </td>
+                        {% endif %}
+                {% endfor %}
+           </tr>
+             {% endfor %}
+
+        </table>
+
+        <div class="div-box">
+            {{level_sum}}
+        </div>
+        {% if player_to_compare %}
+        <div class="main-div compare-div">
+            <form action="{% url 'helper:compare_with_player' %}" method="post">
+                {% csrf_token %}
+                <label>Nazwa gracza</label>
+                <input class="form-control"  maxlength="50" type="text" name="user_name"/>
+                <button class="btn btn-success compare-button" type="submit" >Porównaj</button>
+            </form>
+        </div>
+
+
+        <table class="table-bordered">
+              <tr>
+                <th>Miasto</th>
+                  {% for building in buildings %}
+                <th><img src="{{building.image_icon_path.url}}" alt="img" width="32px" height="24"></th>
+                  {% endfor %}
+              </tr>
+             {% for town in building_instances %}
+             <tr>
+                      <th>{{town.0.building_town.town_name}}</th>
+                      {% for building_instance in town %}
+                            {% if building_instance.level > 0%}
+                                <td is_upgrading="{{building_instance.is_upgraded}}" class="developing_td"  style="text-align:center;">
+                                    <a href="{% url 'helper:building' building_instance.id %}">
+                                    {% if building_instance.level == building_instance.building_type.max_level %}
+                                    <div class="max-level">
+                                      {{building_instance.level}}
+                                    </div>
+                                    {% else %}
+                                    <div class="not-max-level">
+                                      {{building_instance.level}}
+                                    </div>
+                                    {% endif %}
+
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td style="text-align:center;">
+                                    <a href="{% url 'helper:building' building_instance.id %}">
+                                    <div class="level-div">
+                                        -
+                                    </div>
+                                    </a>
+                                </td>
+                            {% endif %}
+                    {% endfor %}
+               </tr>
+                 {% endfor %}
+        </table>
+
+        <div class="div-box">
+            {{level_sum}}
+        </div>
+        {% endif %}
+    </body>
+
+</html>
+
+
+
+
+
