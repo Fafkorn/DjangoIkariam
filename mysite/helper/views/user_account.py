@@ -80,10 +80,12 @@ def save_researches(request, user_id):
     return HttpResponseRedirect(reverse('helper:user_account', args=(user_id,)))
 
 
-def edit_user_name(request, user_id):
+def edit_user_info(request, user_id):
     user_name = request.POST['user_name']
+    alliance = request.POST['alliance']
     user = User.objects.get(pk=user_id)
     user.user_name = user_name
+    user.alliance = alliance
     user.save()
     return HttpResponseRedirect(reverse('helper:user_account', args=(user_id,)))
 

@@ -10,7 +10,7 @@
 
     {% include "helper/navigation.html" %}
 
-    <div class="">
+    <div id="content-div">
         <div class="tile" style="width: 682px;">
             <div class="row">
                 <div class="col">
@@ -110,35 +110,36 @@
             </table>
         </div>
 
-        <div class="">
-            <div class="add-town-edit-user-div">
-                <div class="tile edit-name-div">
-                    <form action="{% url 'helper:edit_user_name' user.id %}" method="post">
-                        {% csrf_token %}
-                        <label>Nazwa gracza</label>
-                        <input class="form-control"  maxlength="50" type="text" name="user_name"/>
-                        <button class="btn btn-success add-button" type="submit" >Zmień</button>
-                    </form>
-                </div>
-                <div class="tile">
-                    <form action="{% url 'helper:save_researches' user.id %}" method="post">
-                        {% csrf_token %}
-                        <input  type="hidden" value="{{user.id}}"/>
-                        <label >Przyszłość żeglugi</label>
-                        <input class="form-control" type="number" value="{{user.shipping_future}}" name="shipping_future"/>
+        <div class="add-town-edit-user-div">
+            <div class="tile edit-name-div">
+                <form action="{% url 'helper:edit_user_info' user.id %}" method="post">
+                    {% csrf_token %}
+                    <label>Nazwa gracza</label>
+                    <input class="form-control"  maxlength="50" type="text" name="user_name" value="{{ user.user_name }}"/>
 
-                        <label >Przyszłość gospodarki</label>
-                        <input class="form-control" type="number" value="{{user.economy_future}}" name="economy_future"/>
+                    <label>Nazwa sojuszu</label>
+                    <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance }}"/>
+                    <button class="btn btn-success add-button" type="submit" >Zmień</button>
+                </form>
+            </div>
+            <div class="tile">
+                <form action="{% url 'helper:save_researches' user.id %}" method="post">
+                    {% csrf_token %}
+                    <input  type="hidden" value="{{user.id}}"/>
+                    <label >Przyszłość żeglugi</label>
+                    <input class="form-control" type="number" value="{{user.shipping_future}}" name="shipping_future"/>
 
-                        <label >Przyszłość nauki</label>
-                        <input class="form-control" type="number" value="{{user.science_future}}" name="science_future"/>
+                    <label >Przyszłość gospodarki</label>
+                    <input class="form-control" type="number" value="{{user.economy_future}}" name="economy_future"/>
 
-                        <label >Przyszłość wojska</label>
-                        <input class="form-control" type="number" value="{{user.military_future}}" name="military_future"/>
+                    <label >Przyszłość nauki</label>
+                    <input class="form-control" type="number" value="{{user.science_future}}" name="science_future"/>
 
-                        <button  class="btn btn-success add-button" type="submit">Zapisz</button>
-                    </form>
-                </div>
+                    <label >Przyszłość wojska</label>
+                    <input class="form-control" type="number" value="{{user.military_future}}" name="military_future"/>
+
+                    <button  class="btn btn-success add-button" type="submit">Zapisz</button>
+                </form>
             </div>
         </div>
     </div>

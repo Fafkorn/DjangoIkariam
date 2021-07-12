@@ -35,7 +35,7 @@ urlpatterns = [
 
     path('users/account/<int:pk>', user_account.UserAccountView.as_view(), name='user_account'),
     path('users/account/<int:user_id>/save_researches', user_account.save_researches, name='save_researches'),
-    path('users/account/<int:user_id>/edit_user_name', user_account.edit_user_name, name='edit_user_name'),
+    path('users/account/<int:user_id>/edit_user_info', user_account.edit_user_info, name='edit_user_info'),
     path('users/account/<int:user_id>/delete_user', user_account.delete_user, name='delete_user'),
     path('users/account/<int:user_id>/enable_towns', user_account.enable_towns, name='enable_towns'),
 

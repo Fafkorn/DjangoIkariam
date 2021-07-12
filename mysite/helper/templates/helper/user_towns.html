@@ -53,7 +53,7 @@
 
     <div id="content-div">
         <div>
-            <div class="tile add-town-div">
+            <div class="tile">
                 <form action="{% url 'helper:add_town' user.id %}" method="post">
                     {% csrf_token %}
                     <h5>
