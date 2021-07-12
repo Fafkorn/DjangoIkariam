@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
         {% load static %}
-
         <link rel="stylesheet" type="text/css" href="{% static 'helper/resources_rank.css' %}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
-        <title>Ranking surowców</title>
         {% load helper_extras %}
 {% endblock %}
 {% block content %}
@@ -13,7 +10,7 @@
     {% include "helper/navigation.html" %}
 
 
-    <div class="main-div">
+    <div class="tile">
         <h5>Ranking wydobycia surowców - TOP 50</h5>
         <p></p>
         <table class="table" cellspacing="0" width="100%">

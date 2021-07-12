@@ -14,6 +14,7 @@ class BuildingView(generic.DetailView):
         context = super(BuildingView, self).get_context_data()
         context['user'] = get_object_or_404(User, pk=context['buildinginstance'].building_town.user.id)
         context['nav_active'] = 'user_buildings'
+        context['title'] = context['buildinginstance'].building_type.building_name + ' - ' + context['buildinginstance'].building_town.town_name
         return context
 
 

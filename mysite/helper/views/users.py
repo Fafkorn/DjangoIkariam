@@ -1,7 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views import generic
 from django.core.paginator import Paginator
 import math
 from .filters import UserFilter
@@ -34,7 +33,9 @@ def get_users(request):
                'visited_users': visited_users,
                'buttons': buttons, 'page_num': int(page_num),
                'username_search': name_filter,
-               'order_by': order_by}
+               'order_by': order_by,
+               'title': 'Użytkownicy'
+               }
     return render(request, 'helper/users.html', context)
 
 

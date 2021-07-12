@@ -1,31 +1,7 @@
-body {
-    background: #18191a;
-    text-decoration:none;
-    box-sizing: border-box;
-}
-
-.main-div {
-    background: #242526;
-    border: 1px solid #666;
-    margin: 4px;
-    border-radius: 15px;
-    padding: 10px;
-    color: #e4e6eb;
-    margin-bottom: 10px;
-}
-
 .card-div {
     display: inline-block;
     margin: 5px;
     padding: 5px;
     border: 1px solid #666;
     background: #332211a;
-}
-
-.break-line {
-    height: 1px;
-    background: #aaa;
-    width: 100%;
-    margin-top: 2px;
-    margin-bottom: 2px;
 }

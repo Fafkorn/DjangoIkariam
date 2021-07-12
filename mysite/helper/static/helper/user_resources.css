@@ -1,9 +1,3 @@
-body {
-    background: #18191a;
-    text-decoration:none;
-    box-sizing: border-box;
-}
-
 tr:hover {
     background: #343536;
 }
@@ -80,17 +74,6 @@ label {
 .form-control:focus {
   border-color: #00aa00;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 150, 0, 0.6);
-}
-
-button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    color: lightgreen;
-    padding: 0;
 }
 
 a {

@@ -51,6 +51,7 @@ class UserResourcesView(generic.DetailView):
         context['sum_sulfur_production'] = sulfur_production
 
         context['nav_active'] = 'user_resources'
+        context['title'] = 'Surowce - ' + context['user'].user_name
         return context
 
 

@@ -1,60 +1,17 @@
-body {
-    background: #18191a;
-    text-decoration:none;
-    box-sizing: border-box;
-}
-
-.main-div {
-    background: #242526;
-    border: 1px solid #666;
-    margin: 4px;
-    border-radius: 15px;
-    padding: 10px;
-    color: #e4e6eb;
-}
-
-.edit-towns-div {
-    width: 640px;
-    float: left;
-}
-
-.add-town-div {
-    width: 640px;
-}
-
-.action-button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    font-size: 20px;
-    padding: 0;
-    float: left;
-    margin: 4px;
-}
-
-table {
-    width: 100%;
+#content-div {
+    display: flex;
 }
 
 .confirm-button {
+    font-size: 20px;
     color: lightgreen;
+    margin: 2px;
 }
 
 .delete-button {
+    font-size: 20px;
     color: #f22;
-}
-
-.my-form-control {
-    float: left;
-    width: 250px;
-    display: inline;
-    margin: 1px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 15px;
+    margin: 2px;
 }
 
 .add-button {
@@ -62,72 +19,25 @@ table {
     bottom:   0;
 }
 
-.coord {
-   float: left;
-    width: 80px;
-}
-
-.coord-left {
+.my-form-control {
     float: left;
-    width: 70px;
-}
-
-.coord-label {
-    float: left;
-    margin-top: 4px;
-    margin-right: 8px;
-}
-
-.coord-div {
-    margin-right: 18px;
-    float: left;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    margin: 1px;
 }
 
 hr {
     background: #e4e6eb;
 }
 
-.island-resources {
-    margin-left: 5px;
-    margin-right: 5px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.island-resources:hover {
-    text-decoration: none;
-    color: lightgreen;
-}
-
-.break-line {
-    border-bottom:1px solid #e4e6eb;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
-
-.form-control:focus {
-  border-color: #00aa00;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 150, 0, 0.6);
-}
-
-.form-control {
-    background: #363636;
-    border-color: #1a1a1a;
-    color: #ddd;
-}
-
 .island-square {
-    width: 6px;
-    min-width: 6px;
-    max-width: 6px;
+    width: 7px;
     height: 6px;
-    min-height: 6px;
-    max-height: 6px;
     line-height: 0;
     padding: 0;
     margin: 0;
     background: #007;
-    font-size: 12;
 }
 
 .confirm-btn {
@@ -170,25 +80,18 @@ hr {
 }
 
 .btn-rank {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
     color: lightgreen;
     padding: 0;
     font-size: 20px;
 }
 
-.search-row {
+#search-row {
     display: flex;
 }
 
-.btn-rank:hover {
-    background-color: Transparent;
-    color: lightgreen;
-
+.search-col {
+    flex: 1;
+    padding: 4px;
 }
 
 #select-islands-div {
@@ -201,4 +104,12 @@ hr {
 
 #select-islands-value {
     flex: 3;
+}
+
+#islandTable {
+    margin: 0;
+    padding: 0;
+    border: solid 1px #000;
+    margin-left: auto;
+    margin-right: auto;
 }

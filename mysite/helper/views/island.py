@@ -19,7 +19,7 @@ class IslandView(generic.DetailView):
         context['miracle_types'] = Miracle.objects.all()
         context['next_level_saw_mill_cost'] = SawMillWorkers.objects.get(level=island.wood_level+1).cost
         context['next_level_mine_cost'] = MineWorkers.objects.get(level=island.luxury_level+1).cost
-
+        context['title'] = f'{island.name} [{island.x}:{island.y}]'
         return context
 
 

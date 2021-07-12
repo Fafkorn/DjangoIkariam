@@ -17,6 +17,7 @@ class UserBuildingsView(generic.DetailView):
         context['towns'] = Town.objects.filter(user__id=user_id)
         context['building_instances'] = self.get_building_instances(context['towns'], context)
         context['nav_active'] = 'user_buildings'
+        context['title'] = 'Budynki - ' + context['user'].user_name
         return context
 
     def get_building_instances(self, towns, context):

@@ -16,7 +16,8 @@ def get_resources_rank(request, user_id):
         'user': user,
         'user_id': user_id,
         'resources_by_user': resources_by_user,
-        'order': order
+        'order': order,
+        'title': 'Ranking surowców'
     }
     return render(request, 'helper/resources_rank.html', context)
 

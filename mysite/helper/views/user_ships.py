@@ -38,6 +38,7 @@ class UserShipsView(generic.DetailView):
         context['sum_points'] = int(get_sum_ships_points(user_id))
 
         context['nav_active'] = 'user_ships'
+        context['title'] = 'Statki - ' + context['user'].user_name
         return context
 
     def get_ship_instances(self, towns):

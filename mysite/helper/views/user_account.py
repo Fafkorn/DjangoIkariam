@@ -21,8 +21,8 @@ class UserAccountView(generic.DetailView):
         context['sum_points'] = int(get_sum_units_points(user_id) + get_sum_ships_points(user_id))
         context['sum_costs'] = int(get_sum_units_costs(user_id)*costs_units_discount +
                                    get_sum_ships_costs(user_id)*costs_ships_discount)
-
         context['nav_active'] = 'user_account'
+        context['title'] = 'Konto - ' + context['user'].user_name
         return context
 
 

@@ -53,7 +53,8 @@ def get_user_towns(request, user_id):
         'occupied_islands': get_occupied_islands(),
         'own_islands': get_coordinates_for_towns(towns),
         'searched_islands': get_searched_coordinates(username, alliance_tag, search_type, search_value),
-        'nav_active': 'user_towns'
+        'nav_active': 'user_towns',
+        'title': 'Miasta - ' + user.user_name
     }
     return render(request, 'helper/user_towns.html', context)
 

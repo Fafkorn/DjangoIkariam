@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 
 def admin_site(request):
-    context = {}
+    context = {'title': 'Admin'}
     return render(request, 'helper/admin.html', context)
 
 

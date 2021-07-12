@@ -8,6 +8,7 @@ def get_units(request):
     units = Unit.objects.all()
     context = {'user': user,
                'units': units,
-               'nav_active': 'guide'}
+               'nav_active': 'guide',
+               'title': 'Poradnik - Jednostki'}
 
     return render(request, 'helper/guide/units.html', context)

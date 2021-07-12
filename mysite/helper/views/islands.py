@@ -47,7 +47,8 @@ def get_islands(request, user_id):
                'page_num': int(page_num),
                'has_pages': has_pages,
                'buttons': buttons,
-               'nav_active':  'islands'}
+               'nav_active':  'islands',
+               'title': 'Wyspy'}
 
     return render(request, 'helper/islands.html', context)
 

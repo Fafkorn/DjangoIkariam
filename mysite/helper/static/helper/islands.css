@@ -1,18 +1,5 @@
-body {
-    background: #18191a;
-    text-decoration:none;
-    box-sizing: border-box;
-}
-
-.main-div {
-    background: #242526;
-    border: 1px solid #666;
-    margin: 4px;
-    border-radius: 15px;
-    padding: 10px;
-    color: #e4e6eb;
-    margin-bottom: 10px;
-
+#content-div {
+    display: flex;
 }
 
 .island-link {
@@ -33,26 +20,15 @@ tr {
 
 .filter-div {
     width: 350px;
-    float: left;
 }
 
 .data-div {
     width: 700px;
-    float: left;
-    min-height: 400px;
 }
 
 .btn-search {
     margin-top: 15px;
     width: 100%;
-}
-
-.coordinates-label {
-
-}
-
-.coordinates-div {
-
 }
 
 .coord-x {

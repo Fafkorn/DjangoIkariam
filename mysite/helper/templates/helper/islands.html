@@ -2,15 +2,14 @@
 {% block head %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'helper/islands.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
-    <title>Wyspy</title>
 {% endblock %}
 {% block content %}
      {% load widget_tweaks %}
 
     {% include "helper/navigation.html" %}
 
-    <div class="main-div data-div">
+<div id="content-div">
+     <div class="tile data-div">
         {% if islands_list %}
         <div class="row">
             <div class="col"><h5>Znalezionych wysp: {{islands_found}}</h5></div>
@@ -46,7 +45,7 @@
                 <td>{{island.wood_level}} <img src="{{island.wood_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
                 <td>{{island.luxury_level}} <img src="{{island.luxury_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
                 <td title="{{island.miracle.name}}">{{island.miracle_level}} <img src="{{island.miracle.image_path.url}}" alt="img" width="20px" height="20px"></td>
-                <td>{{island.towns}} <img src="{% static "helper/town_icon.png" %}" alt="something" width="23px" height="20px" ></td>
+                <td>{{island.towns}} <img src="{% static "helper/icons/town_icon.png" %}" alt="something" width="23px" height="20px" ></td>
             </tr>
             {% endfor %}
         </table>
@@ -61,13 +60,13 @@
 
     {% load widget_tweaks %}
 
-    <div class="main-div filter-div">
+    <div class="tile filter-div">
         <h5>Znajdź wyspę</h5>
         <form method="get">
 
-            <div class="coordinates-div">
+            <div>
                 <div>
-                    <label class="coordinates-label">Współrzędne</label>
+                    <label>Współrzędne</label>
                 </div>
                 <div class="coordinates-inputs">
                     <div class="coord-x">
@@ -109,4 +108,5 @@
                 Szukaj</button>
         </form>
     </div>
+</div>
 {% endblock %}

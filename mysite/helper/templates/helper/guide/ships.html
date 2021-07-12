@@ -1,24 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+{% extends "base.html" %}
+{% block head %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'helper/guide/units.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
-    <title>Poradnik - Statki</title>
     {% load helper_extras %}
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     {% load widget_tweaks %}
 
     {% include "helper/navigation.html" %}
 
-    <div class="main-div">
+    <div class="tile">
         {% for ship in ships %}
             <div class="card-div">
                 <table>
@@ -46,7 +38,7 @@
 
                     <tr>
                         <td>
-                            <img title="Koszty utrzymania" src="{% static "helper/upkeep.png" %}" alt="" width="25px" height="20" > {{ship.hour_costs}}
+                            <img title="Koszty utrzymania" src="{% static "helper/icons/upkeep.png" %}" alt="" width="25px" height="20" > {{ship.hour_costs}}
                             <img title="Obywatele" src="{% static "helper/icons/icon_citizen.png" %}" alt="" width="19px" height="20" > {{ship.men_costs}}
                             <img title="Czas budowy" src="{% static "helper/icons/icon_time.png" %}" alt="" width="19px" height="20" > {{ship.time|get_time}}
                         </td>
@@ -85,5 +77,4 @@
             </div>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

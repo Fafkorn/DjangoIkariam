@@ -2,8 +2,6 @@
 {% block head %}
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'helper/user_buildings.css' %}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
-        <title>Budynki - {{user.user_name}}</title>
 {% endblock %}
 {% block content %}
     {% load widget_tweaks %}
@@ -55,7 +53,7 @@
             {{level_sum}}
         </div>
         {% if player_to_compare %}
-        <div class="main-div compare-div">
+        <div class="tile compare-div">
             <form action="{% url 'helper:compare_with_player' %}" method="post">
                 {% csrf_token %}
                 <label>Nazwa gracza</label>

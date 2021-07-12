@@ -44,6 +44,7 @@ class UserUnitsView(generic.DetailView):
         context['sum_points'] = int(get_sum_units_points(user_id))
 
         context['nav_active'] = 'user_units'
+        context['title'] = 'Jednostki - ' + context['user'].user_name
         return context
 
     def get_unit_instances(self, towns):

@@ -1,5 +1,4 @@
 import django_filters
-from django import forms
 
 from ..models import *
 
@@ -19,7 +18,6 @@ class IslandFilter(django_filters.FilterSet):
     class Meta:
         model = Island
         fields = ['x', 'y', 'luxury_resource', 'has_tower']
-        # exclude = ['miracle_level', 'miracle', 'wood_resource']
 
 
 class UserFilter(django_filters.FilterSet):
