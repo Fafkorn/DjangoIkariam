@@ -1,0 +1,2 @@
+# DjangoIkariam
+Ikariam management tool
