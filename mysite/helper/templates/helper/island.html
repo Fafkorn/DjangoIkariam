@@ -1,182 +1,175 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <script type="text/javascript">window.delete = function() { var isValid = confirm('Czy na pewno chcesz usunąć?');if (!isValid) { event.preventDefault();}}</script>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'helper/island.css' %}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
-        <title>Wyspa [{{island.x}}:{{island.y}}]</title>
-        {% load helper_extras %}
-    </head>
+{% extends "base.html" %}
+{% block head %}
+    <script type="text/javascript">window.delete = function() { var isValid = confirm('Czy na pewno chcesz usunąć?');if (!isValid) { event.preventDefault();}}</script>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/island.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
+    <title>Wyspa [{{island.x}}:{{island.y}}]</title>
+    {% load helper_extras %}
+{% endblock %}
 
-    <body>
-    {% load widget_tweaks %}
-    {% include "helper/navigation.html" %}
+{% block content %}
+{% load widget_tweaks %}
+{% include "helper/navigation.html" %}
 
-        <div class="main-div">
-            <div class="row">
-                <div class="col">
-                    <h5>{{island.name}} [{{island.x}}:{{island.y}}] ({{towns.count}} miast)</h5>
-                </div>
-                <div class="col">
-                    <form action="{% url 'helper:delete_island' %}" method="post" onsubmit="window.delete()">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{island.id}}" name="island_id">
-                        <input type="hidden" value="{{user.id}}" name="user_id">
-                        <button type="submit" title="Usuń wyspę" class="delete-button">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
+    <div class="main-div">
+        <div class="row">
+            <div class="col">
+                <h5>{{island.name}} [{{island.x}}:{{island.y}}] ({{towns.count}} miast)</h5>
             </div>
-            <div class="resources-div">
-                <div class="wood-div">
-                    <div>
-                        <img src="{{island.wood_resource.mine_image_path.url}}" alt="img">
-                        <div class="level level-resource">
-                            <p>{{island.wood_level}}</p>
-                        </div>
-                        <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_saw_mill_cost|number_commas}}</p>
-                    </div>
-                </div>
-                <div class="luxury-div">
-                    <img src="{{island.luxury_resource.mine_image_path.url}}" alt="img">
+            <div class="col">
+                <form action="{% url 'helper:delete_island' %}" method="post" onsubmit="window.delete()">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{island.id}}" name="island_id">
+                    <input type="hidden" value="{{user.id}}" name="user_id">
+                    <button type="submit" title="Usuń wyspę" class="delete-button">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="resources-div">
+            <div class="wood-div">
+                <div>
+                    <img src="{{island.wood_resource.mine_image_path.url}}" alt="img">
                     <div class="level level-resource">
-                        <p>{{island.luxury_level}}</p>
+                        <p>{{island.wood_level}}</p>
                     </div>
-                    <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_mine_cost|number_commas}}</p>
+                    <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_saw_mill_cost|number_commas}}</p>
                 </div>
-                {% if island.miracle %}
-                <div class="miracle-div">
-                    <img src="{{island.miracle.image_path.url}}" alt="img">
-                    <div class="level level-miracle">
-                        <p>{{island.miracle_level}}</p>
-                    </div>
-                </div>
-                {% endif %}
             </div>
-            <div>
-                {% if towns %}
-                <table>
-                    <tr>
-                        <th>Użytkownik</th>
-                        <th>Punkty</th>
-                        <th>Datki</th>
-                        <th>Miasto</th>
-                    </tr>
-                    {% for town in towns %}
-                        {% ifchanged town.user.user_name %}
-                            <tr class="break-line">
-                                <td colspan="100%"></td>
-                            </tr>
-                        {% endifchanged %}
-                        <tr>
-                            <td>
-                                {% ifchanged town.user.user_name %}
-                                    <a class="user-a" href="{% url 'helper:user_towns' town.user.id %}">{{town.user.user_name}}
-                                        {% if town.user.alliance %}
-                                        [{{town.user.alliance}}]
-                                        {% endif %}
-                                    </a>
-                                {% endifchanged %}
-                            </td>
-                            <td>
-                                {% ifchanged town.user.user_name %}
-                                    {{town.user.score|number_commas}}
-                                {% endifchanged %}
-                            </td>
-                            <td>
-                                {% ifchanged town.user.user_name %}
-                                    {{town.user.donations|number_commas}}
-                                {% endifchanged %}
-                            </td>
-                            <td>{{town.town_name}}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                {% else %}
-                <tr class="break-line">
-                    <td colspan="100%"></td>
+            <div class="luxury-div">
+                <img src="{{island.luxury_resource.mine_image_path.url}}" alt="img">
+                <div class="level level-resource">
+                    <p>{{island.luxury_level}}</p>
+                </div>
+                <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_mine_cost|number_commas}}</p>
+            </div>
+            {% if island.miracle %}
+            <div class="miracle-div">
+                <img src="{{island.miracle.image_path.url}}" alt="img">
+                <div class="level level-miracle">
+                    <p>{{island.miracle_level}}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div>
+            {% if towns %}
+            <table>
+                <tr>
+                    <th>Użytkownik</th>
+                    <th>Punkty</th>
+                    <th>Datki</th>
+                    <th>Miasto</th>
                 </tr>
-                <h5>Brak miast</h5>
-                 {% endif %}
+                {% for town in towns %}
+                    {% ifchanged town.user.user_name %}
+                        <tr class="break-line">
+                            <td colspan="100%"></td>
+                        </tr>
+                    {% endifchanged %}
+                    <tr>
+                        <td>
+                            {% ifchanged town.user.user_name %}
+                                <a class="user-a" href="{% url 'helper:user_towns' town.user.id %}">{{town.user.user_name}}
+                                    {% if town.user.alliance %}
+                                    [{{town.user.alliance}}]
+                                    {% endif %}
+                                </a>
+                            {% endifchanged %}
+                        </td>
+                        <td>
+                            {% ifchanged town.user.user_name %}
+                                {{town.user.score|number_commas}}
+                            {% endifchanged %}
+                        </td>
+                        <td>
+                            {% ifchanged town.user.user_name %}
+                                {{town.user.donations|number_commas}}
+                            {% endifchanged %}
+                        </td>
+                        <td>{{town.town_name}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <tr class="break-line">
+                <td colspan="100%"></td>
+            </tr>
+            <h5>Brak miast</h5>
+             {% endif %}
 
 
-            </div>
         </div>
-        <div class="main-div edit-div">
-            <h5>
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                </svg>
-                Edytuj wyspę</h5>
-            <form action="{% url 'helper:edit_island' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" value="{{island.id}}" name="island_id">
-                <input type="hidden" value="{{user.id}}" name="user_id">
-                <input type="hidden" value="{{island.x}}" name="x">
-                <input type="hidden" value="{{island.y}}" name="y">
+    </div>
+    <div class="main-div edit-div">
+        <h5>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+            </svg>
+            Edytuj wyspę</h5>
+        <form action="{% url 'helper:edit_island' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" value="{{island.id}}" name="island_id">
+            <input type="hidden" value="{{user.id}}" name="user_id">
+            <input type="hidden" value="{{island.x}}" name="x">
+            <input type="hidden" value="{{island.y}}" name="y">
 
-                <label>Tartak poziom</label>
-                <input type="number" class="form-control" name="wood_level" value="{{island.wood_level}}">
-                <hr>
-                <label>Surowiec luksusowy</label>
-                <select class="form-control" name="luxury_resource">
-                    <option value="2" {% ifequal 2 island.luxury_resource.id %} selected{% endifequal %}>Wino</option>
-                    <option value="3" {% ifequal 3 island.luxury_resource.id %} selected{% endifequal %}>Marmur</option>
-                    <option value="4" {% ifequal 4 island.luxury_resource.id %} selected{% endifequal %}>Kryształ</option>
-                    <option value="5" {% ifequal 5 island.luxury_resource.id %} selected{% endifequal %}>Siarka</option>
-                </select>
+            <label>Tartak poziom</label>
+            <input type="number" class="form-control" name="wood_level" value="{{island.wood_level}}">
+            <hr>
+            <label>Surowiec luksusowy</label>
+            <select class="form-control" name="luxury_resource">
+                <option value="2" {% ifequal 2 island.luxury_resource.id %} selected{% endifequal %}>Wino</option>
+                <option value="3" {% ifequal 3 island.luxury_resource.id %} selected{% endifequal %}>Marmur</option>
+                <option value="4" {% ifequal 4 island.luxury_resource.id %} selected{% endifequal %}>Kryształ</option>
+                <option value="5" {% ifequal 5 island.luxury_resource.id %} selected{% endifequal %}>Siarka</option>
+            </select>
 
-                <label>Kopalnia poziom</label>
-                <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level}}">
-                <hr>
-                <label>Cud</label>
-                <select class="form-control" name="miracle_type">
-                    {% for miracle_type in miracle_types %}
-                    <option value="{{miracle_type.id}}" {% ifequal miracle_type.id island.miracle.id %} selected{% endifequal %}>{{miracle_type.name}}</option>
-                    {% endfor %}
-                </select>
-                <label>Cud poziom</label>
-                <input type="number" class="form-control" name="miracle_level" value="{{island.miracle_level}}">
+            <label>Kopalnia poziom</label>
+            <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level}}">
+            <hr>
+            <label>Cud</label>
+            <select class="form-control" name="miracle_type">
+                {% for miracle_type in miracle_types %}
+                <option value="{{miracle_type.id}}" {% ifequal miracle_type.id island.miracle.id %} selected{% endifequal %}>{{miracle_type.name}}</option>
+                {% endfor %}
+            </select>
+            <label>Cud poziom</label>
+            <input type="number" class="form-control" name="miracle_level" value="{{island.miracle_level}}">
 
-                <label>Wieża</label>
-                <select class="form-control" name="has_tower">
-                    <option value="True" {% if island.has_tower  %} selected{% endif %}>Tak</option>
-                    <option value="False" {% if not island.has_tower %} selected{% endif %}>Nie</option>
-                </select>
+            <label>Wieża</label>
+            <select class="form-control" name="has_tower">
+                <option value="True" {% if island.has_tower  %} selected{% endif %}>Tak</option>
+                <option value="False" {% if not island.has_tower %} selected{% endif %}>Nie</option>
+            </select>
 
-                <button class="btn btn-success submit-btn" type="submit">Zapisz</button>
+            <button class="btn btn-success submit-btn" type="submit">Zapisz</button>
 
-            </form>
-        </div>
-        <div class="main-div add-town-div">
-            <h5>
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-                Dodaj miasto</h5>
-            <form action="{% url 'helper:add_town' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" value="{{island.id}}" name="island_id">
-                <input type="hidden" value="{{user.id}}" name="user_id">
+        </form>
+    </div>
+    <div class="main-div add-town-div">
+        <h5>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Dodaj miasto</h5>
+        <form action="{% url 'helper:add_town' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" value="{{island.id}}" name="island_id">
+            <input type="hidden" value="{{user.id}}" name="user_id">
 
-                <label>Nazwa miasta</label>
-                <input type="text" class="form-control" name="town_name">
+            <label>Nazwa miasta</label>
+            <input type="text" class="form-control" name="town_name">
 
-                <label>Nazwa gracza</label>
-                <input type="text" class="form-control" name="user_name">
+            <label>Nazwa gracza</label>
+            <input type="text" class="form-control" name="user_name">
 
-                <button class="btn btn-success submit-btn" type="submit">Dodaj</button>
-            </form>
-        </div>
-    </body>
-</html>
+            <button class="btn btn-success submit-btn" type="submit">Dodaj</button>
+        </form>
+    </div>
+{% endblock %}
