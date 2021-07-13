@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from ..models import User, Town, Island, Resource, BuildingInstance, SawMillWorkers, MineWorkers
+from ..models import User, Town, Island, Resource, BuildingInstance, SawMillWorkers, MineWorkers, UserStatus
 from django.views import generic
 
 from .user_units import get_sum_units_points, get_sum_units_costs
@@ -15,6 +15,7 @@ class UserAccountView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserAccountView, self).get_context_data()
         user_id = context['user'].id
+        user_statuses = UserStatus.objects.all()
         costs_units_discount = 1.0 - context['user'].military_future * 0.02 - 0.14
         costs_ships_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
         context['towns'] = Town.objects.filter(user__id=user_id).order_by('island')
@@ -23,6 +24,7 @@ class UserAccountView(generic.DetailView):
                                    get_sum_ships_costs(user_id)*costs_ships_discount)
         context['nav_active'] = 'user_account'
         context['title'] = 'Konto - ' + context['user'].user_name
+        context['user_statuses'] = user_statuses
         return context
 
 
@@ -83,9 +85,11 @@ def save_researches(request, user_id):
 def edit_user_info(request, user_id):
     user_name = request.POST['user_name']
     alliance = request.POST['alliance']
+    user_status = request.POST['user_status']
     user = User.objects.get(pk=user_id)
     user.user_name = user_name
     user.alliance = alliance
+    user.user_status = UserStatus.objects.get(pk=user_status)
     user.save()
     return HttpResponseRedirect(reverse('helper:user_account', args=(user_id,)))
 

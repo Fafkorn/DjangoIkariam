@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from ...models import User, Unit
+from ..models import User, Unit
 
 
 def get_units(request):
@@ -11,4 +11,4 @@ def get_units(request):
                'nav_active': 'guide',
                'title': 'Poradnik - Jednostki'}
 
-    return render(request, 'helper/guide/units.html', context)
+    return render(request, 'helper/units.html', context)

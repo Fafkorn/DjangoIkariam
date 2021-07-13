@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/statistics.css' %}">
+    {% load helper_extras %}
+{% endblock %}
+
+{% block content %}
+
+{% include "helper/navigation.html" %}
+<div class="tile">
+    <ul>
+        <li>Wszyscy użytkownicy: {{ all_users }}</li>
+        <li>Aktywni: {{ active_users }}</li>
+        <li>Niekatywni: {{ inactive_users }}</li>
+        <li>Na urlopie: {{ on_vacation__users }}</li>
+        <li>Usunięci: {{ deleted_users }}</li>
+    </ul>
+
+
+</div>
+{% endblock %}

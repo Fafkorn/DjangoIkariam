@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from ...models import User, Ship
+from ..models import User, Ship
 
 
 def get_ships(request):
@@ -11,4 +11,4 @@ def get_ships(request):
                'nav_active': 'guide',
                'title': 'Poradnik - Statki'}
 
-    return render(request, 'helper/guide/ships.html', context)
+    return render(request, 'helper/ships.html', context)

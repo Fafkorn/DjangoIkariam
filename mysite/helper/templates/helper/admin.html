@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block head %}
-    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'helper/admin.css' %}">
 {% endblock %}
 
@@ -40,6 +42,13 @@
         <input class="form-control" type="text" maxlength="5" name="password">
         <label></label>
         <button type="submit" class="btn btn-success submit-btn">Przeszukaj</button>
+    </form>
+</div>
+
+<div class="tile">
+    <form action="{% url 'helper:set_all_users_deleted' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success submit-btn">Ustaw wszystkim "Usunięty"</button>
     </form>
 </div>
 {% endblock %}

@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import User, Town, Building, BuildingInstance, \
     TownResources, Resource, Unit, UnitInstance, Ship, ShipInstance, Island, Miracle, \
-    AchievementCategory, Achievement, AchievementLevel, SawMillWorkers, MineWorkers
+    AchievementCategory, Achievement, AchievementLevel, SawMillWorkers, MineWorkers, \
+    UserStatus
 
 admin.site.register(User)
 admin.site.register(Town)
@@ -21,3 +22,4 @@ admin.site.register(Achievement)
 admin.site.register(AchievementLevel)
 admin.site.register(SawMillWorkers)
 admin.site.register(MineWorkers)
+admin.site.register(UserStatus)

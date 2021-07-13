@@ -3,8 +3,16 @@ from datetime import datetime
 from django.db import models
 
 
+class UserStatus(models.Model):
+    user_status_name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.user_status_name
+
+
 class User(models.Model):
     user_name = models.CharField(max_length=50)
+    user_status = models.ForeignKey(UserStatus, on_delete=models.SET_NULL, default=None, null=True)
     shipping_future = models.IntegerField(default=0)
     economy_future = models.IntegerField(default=0)
     science_future = models.IntegerField(default=0)
@@ -24,7 +32,7 @@ class User(models.Model):
     donations = models.IntegerField(default=0)
     piracy = models.IntegerField(default=0)
 
-    alliance = models.CharField(max_length=50, default='')
+    alliance = models.CharField(max_length=50, default='', null=True)
     last_visit = models.DateTimeField(default=datetime(2015, 10, 9, 23, 55, 59, 342380))
 
     def __str__(self):

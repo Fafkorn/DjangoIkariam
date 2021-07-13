@@ -1,10 +1,7 @@
 from django.urls import path
 
 from .views import users, building, user_buildings, user_resources, user_units, user_ships, user_account, island,\
-    user_towns, islands, admin, resources_rank
-
-from .views.guide import units, ships, achievements
-
+    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics
 
 app_name = 'helper'
 
@@ -15,6 +12,7 @@ urlpatterns = [
 
     path('users/buildings/<int:pk>', user_buildings.UserBuildingsView.as_view(), name='user_buildings'),
     path('users/buildings/compare_with_player', user_buildings.UserBuildingsView.compare_with_player, name='compare_with_player'),
+
     path('building/<int:pk>/', building.BuildingView.as_view(), name='building'),
     path('building/<int:instance_building_id>/update_building', building.update_building, name='update_building'),
     path('building/<int:instance_building_id>/start_develop_building', building.start_develop_building, name='start_develop_building'),
@@ -58,12 +56,15 @@ urlpatterns = [
     path('admin/web_scrap_island', admin.web_scrap_island, name='web_scrap_island'),
     path('admin/web_scrap_town', admin.web_scrap_town, name='web_scrap_town'),
     path('admin/web_scrap_all_islands', admin.web_scrap_all_islands, name='web_scrap_all_islands'),
+    path('admin/set_all_users_deleted', admin.set_all_users_deleted, name='set_all_users_deleted'),
 
     path('guide/units', units.get_units, name='units'),
     path('guide/ships', ships.get_ships, name='ships'),
     path('guide/achievements/<int:category_id>', achievements.get_achievements, name='achievements_category'),
     path('guide/achievements/level_up', achievements.level_up, name='achievements_level_up'),
     path('guide/achievements/confirm_progress', achievements.confirm_progress, name='confirm_progress'),
+
+    path('guide/statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
 
 
 ]

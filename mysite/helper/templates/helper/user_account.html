@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block head %}
         <script type="text/javascript">window.delete = function() { var isValid = confirm('Czy na pewno chcesz usunąć?');if (!isValid) { event.preventDefault();}}</script>
-        {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'helper/user_account.css' %}">
         {% load helper_extras %}
 {% endblock %}
@@ -119,6 +121,13 @@
 
                     <label>Nazwa sojuszu</label>
                     <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance }}"/>
+
+                    <label>Status</label>
+                    <select class="form-control" name="user_status">
+                        {% for status in user_statuses %}
+                            <option value="{{ status.id }}" {% ifequal user.user_status.id status.id %} selected {% endifequal %} >{{ status.user_status_name }}</option>
+                        {% endfor %}
+                    </select>
                     <button class="btn btn-success add-button" type="submit" >Zmień</button>
                 </form>
             </div>

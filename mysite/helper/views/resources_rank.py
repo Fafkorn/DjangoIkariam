@@ -1,7 +1,6 @@
 from django.db import connection
-from django.db.models import Sum
 
-from ..models import User, Island
+from ..models import User
 
 from django.shortcuts import get_object_or_404, render
 

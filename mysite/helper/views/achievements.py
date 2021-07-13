@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from ...models import AchievementLevel, AchievementCategory, User, Achievement
+from ..models import AchievementLevel, AchievementCategory, User, Achievement
 
 
 def get_achievements(request, category_id):
@@ -27,7 +27,7 @@ def get_achievements(request, category_id):
                'active_category': int(category_id),
                'nav_active': 'guide',
                'title': 'Osiągnięcia'}
-    return render(request, 'helper/guide/achievements.html', context)
+    return render(request, 'helper/achievements/achievements.html', context)
 
 
 def init():

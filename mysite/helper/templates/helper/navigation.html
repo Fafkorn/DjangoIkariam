@@ -1,5 +1,7 @@
 {% load widget_tweaks %}
+
 {% load static %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'helper/navigation.css' %}">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
@@ -62,6 +64,11 @@
             <li class="nav-item {% if nav_active == 'islands' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'helper:islands' user.id %}">
                     Wyspy
+                </a>
+            </li>
+            <li class="nav-item {% if nav_active == 'statistics' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'helper:statistics' user.id %}">
+                    Statystyki
                 </a>
             </li>
             <li class="nav-item dropdown  {% if nav_active == 'guide' %}active{% endif %}" >

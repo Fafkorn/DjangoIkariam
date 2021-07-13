@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block head %}
     <script type="text/javascript">window.delete = function() { var isValid = confirm('Czy na pewno chcesz usunąć?');if (!isValid) { event.preventDefault();}}</script>
-    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'helper/island.css' %}">
     {% load helper_extras %}
 {% endblock %}

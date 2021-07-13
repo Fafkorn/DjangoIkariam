@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-import re
 
 from ..models import Island, User, Town, Miracle, Resource, SawMillWorkers, MineWorkers
 

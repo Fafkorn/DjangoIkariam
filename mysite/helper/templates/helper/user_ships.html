@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block head %}
-        {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'helper/user_ships.css' %}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'helper/favicon.ico' %}"/>
 {% endblock %}
 {% block content %}
     {% load widget_tweaks %}

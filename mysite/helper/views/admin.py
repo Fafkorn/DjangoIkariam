@@ -4,7 +4,7 @@ from django.shortcuts import render
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance
+from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance, UserStatus
 from bs4 import BeautifulSoup
 
 
@@ -160,9 +160,13 @@ def web_scrap(request):
     option = option_list[1].text
 
     names = []
+    statuses = []
     td_name = soup.find_all("td", {"class": "name"})
+    print(td_name)
     for element in td_name:
         name = element.text
+        statuses.append(get_status(element))
+        print(f"{name.strip()} {get_status(element)}")
         for title in titles:
             name = name.replace(title, '')
         names.append(name.strip())
@@ -177,7 +181,7 @@ def web_scrap(request):
     for element in td_score:
         scores.append(element.text.replace(',', ''))
 
-    data = zip(names, allies, scores)
+    data = zip(names, allies, scores, statuses)
     for entry in data:
         user = User.objects.filter(user_name=entry[0])
         if user:
@@ -187,6 +191,7 @@ def web_scrap(request):
         else:
             user = User(user_name=entry[0], alliance=entry[1])
             # user.save()
+
         if 'Całkowity wynik' in option:
             user.score = entry[2]
         elif 'Mistrzowie budowy' in option:
@@ -213,9 +218,20 @@ def web_scrap(request):
             user.donations = entry[2]
         elif 'Punkty Abordażu' in option:
             user.piracy = entry[2]
+
+        user.user_status = UserStatus.objects.get(pk=entry[3])
         user.save()
 
     return HttpResponseRedirect(reverse('helper:admin', args=()))
+
+
+def get_status(element):
+    if element.find('a').get('class') and 'gray' in element.find('a').get('class'):
+        return 2
+    elif element.find('img'):
+        return 4
+    else:
+        return 1
 
 
 def web_scrap_town(request):
@@ -294,3 +310,8 @@ def find_first_and_delete(buildings_list, building_instance):
         if building.building_type == building_instance.building_type:
             buildings_list.remove(building)
     return buildings_list
+
+
+def set_all_users_deleted(request):
+    User.objects.update(user_status=3)
+    return HttpResponseRedirect(reverse('helper:admin', args=()))
