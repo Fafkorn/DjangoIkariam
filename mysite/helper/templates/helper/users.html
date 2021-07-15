@@ -26,33 +26,27 @@
             </div>
         </div>
 
-        <div class="page-div">
-            <div>
-                <form action="{% url 'helper:add_user' %}" method="post">
+        <div class="tile">
+            <div style="display: inline-block">
+                <form action="{% url 'helper:users'%}" method="get" id="order-form" class="form-inline" >
                     {% csrf_token %}
-                    <input style="width: 200px; float: left" class="form-control"  type="text" name="user_name" placeholder="Nazwa użytkownika">
-                    <button  class="btn btn-success btn-action" type="submit">Dodaj</button>
+                    {{ my_filter.form }}
+                    <button class="btn btn-success btn-action" type="submit" style="display: inline-block">Zastosuj</button>
                 </form>
-
             </div>
+        </div>
+
+        <div class="page-div">
             <div>
                 {% if buttons %}
                 {% for button in buttons %}
-                    <a href="{% url 'helper:users' %}?page={{button.1}}&username_search={{username_search}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
+                    <a href="{% url 'helper:users' %}?page={{button.1}}&user_name={{user_name}}&alliance={{alliance}}&user_status={{user_status}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
                 {% endfor %}
-                    <div style="display: inline-block">
-                        <form action="{% url 'helper:users'%}" method="get" id="order-form" class="form-inline" >
-                            {% csrf_token %}
-                            <label style="margin-left: 15px; margin-right: 5px;">Sortuj według</label>
-                            {% render_field my_filter.form.order_by class="form-control order-select" id="order-select"  %}
-                            <button class="btn btn-success btn-action" type="submit" style="display: inline-block">Zastosuj</button>
-                        </form>
-                    </div>
+
                 {% else %}
                 <h5>Nie znaleziono graczy</h5>
                 {% endif %}
             </div>
-
         </div>
 
         <div class="users-div">
@@ -76,9 +70,12 @@
                         <th>Punkty Abordażu</th>
                     </tr>
                     {% for user in users_list %}
-                        <tr>
+                        <tr class="{% ifequal user.user_status.id 2 %} inactive-player {% endifequal%} {% ifequal user.user_status.id 3 %} deleted-player {% endifequal%}">
                             <td>{{forloop.counter|get_pos:page_num }}</td>
                             <td><a class="player-a" href="{% url 'helper:user_towns' user.id %}">
+                                {% if user.user_status.id == 4 %}
+                                    <img src="{% static "helper/icons/vacation_icon.png" %}" alt="something" width="16px" height="16" >
+                                {% endif %}
                                 {{ user.user_name }}
                                 {% if user.alliance %}
                                     [{{user.alliance}}]

@@ -10,8 +10,10 @@ from ..models import User, Town, Island, Resource
 
 from .user_units import get_sum_units_points, get_sum_units_costs
 from .user_ships import get_sum_ships_points, get_sum_ships_costs
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='helper:login')
 def get_user_towns(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user.last_visit = datetime.now()

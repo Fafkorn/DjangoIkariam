@@ -2,10 +2,12 @@ from django.db import connection
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from ..models import AchievementLevel, AchievementCategory, User, Achievement
 
 
+@login_required(login_url='helper:login')
 def get_achievements(request, category_id):
     user = User.objects.get(id=1)
     achievements = AchievementLevel.objects.raw('SELECT * FROM helper_achievementlevel as al INNER JOIN helper_achievement as a on a.id == al.achievement_id WHERE ((al.level == a.level and a.level == a.max_level) OR al.level == a.level+1) AND a.category_id == %s', [category_id])

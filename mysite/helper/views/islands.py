@@ -4,10 +4,12 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.shortcuts import render, get_object_or_404
 from .filters import IslandFilter
+from django.contrib.auth.decorators import login_required
 
-from ..models import Island, User, Town
+from ..models import Island, User
 
 
+@login_required(login_url='helper:login')
 def get_islands(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     x = request.GET.get('x', '')

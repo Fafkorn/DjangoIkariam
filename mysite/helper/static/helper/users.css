@@ -59,3 +59,11 @@ table {
     margin: 5px 0px 5px 0px;
     justify-content: space-around;
 }
+
+.inactive-player {
+    color: gray;
+}
+
+.deleted-player {
+    color: red;
+}

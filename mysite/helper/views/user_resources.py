@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 
 class UserResourcesView(generic.DetailView):

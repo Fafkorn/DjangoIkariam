@@ -1,12 +1,16 @@
 from django.urls import path
 
 from .views import users, building, user_buildings, user_resources, user_units, user_ships, user_account, island,\
-    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics
+    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics, login, register, logout
 
 app_name = 'helper'
 
 
 urlpatterns = [
+    path('login/', login.get_login, name='login'),
+    path('register/', register.get_register, name='register'),
+    path('logout/', logout.get_logout, name='logout'),
+
     path('users/', users.get_users, name='users'),
     path('users/add_user', users.add_user, name='add_user'),
 

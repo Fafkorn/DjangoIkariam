@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
 from ..models import User, Town, Island, Resource, BuildingInstance, SawMillWorkers, MineWorkers, UserStatus
 from django.views import generic
 

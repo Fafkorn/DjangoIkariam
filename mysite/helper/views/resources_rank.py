@@ -1,10 +1,11 @@
 from django.db import connection
-
+from django.contrib.auth.decorators import login_required
 from ..models import User
 
 from django.shortcuts import get_object_or_404, render
 
 
+@login_required(login_url='helper:login')
 def get_resources_rank(request, user_id):
     order = request.GET.get('order', 'wood')
     user = get_object_or_404(User, pk=user_id)

@@ -1,8 +1,9 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 from ..models import User, Ship
 
 
+@login_required(login_url='helper:login')
 def get_ships(request):
     user = User.objects.get(id=1)
     ships = Ship.objects.all()

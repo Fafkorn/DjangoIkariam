@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
+from django.contrib.auth.decorators import login_required
 
 from ..models import Island, User, Town, Miracle, Resource, SawMillWorkers, MineWorkers
 
@@ -14,7 +15,7 @@ class IslandView(generic.DetailView):
         context = super(IslandView, self).get_context_data()
         island = Island.objects.get(pk=self.kwargs['pk'])
         context['user'] = get_object_or_404(User, pk=self.kwargs['user_id'])
-        context['towns'] = Town.objects.filter(island__id=self.kwargs['pk']).order_by('user')
+        context['towns'] = Town.objects.filter(island__id=self.kwargs['pk']).exclude(user__user_status__id=3).order_by('user')
         context['miracle_types'] = Miracle.objects.all()
         context['next_level_saw_mill_cost'] = SawMillWorkers.objects.get(level=island.wood_level+1).cost
         context['next_level_mine_cost'] = MineWorkers.objects.get(level=island.luxury_level+1).cost

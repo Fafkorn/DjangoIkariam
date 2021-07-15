@@ -6,8 +6,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance, UserStatus
 from bs4 import BeautifulSoup
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='helper:login')
 def admin_site(request):
     context = {'title': 'Admin'}
     return render(request, 'helper/admin.html', context)
