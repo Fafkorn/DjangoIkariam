@@ -40,6 +40,7 @@ def get_user_towns(request, user_id):
         'username': username,
         'alliance_tag': alliance_tag,
         'search_type': search_type,
+        'search_type_display': get_displayable_search_name(search_type),
         'search_value': search_value,
         'towns': towns,
         'sum_points': int(get_sum_units_points(user_id) + get_sum_ships_points(user_id)),
@@ -192,4 +193,23 @@ def get_selected_islands(search_type, search_value):
     for island in islands:
         coords.append([island.x, island.y])
     return coords
+
+
+def get_displayable_search_name(search_name: str):
+    if not search_name:
+        return None
+    names = {
+        "sawmill_above": "Tartak powyżej",
+        "sawmill_below": "Tartak poniżej",
+        "luxury_above": "Kopalnia powyżej",
+        "luxury_below": "Kopalnia poniżej",
+        "luxury_wine": "Surowiec - wino",
+        "luxury_marble": "Surowiec - marmur",
+        "luxury_crystal": "Surowiec - kryształ",
+        "luxury_sulfur": "Surowiec - siarka",
+        "towns_above": "Miasta powżej",
+        "towns_below": "Miasta poniżej",
+        "has_tower": "Wyspy z wieżą",
+    }
+    return names[search_name]
 

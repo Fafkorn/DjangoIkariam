@@ -97,7 +97,7 @@ body {
     display: block;
     position: relative;
     z-index: 1;
-    border-radius: 25px;
+    border-radius: 5px;
     overflow: hidden;
     margin: 0 auto;
 }
@@ -140,8 +140,8 @@ body {
 }
 
 .signup-a {
-font-size: 16px;
-margin-left: 10px;
+    font-size: 16px;
+    margin-left: 10px;
     color: #22cc33;
     font-weight: 600;
 }

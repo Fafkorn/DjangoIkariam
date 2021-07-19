@@ -8,25 +8,6 @@
     margin: 2px;
 }
 
-.delete-button {
-    font-size: 20px;
-    color: #f22;
-    margin: 2px;
-}
-
-.add-button {
-    position: absolute;
-    bottom:   0;
-}
-
-.my-form-control {
-    float: left;
-    height: 30px;
-    line-height: 30px;
-    font-size: 15px;
-    margin: 1px;
-}
-
 hr {
     background: #e4e6eb;
 }
@@ -87,6 +68,7 @@ hr {
 
 #search-row {
     display: flex;
+    max-width: 700px;
 }
 
 .search-col {
@@ -113,3 +95,10 @@ hr {
     margin-left: auto;
     margin-right: auto;
 }
+
+#towns-table {
+    width: 100%;
+    min-width: 500px;
+    line-height: 28px;
+}
+
