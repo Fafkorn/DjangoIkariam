@@ -88,7 +88,7 @@ hr {
 }
 
 #level-input {
-    width: 60px;
+    width: 70px;
 }
 
 .div-name {
@@ -97,11 +97,17 @@ hr {
 
 .single-level-div {
     display: flex;
+    line-height: 36px;
 }
 
 .manage-building-btn {
     width: 100%;
     margin-top: 10px;
+}
+
+#sum-div {
+    margin: 5px;
+    font-weight: 600;
 }
 
 

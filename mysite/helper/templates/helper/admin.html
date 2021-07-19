@@ -28,7 +28,7 @@
     <form action="{% url 'helper:web_scrap_town' %}" method="post">
         {% csrf_token %}
         <label>HTML</label>
-        <textarea name="textarea"></textarea>
+        <textarea name="html"></textarea>
         <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
     </form>
 </div>

@@ -53,6 +53,17 @@
              {% endfor %}
 
         </table>
+        <div style="display: flex; margin-top: 10px; justify-content: space-between;">
+            <div>
+                <form action="{% url 'helper:web_scrap_town' %}" method="post" style="display: flex">
+                    {% csrf_token %}
+                    <input class="form-control" type="text" name="html" placeholder="Wprowadź kod html" />
+                    <input type="hidden" name="user_id" value="{{user.id}}" />
+                    <button class="btn btn-success" type="submit">Wprowadź</button>
+                </form>
+            </div>
+            <div id="sum-div">Suma poziomów {{level_sum}}</div>
+        </div>
 
 
     </div>
@@ -71,7 +82,7 @@
                     <div class="single-level-div">
                         <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
                         <input type="hidden" name="user_id" value="{{user.id}}">
-                        Poziom: <input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
+                        Poziom:<input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
                         <button class="btn btn-success" type="submit">Zatwierdź</button>
                     </div>
                 </form>
@@ -98,9 +109,6 @@
     {% endif %}
 </div>
 
-        <div class="tile">
-            Suma {{level_sum}}
-        </div>
         {% if player_to_compare %}
         <div class="tile compare-div">
             <form action="{% url 'helper:compare_with_player' %}" method="post">

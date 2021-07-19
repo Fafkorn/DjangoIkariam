@@ -1,7 +1,7 @@
 import math
 
 from django.core.paginator import Paginator
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from django.shortcuts import render, get_object_or_404
 from .filters import IslandFilter
 from django.contrib.auth.decorators import login_required
@@ -19,7 +19,7 @@ def get_islands(request, user_id):
     luxury_level = request.GET.get('luxury_level', '')
     order_by = request.GET.get('order_by', '')
     has_tower = request.GET.get('has_tower', '')
-    islands_list = Island.objects.filter().order_by('wood_level', 'luxury_level').reverse().annotate(towns=Count('town'))
+    islands_list = Island.objects.filter().order_by('wood_level', 'luxury_level').reverse().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3)))
     my_filter = IslandFilter(request.GET, queryset=islands_list)
     islands_list = my_filter.qs
     towns = islands_list.aggregate(sum=Sum('towns'))['sum']

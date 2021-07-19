@@ -1,6 +1,6 @@
 import requests
 import time
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -237,11 +237,12 @@ def get_status(element):
 
 
 def web_scrap_town(request):
-    text = request.POST['textarea']
+    text = request.POST['html']
+    user_id = request.POST['user_id']
     soup = BeautifulSoup(text, 'html.parser')
     scripts = soup.find_all("script", {"type": "text/javascript"})
     convert_town_script_to_data(scripts)
-    return HttpResponseRedirect(reverse('helper:admin', args=()))
+    return redirect(reverse('helper:user_buildings', args=[user_id]))
 
 
 def convert_town_script_to_data(scripts):
