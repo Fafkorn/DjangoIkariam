@@ -1,7 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from ..forms import CreateUserForm
 from django.contrib import messages
+from ..models import RegisterKey
 
 
 def get_register(request):
@@ -22,8 +24,10 @@ def get_register(request):
 
 
 def is_key_correct(key: str, form):
-    if key == '123':
+    try:
+        register_key = RegisterKey.objects.get(key=key)
+        register_key.delete()
         return True
-    form.add_error('password1', 'Niepoprawny klucz')
-    return False
-
+    except ObjectDoesNotExist:
+        form.add_error('password1', 'Niepoprawny klucz')
+        return False

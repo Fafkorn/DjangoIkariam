@@ -54,7 +54,7 @@ class UserFilter(FilterSet):
         label="Sortuj"
     )
 
-    order_by.descending_fmt = False
+    order_by.descending_fmt = None
 
     class Meta:
         model = User

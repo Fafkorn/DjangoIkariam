@@ -41,7 +41,7 @@
             </tr>
             {% for island in islands_list%}
             <tr>
-                <td><a class="island-link" href="{% url 'helper:island' pk=island.id user_id=1 %}">{{island.name}}</a></td>
+                <td><a class="island-link" href="{% url 'helper:island' user_id island.id %}">{{island.name}}</a></td>
                 <td>{{island.x}}</td>
                 <td>{{island.y}}</td>
                 <td>{{island.wood_level}} <img src="{{island.wood_resource.image_path.url}}" alt="img" width="25px" height="20"></td>

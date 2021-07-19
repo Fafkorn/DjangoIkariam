@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import users, building, user_buildings, user_resources, user_units, user_ships, user_account, island,\
-    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics, login, register, logout
+from .views import users, user_buildings, user_resources, user_army, user_account, island,\
+    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics, login, register, logout,\
+    key_manager
 
 app_name = 'helper'
 
@@ -14,34 +15,30 @@ urlpatterns = [
     path('users/', users.get_users, name='users'),
     path('users/add_user', users.add_user, name='add_user'),
 
-    path('users/buildings/<int:pk>', user_buildings.UserBuildingsView.as_view(), name='user_buildings'),
-    path('users/buildings/compare_with_player', user_buildings.UserBuildingsView.compare_with_player, name='compare_with_player'),
 
-    path('building/<int:pk>/', building.BuildingView.as_view(), name='building'),
-    path('building/<int:instance_building_id>/update_building', building.update_building, name='update_building'),
-    path('building/<int:instance_building_id>/start_develop_building', building.start_develop_building, name='start_develop_building'),
-    path('building/<int:instance_building_id>/stop_develop_building', building.stop_develop_building, name='stop_develop_building'),
+    path('users/buildings/<int:user_id>', user_buildings.get_user_buildings, name='user_buildings'),
+    path('users/update_building/', user_buildings.update_building, name='update_building'),
+    path('users/start_develop_building/', user_buildings.start_develop_building, name='start_develop_building'),
+    path('users/stop_develop_building/', user_buildings.stop_develop_building, name='stop_develop_building'),
 
-    path('users/resources/<int:pk>', user_resources.UserResourcesView.as_view(), name='user_resources'),
+    path('users/resources/<int:user_id>', user_resources.get_user_resources, name='user_resources'),
     path('users/resources/<int:user_id>/save_resources', user_resources.save_resources, name='save_resources'),
     path('users/resources/<int:user_id>/send_resources', user_resources.send_resources, name='send_resources'),
     path('users/resources/<int:user_id>/add_all', user_resources.add_all, name='add_all'),
 
-    path('users/units/<int:pk>', user_units.UserUnitsView.as_view(), name='user_units'),
-    path('users/units/<int:user_id>/save_units', user_units.save_units, name='save_units'),
-    path('users/units/<int:user_id>/toggle_no_units', user_units.toggle_no_units, name='toggle_no_units'),
+    path('users/army/<int:user_id>', user_army.get_user_army, name='user_army'),
+    path('users/army/<int:user_id>/save_units', user_army.save_units, name='save_units'),
+    path('users/army/<int:user_id>/toggle_no_units', user_army.toggle_no_units, name='toggle_no_units'),
+    path('users/army/<int:user_id>/save_ships', user_army.save_ships, name='save_ships'),
+    path('users/army/<int:user_id>/toggle_no_ships', user_army.toggle_no_ships, name='toggle_no_ships'),
 
-    path('users/ships/<int:pk>', user_ships.UserShipsView.as_view(), name='user_ships'),
-    path('users/ships/<int:user_id>/save_ships', user_ships.save_ships, name='save_ships'),
-    path('users/ships/<int:user_id>/toggle_no_ships', user_ships.toggle_no_ships, name='toggle_no_ships'),
-
-    path('users/account/<int:pk>', user_account.UserAccountView.as_view(), name='user_account'),
+    path('users/account/<int:user_id>', user_account.get_user_account, name='user_account'),
     path('users/account/<int:user_id>/save_researches', user_account.save_researches, name='save_researches'),
     path('users/account/<int:user_id>/edit_user_info', user_account.edit_user_info, name='edit_user_info'),
     path('users/account/<int:user_id>/delete_user', user_account.delete_user, name='delete_user'),
     path('users/account/<int:user_id>/enable_towns', user_account.enable_towns, name='enable_towns'),
 
-    path('users/island/<int:pk>/<int:user_id>', island.IslandView.as_view(), name='island'),
+    path('users/island/<int:user_id>/<int:island_id>', island.get_island, name='island'),
     path('users/island/edit_island', island.edit_island, name='edit_island'),
     path('users/island/add_town', island.add_town, name='add_town'),
     path('users/island/delete_island', island.delete_island, name='delete_island'),
@@ -57,6 +54,7 @@ urlpatterns = [
 
     path('admin', admin.admin_site, name='admin'),
     path('admin/web_scrap', admin.web_scrap, name='web_scrap'),
+    path('admin/key_manager', key_manager.get_key_manager, name='key_manager'),
     path('admin/web_scrap_island', admin.web_scrap_island, name='web_scrap_island'),
     path('admin/web_scrap_town', admin.web_scrap_town, name='web_scrap_town'),
     path('admin/web_scrap_all_islands', admin.web_scrap_all_islands, name='web_scrap_all_islands'),

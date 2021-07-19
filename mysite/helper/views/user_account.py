@@ -1,31 +1,29 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from ..models import User, Town, Island, Resource, BuildingInstance, SawMillWorkers, MineWorkers, UserStatus
-from django.views import generic
+from ..models import User, Town, Island, Resource, BuildingInstance, UserStatus
 
-from .user_units import get_sum_units_points, get_sum_units_costs
-from .user_ships import get_sum_ships_points, get_sum_ships_costs
+from .user_army import get_sum_units_points, get_sum_units_costs
+from .user_army import get_sum_ships_points, get_sum_ships_costs
 
 
-class UserAccountView(generic.DetailView):
-    template_name = 'helper/user_account.html'
-    model = User
-
-    def get_context_data(self, **kwargs):
-        context = super(UserAccountView, self).get_context_data()
-        user_id = context['user'].id
-        user_statuses = UserStatus.objects.all()
-        costs_units_discount = 1.0 - context['user'].military_future * 0.02 - 0.14
-        costs_ships_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
-        context['towns'] = Town.objects.filter(user__id=user_id).order_by('island')
-        context['sum_points'] = int(get_sum_units_points(user_id) + get_sum_ships_points(user_id))
-        context['sum_costs'] = int(get_sum_units_costs(user_id)*costs_units_discount +
-                                   get_sum_ships_costs(user_id)*costs_ships_discount)
-        context['nav_active'] = 'user_account'
-        context['title'] = 'Konto - ' + context['user'].user_name
-        context['user_statuses'] = user_statuses
-        return context
+@login_required(login_url='helper:login')
+def get_user_account(request, user_id):
+    context = {}
+    context['user'] = User.objects.get(pk=user_id)
+    user_id = context['user'].id
+    user_statuses = UserStatus.objects.all()
+    costs_units_discount = 1.0 - context['user'].military_future * 0.02 - 0.14
+    costs_ships_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
+    context['towns'] = Town.objects.filter(user__id=user_id).order_by('island')
+    context['sum_points'] = int(get_sum_units_points(user_id) + get_sum_ships_points(user_id))
+    context['sum_costs'] = int(get_sum_units_costs(user_id)*costs_units_discount +
+                               get_sum_ships_costs(user_id)*costs_ships_discount)
+    context['nav_active'] = 'user_account'
+    context['title'] = 'Konto - ' + context['user'].user_name
+    context['user_statuses'] = user_statuses
+    return render(request, 'helper/user_account.html', context)
 
 
 def add_town(request, user_id):

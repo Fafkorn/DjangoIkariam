@@ -10,11 +10,6 @@
             Ikariam Helper
         </a>
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if nav_active == 'users' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'helper:users' %}">
-                    Użytkownicy
-                </a>
-            </li>
             <li class="nav-item {% if nav_active == 'user_towns' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'helper:user_towns' user.id %}">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-door" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -42,20 +37,12 @@
                     Surowce
                 </a>
             </li>
-            <li class="nav-item {% if nav_active == 'user_units' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'helper:user_units' user.id %}">
+            <li class="nav-item {% if nav_active == 'user_army' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'helper:user_army' user.id %}">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-shield" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M5.443 1.991a60.17 60.17 0 0 0-2.725.802.454.454 0 0 0-.315.366C1.87 7.056 3.1 9.9 4.567 11.773c.736.94 1.533 1.636 2.197 2.093.333.228.626.394.857.5.116.053.21.089.282.11A.73.73 0 0 0 8 14.5c.007-.001.038-.005.097-.023.072-.022.166-.058.282-.111.23-.106.525-.272.857-.5a10.197 10.197 0 0 0 2.197-2.093C12.9 9.9 14.13 7.056 13.597 3.159a.454.454 0 0 0-.315-.366c-.626-.2-1.682-.526-2.725-.802C9.491 1.71 8.51 1.5 8 1.5c-.51 0-1.49.21-2.557.491zm-.256-.966C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815z"/>
                     </svg>
-                    Jednostki
-                </a>
-            </li>
-            <li class="nav-item {% if nav_active == 'user_ships' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'helper:user_ships' user.id %}">
-                    <svg width="1em" height="1em" viewBox="0 0 24 24" class="bi bi-shield" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17,15l1.55,1.55c-0.96,1.69-3.33,3.04-5.55,3.37V11h3V9h-3V7.82C14.16,7.4,15,6.3,15,5c0-1.65-1.35-3-3-3S9,3.35,9,5 c0,1.3,0.84,2.4,2,2.82V9H8v2h3v8.92c-2.22-0.33-4.59-1.68-5.55-3.37L7,15l-4-3v3c0,3.88,4.92,7,9,7s9-3.12,9-7v-3L17,15z M12,4 c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S11.45,4,12,4z"/>
-                    </svg>
-                    Statki
+                    Armia
                 </a>
             </li>
             <li class="nav-item {% if nav_active == 'user_account' %}active{% endif %}" >
@@ -89,22 +76,38 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active" style="margin-right: 20px; color: #fff;">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+
+            <li class="nav-item">
+                <a class="nav-link inactive" href="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                 </svg>
-                {{user.user_name}}
+                    {{user.user_name}}
+                </a>
             </li>
 
-            <li class="nav-item" style="margin-right: 20px; color: #fff;">
-                {{request.user}}
-                <a href="{% url 'helper:logout' %}">Wyloguj się</a>
+            <li class="nav-item dropdown active" >
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    {{request.user}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="userDropdown">
+                   <a class="dropdown-item" href="{% url 'helper:logout' %}" title="Wyloguj">
+                    Wyloguj
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                      <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                    </svg>
+                </a>
+                </div>
             </li>
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="{% url 'helper:users'%}" method="get">
             {% csrf_token %}
-            <input type="search" class="form-control mr-sm-2" name="username_search" placeholder="Nazwa użytkownika">
+            <input type="search" class="form-control mr-sm-2" name="user_name" placeholder="Nazwa użytkownika">
             <button type="submit" class="btn btn-success btn-action">Szukaj</button>
         </form>
     </nav>

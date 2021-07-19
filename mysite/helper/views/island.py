@@ -1,26 +1,23 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views import generic
 from django.contrib.auth.decorators import login_required
 
 from ..models import Island, User, Town, Miracle, Resource, SawMillWorkers, MineWorkers
 
 
-class IslandView(generic.DetailView):
-    template_name = 'helper/island.html'
-    model = Island
-
-    def get_context_data(self, **kwargs):
-        context = super(IslandView, self).get_context_data()
-        island = Island.objects.get(pk=self.kwargs['pk'])
-        context['user'] = get_object_or_404(User, pk=self.kwargs['user_id'])
-        context['towns'] = Town.objects.filter(island__id=self.kwargs['pk']).exclude(user__user_status__id=3).order_by('user')
-        context['miracle_types'] = Miracle.objects.all()
-        context['next_level_saw_mill_cost'] = SawMillWorkers.objects.get(level=island.wood_level+1).cost
-        context['next_level_mine_cost'] = MineWorkers.objects.get(level=island.luxury_level+1).cost
-        context['title'] = f'{island.name} [{island.x}:{island.y}]'
-        return context
+@login_required(login_url='helper:login')
+def get_island(request, user_id, island_id):
+    context = {}
+    context['user'] = get_object_or_404(User, pk=user_id)
+    island = Island.objects.get(pk=island_id)
+    context['towns'] = Town.objects.filter(island__id=island_id).exclude(user__user_status__id=3).order_by('user')
+    context['miracle_types'] = Miracle.objects.all()
+    context['island'] = island
+    context['next_level_saw_mill_cost'] = SawMillWorkers.objects.get(level=island.wood_level+1).cost
+    context['next_level_mine_cost'] = MineWorkers.objects.get(level=island.luxury_level+1).cost
+    context['title'] = f'{island.name} [{island.x}:{island.y}]'
+    return render(request, 'helper/island.html', context)
 
 
 def edit_island(request):

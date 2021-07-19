@@ -1,3 +1,7 @@
+.content-div {
+    display: flex;
+}
+
 table {
     margin: 4px;
     box-shadow: 1px 1px 4px rgba(255, 255, 255, 0.66);
@@ -7,7 +11,7 @@ table.table-bordered > tbody > tr > td{
     border:.5px solid #888;
 }
 
-table.table-bordered > tbody > tr > td > a{
+.building-a {
     width: 100%;
     display: block;
     text-decoration:none;
@@ -57,23 +61,48 @@ tr:nth-child(even) {background-color: #ffffff;}
     color: #fff;
 }
 
-.form-control:focus {
-  border-color: #00aa00;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 150, 0, 0.6);
-}
-
-.form-control {
-    background: #363636;
-    border-color: #1a1a1a;
-    color: #ddd;
-}
-
 .compare-div {
     width: 275px;
 }
 
-.compare-button {
-    margin-top: 12px;
-    display: inline;
-    width: 100%;
+
+hr {
+    background: #e4e6eb;
 }
+
+
+.div-level {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.div-title {
+    font-size: 20px;
+}
+
+.div-town {
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#level-input {
+    width: 60px;
+}
+
+.div-name {
+    font-size: 20px;
+}
+
+.single-level-div {
+    display: flex;
+}
+
+.manage-building-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+

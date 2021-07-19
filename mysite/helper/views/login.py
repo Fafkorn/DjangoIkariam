@@ -13,7 +13,7 @@ def get_login(request):
             login(request, user)
             return redirect('helper:users')
         else:
-            messages.info(request, 'Nieprawidłowa nazwa użytkownika lub hasło')
+            messages.error(request, 'Nieprawidłowa nazwa lub hasło')
 
     context = {
         'title': 'Helper - Logowanie'}

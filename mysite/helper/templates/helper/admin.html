@@ -46,9 +46,11 @@
 </div>
 
 <div class="tile">
+    {{key}}
     <form action="{% url 'helper:set_all_users_deleted' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-success submit-btn">Ustaw wszystkim "Usunięty"</button>
     </form>
 </div>
+
 {% endblock %}

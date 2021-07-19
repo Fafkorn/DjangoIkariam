@@ -132,6 +132,7 @@ body {
 
 
 .signup-div {
+    font-size: 14px;
     display: flex;
     justify-content: center;
     margin-top: 30px;
@@ -139,8 +140,9 @@ body {
 }
 
 .signup-a {
-    color: lightgreen;
-    align-text: center;
+font-size: 16px;
+margin-left: 10px;
+    color: #22cc33;
     font-weight: 600;
 }
 

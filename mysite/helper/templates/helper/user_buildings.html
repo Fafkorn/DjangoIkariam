@@ -9,7 +9,8 @@
     {% load widget_tweaks %}
 
     {% include "helper/navigation.html" %}
-
+<div class="content-div">
+    <div class="tile">
         <table class="table-bordered">
           <tr>
             <th>Miasto</th>
@@ -23,7 +24,8 @@
                   {% for building_instance in town %}
                         {% if building_instance.level > 0%}
                             <td is_upgrading="{{building_instance.is_upgraded}}" class="developing_td"  style="text-align:center;">
-                                <a href="{% url 'helper:building' building_instance.id %}">
+                                <input type="hidden" name="selected_building" value="{{building_instance.id}}" />
+                                <a class="building-a" href="{% url 'helper:user_buildings' user.id %}?selected_building={{building_instance.id}}">
                                 {% if building_instance.level == building_instance.building_type.max_level %}
                                 <div class="max-level">
                                   {{building_instance.level}}
@@ -38,10 +40,11 @@
                             </td>
                         {% else %}
                             <td style="text-align:center;">
-                                <a href="{% url 'helper:building' building_instance.id %}">
-                                <div class="level-div">
-                                    -
-                                </div>
+                                <input type="hidden" name="selected_building" value="{{building_instance.id}}" />
+                                <a class="building-a" href="{% url 'helper:user_buildings' user.id %}?selected_building={{building_instance.id}}">
+                                    <div class="level-div">
+                                        -
+                                    </div>
                                 </a>
                             </td>
                         {% endif %}
@@ -51,8 +54,52 @@
 
         </table>
 
-        <div class="div-box">
-            {{level_sum}}
+
+    </div>
+     {% if selected_building %}
+        <div class="tile">
+            <img src="{{selected_building.building_type.image_path.url}}" alt="img">
+            <div class="div-box">
+                <div class="div-name">
+                    <p>{{ selected_building.building_type.building_name }}</p>
+                    <p>{% if selected_building.is_upgraded %} (W budowie) {% endif %}</p>
+                    <p>{{ selected_building.building_town.town_name }}</p>
+                </div>
+                <hr>
+                <form action="{% url 'helper:update_building' %}" method="post">
+                    {% csrf_token %}
+                    <div class="single-level-div">
+                        <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
+                        <input type="hidden" name="user_id" value="{{user.id}}">
+                        Poziom: <input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
+                        <button class="btn btn-success" type="submit">Zatwierdź</button>
+                    </div>
+                </form>
+            </div>
+
+            {% if not selected_building.is_upgraded %}
+            <form action="{% url 'helper:start_develop_building' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
+                <input type="hidden" name="user_id" value="{{user.id}}">
+                <button class="btn btn-success manage-building-btn" type="submit">Rozbuduj</button>
+            </form>
+            {% endif %}
+
+            {% if selected_building.is_upgraded %}
+            <form action="{% url 'helper:stop_develop_building' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
+                <input type="hidden" name="user_id" value="{{user.id}}">
+                <button type="submit" class="btn btn-success manage-building-btn">Zakończ</button>
+            </form>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+        <div class="tile">
+            Suma {{level_sum}}
         </div>
         {% if player_to_compare %}
         <div class="tile compare-div">
@@ -76,28 +123,33 @@
              <tr>
                       <th>{{town.0.building_town.town_name}}</th>
                       {% for building_instance in town %}
-                            {% if building_instance.level > 0%}
-                                <td is_upgrading="{{building_instance.is_upgraded}}" class="developing_td"  style="text-align:center;">
-                                    <a href="{% url 'helper:building' building_instance.id %}">
-                                    {% if building_instance.level == building_instance.building_type.max_level %}
-                                    <div class="max-level">
-                                      {{building_instance.level}}
-                                    </div>
-                                    {% else %}
-                                    <div class="not-max-level">
-                                      {{building_instance.level}}
-                                    </div>
-                                    {% endif %}
+                            {% if building_instance.level > 0 %}
+                                <td class="developing_td"  style="text-align:center;">
+                                    <form action="{% url 'helper:user_buildings' %}" method="GET">
+                                        {% csrf_token %}
+                                        <a href="#" onclick="document.getElementById('form-id').submit();">
+                                        {% if building_instance.level == building_instance.building_type.max_level %}
+                                        <div class="max-level">
+                                          {{building_instance.level}}
+                                        </div>
+                                        {% else %}
+                                        <div class="not-max-level">
+                                          {{building_instance.level}}
+                                        </div>
+                                        {% endif %}
 
-                                    </a>
+                                        </a>
+                                    </form>
                                 </td>
                             {% else %}
                                 <td style="text-align:center;">
-                                    <a href="{% url 'helper:building' building_instance.id %}">
-                                    <div class="level-div">
-                                        -
-                                    </div>
-                                    </a>
+                                    <form action="{% url 'helper:user_buildings' %}" method="GET">
+                                        {% csrf_token %}
+                                            <a href="#12" onclick="document.getElementById('form-id').submit();">
+                                                <div class="level-div">-</div>
+                                            </a>
+                                        <input type="hidden" value="{{building_instance.id}}">
+                                    </form>
                                 </td>
                             {% endif %}
                     {% endfor %}

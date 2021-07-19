@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/key_manager.css' %}">
+    {% load helper_extras %}
+{% endblock %}
+
+{% block content %}
+
+{% include "helper/navigation.html" %}
+
+<div class="tile">
+    <h5>Generuj klucz</h5>
+    {{key}}
+    <form action="{% url 'helper:key_manager' %}" method="post">
+        {% csrf_token%}
+        <button class="btn btn-success" type="submit">Generuj</button>
+    </form>
+</div>
+{% endblock %}

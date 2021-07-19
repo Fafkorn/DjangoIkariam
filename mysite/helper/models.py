@@ -294,3 +294,7 @@ class AchievementLevel(models.Model):
 
     def __str__(self):
         return str(self.achievement.name + ' - ' + self.description)
+
+
+class RegisterKey(models.Model):
+    key = models.CharField(max_length=20)

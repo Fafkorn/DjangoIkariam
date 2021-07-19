@@ -42,7 +42,7 @@
             };
         </script>
         <link rel="shortcut icon" type="image/png" href="{% static 'helper/icons/favicon.ico' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'helper/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'helper/base.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'helper/user_towns.css' %}">
         <title>{{title}}</title>
         {% load helper_extras %}
@@ -154,7 +154,7 @@
                                 <td>
                                     {% ifchanged town.island %}
                                         {% if town.island %}
-                                            <a title="[{{town.island.x}}:{{town.island.y}}]" href="{% url 'helper:island' pk=town.island.id user_id=user.id %}">
+                                            <a title="[{{town.island.x}}:{{town.island.y}}]" href="{% url 'helper:island' user.id town.island.id %}">
                                                 {{town.island.wood_level}}<img src="{{town.island.wood_resource.image_path.url}}" alt="img" width="25px" height="20">
                                                 {{town.island.luxury_level}}<img src="{{town.island.luxury_resource.image_path.url}}" alt="img" width="25px" height="20">
                                                 <img title="{{town.island.miracle.name}}" src="{{town.island.miracle.image_path.url}}" alt="img" width="20px" height="20px">

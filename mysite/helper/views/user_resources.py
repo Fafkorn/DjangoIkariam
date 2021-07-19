@@ -1,59 +1,57 @@
-from ..models import User, TownResources, Resource
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from ..models import TownResources, Resource, User
 from django.http import HttpResponseRedirect
-from django.views import generic
 from django.urls import reverse
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
 
 
-class UserResourcesView(generic.DetailView):
-    template_name = 'helper/user_resources.html'
-    model = User
+@login_required(login_url='helper:login')
+def get_user_resources(request, user_id):
+    context = {}
+    context['user'] = User.objects.get(pk=user_id)
+    context['resources'] = TownResources.objects.filter(town__user_id=user_id)
+    context['resource_types'] = Resource.objects.all()
+    wood = 0
+    wood_production = 0
+    wine = 0
+    wine_production = 0
+    tavern_expenses = 0
+    marble = 0
+    marble_production = 0
+    crystal = 0
+    crystal_production = 0
+    sulfur = 0
+    sulfur_production = 0
+    for resource in context['resources']:
+        update_resources(resource)
+        wood += resource.wood
+        wood_production += resource.wood_production
+        wine += resource.wine
+        wine_production += resource.wine_production
+        tavern_expenses += resource.tavern_expenses
+        marble += resource.marble
+        marble_production += resource.marble_production
+        crystal += resource.crystal
+        crystal_production += resource.crystal_production
+        sulfur += resource.sulfur
+        sulfur_production += resource.sulfur_production
+    context['sum_wood'] = wood
+    context['sum_wood_production'] = wood_production
+    context['sum_wine'] = wine
+    context['sum_wine_production'] = wine_production
+    context['sum_tavern_expenses'] = tavern_expenses
+    context['sum_marble'] = marble
+    context['sum_marble_production'] = marble_production
+    context['sum_crystal'] = crystal
+    context['sum_crystal_production'] = crystal_production
+    context['sum_sulfur'] = sulfur
+    context['sum_sulfur_production'] = sulfur_production
 
-    def get_context_data(self, **kwargs):
-        context = super(UserResourcesView, self).get_context_data()
-        user_id = context['user'].id
-        context['resources'] = TownResources.objects.filter(town__user_id=user_id)
-        context['resource_types'] = Resource.objects.all()
-        wood = 0
-        wood_production = 0
-        wine = 0
-        wine_production = 0
-        tavern_expenses = 0
-        marble = 0
-        marble_production = 0
-        crystal = 0
-        crystal_production = 0
-        sulfur = 0
-        sulfur_production = 0
-        for resource in context['resources']:
-            update_resources(resource)
-            wood += resource.wood
-            wood_production += resource.wood_production
-            wine += resource.wine
-            wine_production += resource.wine_production
-            tavern_expenses += resource.tavern_expenses
-            marble += resource.marble
-            marble_production += resource.marble_production
-            crystal += resource.crystal
-            crystal_production += resource.crystal_production
-            sulfur += resource.sulfur
-            sulfur_production += resource.sulfur_production
-        context['sum_wood'] = wood
-        context['sum_wood_production'] = wood_production
-        context['sum_wine'] = wine
-        context['sum_wine_production'] = wine_production
-        context['sum_tavern_expenses'] = tavern_expenses
-        context['sum_marble'] = marble
-        context['sum_marble_production'] = marble_production
-        context['sum_crystal'] = crystal
-        context['sum_crystal_production'] = crystal_production
-        context['sum_sulfur'] = sulfur
-        context['sum_sulfur_production'] = sulfur_production
-
-        context['nav_active'] = 'user_resources'
-        context['title'] = 'Surowce - ' + context['user'].user_name
-        return context
+    context['nav_active'] = 'user_resources'
+    context['title'] = 'Surowce - ' + context['user'].user_name
+    return render(request, 'helper/user_resources.html', context)
 
 
 def save_resources(request, user_id):

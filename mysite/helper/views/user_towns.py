@@ -8,8 +8,8 @@ from django.db.models import Count
 
 from ..models import User, Town, Island, Resource
 
-from .user_units import get_sum_units_points, get_sum_units_costs
-from .user_ships import get_sum_ships_points, get_sum_ships_costs
+from .user_army import get_sum_units_points, get_sum_units_costs
+from .user_army import get_sum_ships_points, get_sum_ships_costs
 from django.contrib.auth.decorators import login_required
 
 
