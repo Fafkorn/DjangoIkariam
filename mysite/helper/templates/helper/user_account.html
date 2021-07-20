@@ -113,6 +113,7 @@
         </div>
 
         <div class="add-town-edit-user-div">
+            {% if request.user.is_staff %}
             <div class="tile edit-name-div">
                 <form action="{% url 'helper:edit_user_info' user.id %}" method="post">
                     {% csrf_token %}
@@ -131,6 +132,7 @@
                     <button class="btn btn-success add-button" type="submit" >Zmień</button>
                 </form>
             </div>
+            {% endif %}
             <div class="tile">
                 <form action="{% url 'helper:save_researches' user.id %}" method="post">
                     {% csrf_token %}

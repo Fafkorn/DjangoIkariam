@@ -63,6 +63,13 @@
                     Statystyki
                 </a>
             </li>
+            {% if request.user.is_staff %}
+                <li class="nav-item {% if nav_active == 'key_manager' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'helper:key_manager' %}">
+                        Klucze
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item dropdown  {% if nav_active == 'guide' %}active{% endif %}" >
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Poradnik
@@ -70,8 +77,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'helper:units' %}">Jednostki</a>
                     <a class="dropdown-item" href="{% url 'helper:ships' %}">Statki</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'helper:achievements_category' 1 %}">Osiągnięcia</a>
+                    {% if request.user.is_staff %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'helper:achievements_category' 1 %}">Osiągnięcia</a>
+                    {% endif %}
                 </div>
             </li>
         </ul>

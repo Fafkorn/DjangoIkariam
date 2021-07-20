@@ -4,10 +4,12 @@ import string
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from ..decorators import admin_only
 from ..models import RegisterKey
 
 
 @login_required(login_url='helper:login')
+@admin_only()
 def get_key_manager(request):
     context = {}
 

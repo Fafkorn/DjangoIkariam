@@ -1,11 +1,14 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+
+from ..decorators import unauthenticated_user
 from ..forms import CreateUserForm
 from django.contrib import messages
 from ..models import RegisterKey
 
 
+@unauthenticated_user
 def get_register(request):
     form = CreateUserForm()
 

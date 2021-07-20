@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
+from ..decorators import unauthenticated_user
 
+
+@unauthenticated_user
 def get_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')

@@ -4,12 +4,15 @@ from django.shortcuts import render, redirect
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+
+from ..decorators import admin_only
 from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance, UserStatus
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='helper:login')
+@admin_only()
 def admin_site(request):
     context = {'title': 'Admin'}
     return render(request, 'helper/admin.html', context)
@@ -57,6 +60,7 @@ def get_town(town_name, user, island, in_game_id):
         return town
 
 
+@admin_only()
 def web_scrap_all_islands(request):
     cookie = request.POST['cookie']
     password = request.POST['password']
@@ -88,6 +92,7 @@ def web_scrap_all_islands(request):
     return HttpResponseRedirect(reverse('helper:admin', args=()))
 
 
+@admin_only()
 def web_scrap_island(request):
     text = request.POST['textarea']
     soup = BeautifulSoup(text, 'html.parser')
@@ -96,6 +101,7 @@ def web_scrap_island(request):
     return HttpResponseRedirect(reverse('helper:admin', args=()))
 
 
+@admin_only()
 def convert_island_script_to_data(scripts):
     for script in scripts:
         if "$(document).ready(function () {" in str(script) and "xCoord" in str(script):
@@ -147,6 +153,7 @@ def delete_missing_towns(towns_script, towns_database):
             town.delete()
 
 
+@admin_only()
 def web_scrap(request):
     titles = ['Pan Cieni', 'Imperator', 'Mistrz Sztuk Pięknych', 'Geniusz', 'Korsarz', 'Ambasador', 'Mecenas',
               'Bicz Barbarzyńców', 'Najwyższy Namiestnik', 'Strażnik Wiedzy', 'Hurtownik', 'Syzyf', 'Burmistrz',
@@ -236,6 +243,7 @@ def get_status(element):
         return 1
 
 
+@login_required(login_url='helper:login')
 def web_scrap_town(request):
     text = request.POST['html']
     user_id = request.POST['user_id']
@@ -315,6 +323,8 @@ def find_first_and_delete(buildings_list, building_instance):
     return buildings_list
 
 
+@login_required(login_url='helper:login')
+@admin_only()
 def set_all_users_deleted(request):
     User.objects.update(user_status=3)
     return HttpResponseRedirect(reverse('helper:admin', args=()))
