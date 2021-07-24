@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's&*1mgd2qn*_!dj)lz1q6e=q*h+jdlidomvjln@@pn8(6#_fwq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://django-ika.herokuapp.com']
 
@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['https://django-ika.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'helper.apps.HelperConfig',
+    'mysite.helper',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # Database
