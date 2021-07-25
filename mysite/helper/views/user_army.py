@@ -26,12 +26,7 @@ def get_user_army(request, user_id):
     discount = 1.0 - context['user'].military_future*0.02 - 0.14
     with connection.cursor() as cursor:
         for a in cursor.execute(
-            "SELECT SUM(ui.number), u.hour_costs as sso, u.points as wwo "
-            "FROM helper_unitinstance AS ui "
-            "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
-            "INNER JOIN helper_town as t ON ui.town_id = t.id "
-            "WHERE t.user_id = %s  "
-            "GROUP BY ui.unit_id",
+            "SELECT SUM(ui.number), u.hour_costs as sso, u.points as wwo FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s GROUP BY ui.unit_id",
                 [user_id]):
             sum_units.append(a[0])
             cost = a[0] * a[1] * discount
@@ -91,12 +86,7 @@ def get_ship_instances(towns):
 
 def get_sum_units_points(user_id):
     cursor = connection.cursor()
-    cursor.execute(
-            "SELECT SUM(ui.number * u.points)"
-            "FROM helper_unitinstance AS ui "
-            "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
-            "INNER JOIN helper_town as t ON ui.town_id = t.id "
-            "WHERE t.user_id = %s  ", [user_id])
+    cursor.execute("SELECT SUM(ui.number * u.points) FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
@@ -106,11 +96,7 @@ def get_sum_units_points(user_id):
 def get_sum_units_costs(user_id):
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT SUM(ui.number * u.hour_costs)"
-        "FROM helper_unitinstance AS ui "
-        "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
-        "INNER JOIN helper_town as t ON ui.town_id = t.id "
-        "WHERE t.user_id = %s  ", [user_id])
+        "SELECT SUM(ui.number * u.hour_costs) FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
@@ -139,11 +125,7 @@ def toggle_no_units(request, user_id):
 def get_sum_ships_points(user_id):
     cursor = connection.cursor()
     cursor.execute(
-            "SELECT SUM(si.number * s.points)"
-            "FROM helper_shipinstance AS si "
-            "INNER JOIN helper_ship as s ON si.ship_id = s.id "
-            "INNER JOIN helper_town as t ON si.town_id = t.id "
-            "WHERE t.user_id = %s  ", [user_id])
+            "SELECT SUM(si.number * s.points) FROM helper_shipinstance AS si INNER JOIN helper_ship as s ON si.ship_id = s.id INNER JOIN helper_town as t ON si.town_id = t.id  WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
@@ -153,11 +135,7 @@ def get_sum_ships_points(user_id):
 def get_sum_ships_costs(user_id):
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT SUM(si.number * s.hour_costs)"
-        "FROM helper_shipinstance AS si "
-        "INNER JOIN helper_ship as s ON si.ship_id = s.id "
-        "INNER JOIN helper_town as t ON si.town_id = t.id "
-        "WHERE t.user_id = %s  ", [user_id])
+        "SELECT SUM(si.number * s.hour_costs) FROM helper_shipinstance AS si INNER JOIN helper_ship as s ON si.ship_id = s.id INNER JOIN helper_town as t ON si.town_id = t.id WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
