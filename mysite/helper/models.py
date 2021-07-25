@@ -24,7 +24,7 @@ class User(models.Model):
     scientists = models.IntegerField(default=0)
     research_level = models.IntegerField(default=0)
     generals = models.IntegerField(default=0)
-    gold = models.IntegerField(default=0)
+    gold = models.BigIntegerField(default=0)
     offensive = models.IntegerField(default=0)
     defensive = models.IntegerField(default=0)
     trading = models.IntegerField(default=0)
