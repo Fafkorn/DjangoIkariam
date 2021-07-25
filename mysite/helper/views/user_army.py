@@ -3,7 +3,6 @@ from django.shortcuts import render
 from ..models import User, Unit, Ship, UnitInstance, ShipInstance, Town
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.db import connection
 from django.contrib.auth.decorators import login_required
 
 
@@ -22,39 +21,50 @@ def get_user_army(request, user_id):
     sum_units = []
     units_costs = []
     units_points = []
-    sum_costs = 0
-    discount = 1.0 - context['user'].military_future*0.02 - 0.14
-    with connection.cursor() as cursor:
-        for a in cursor.execute("SELECT SUM(ui.number), u.hour_costs as sso, u.points as wwo FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s GROUP BY ui.unit_id, u.hour_costs, u.points", [user_id]):
-            sum_units.append(a[0])
-            cost = a[0] * a[1] * discount
-            units_costs.append(int(cost))
-            units_points.append(int(a[0] * a[2]))
-            sum_costs += cost
+    units_discount = 1.0 - context['user'].military_future*0.02 - 0.14
+    unit_types = Unit.objects.all()
+    for unit in unit_types:
+        unit_instances2 = UnitInstance.objects.filter(town__user__id=user_id, unit_id=unit.id)
+        liczba_jednostek = 0
+        koszty_jednostek = 0
+        punkty_jednostek = 0
+        for a in unit_instances2:
+            liczba_jednostek += a.number
+            koszty_jednostek += (a.number * a.unit.hour_costs) * units_discount
+            punkty_jednostek += a.number * a.unit.points
+        sum_units.append(liczba_jednostek)
+        units_costs.append(int(koszty_jednostek))
+        units_points.append(int(punkty_jednostek))
+
     context['sum_units'] = sum_units
     context['units_costs'] = units_costs
     context['units_points'] = units_points
-    context['sum_units_costs'] = int(sum_costs)
+    context['sum_units_costs'] = int(get_sum_units_costs(user_id) * units_discount)
     context['sum_units_points'] = int(get_sum_units_points(user_id))
 
     ship_instances = get_ship_instances(context['towns'])
     context['ships_instances'] = zip(ship_instances[0], ship_instances[1])
-    costs_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
     sum_ships = []
     ships_costs = []
     ships_points = []
-    sum_costs = 0
-    with connection.cursor() as cursor:
-        for a in cursor.execute("SELECT SUM(si.number), s.hour_costs as sso, s.points as wwo FROM helper_shipinstance AS si INNER JOIN helper_ship as s ON si.ship_id = s.id INNER JOIN helper_town as t ON si.town_id = t.id WHERE t.user_id = %s GROUP BY si.ship_id, s.hour_costs, s.points", [user_id]):
-            sum_ships.append(a[0])
-            cost = a[0] * a[1] * costs_discount
-            ships_costs.append(int(cost))
-            ships_points.append(int(a[0] * a[2]))
-            sum_costs += cost
+    ships_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
+    ship_types = Ship.objects.all()
+    for ship in ship_types:
+        ship_instances2 = ShipInstance.objects.filter(town__user__id=user_id, ship_id=ship.id)
+        liczba_statkow = 0
+        koszty_statkow = 0
+        punkty_statkow = 0
+        for a in ship_instances2:
+            liczba_statkow += a.number
+            koszty_statkow += (a.number * a.ship.hour_costs) * ships_discount
+            punkty_statkow += a.number * a.ship.points
+        sum_ships.append(liczba_statkow)
+        ships_costs.append(int(koszty_statkow))
+        ships_points.append(int(punkty_statkow))
     context['sum_ships'] = sum_ships
     context['ships_costs'] = ships_costs
     context['ships_points'] = ships_points
-    context['sum_ships_costs'] = int(sum_costs)
+    context['sum_ships_costs'] = int(get_sum_ships_costs(user_id) * ships_discount)
     context['sum_ships_points'] = int(get_sum_ships_points(user_id))
 
     context['nav_active'] = 'user_army'
@@ -81,22 +91,19 @@ def get_ship_instances(towns):
 
 
 def get_sum_units_points(user_id):
-    cursor = connection.cursor()
-    cursor.execute("SELECT SUM(ui.number * u.points) FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s  ", [user_id])
-    results = cursor.fetchall()
-    if results[0][0] is None:
-        return 0
-    return results[0][0]
+    instances = UnitInstance.objects.filter(town__user__id=user_id)
+    sum = 0
+    for instance in instances:
+        sum += instance.unit.points * instance.number
+    return sum
 
 
 def get_sum_units_costs(user_id):
-    cursor = connection.cursor()
-    cursor.execute(
-        "SELECT SUM(ui.number * u.hour_costs) FROM helper_unitinstance AS ui INNER JOIN helper_unit as u ON ui.unit_id = u.id INNER JOIN helper_town as t ON ui.town_id = t.id WHERE t.user_id = %s  ", [user_id])
-    results = cursor.fetchall()
-    if results[0][0] is None:
-        return 0
-    return results[0][0]
+    instances = UnitInstance.objects.filter(town__user__id=user_id)
+    sum = 0
+    for instance in instances:
+        sum += instance.unit.hour_costs * instance.number
+    return sum
 
 
 def save_units(request, user_id):
@@ -119,23 +126,19 @@ def toggle_no_units(request, user_id):
 
 
 def get_sum_ships_points(user_id):
-    cursor = connection.cursor()
-    cursor.execute(
-            "SELECT SUM(si.number * s.points) FROM helper_shipinstance AS si INNER JOIN helper_ship as s ON si.ship_id = s.id INNER JOIN helper_town as t ON si.town_id = t.id  WHERE t.user_id = %s  ", [user_id])
-    results = cursor.fetchall()
-    if results[0][0] is None:
-        return 0
-    return results[0][0]
+    instances = ShipInstance.objects.filter(town__user__id=user_id)
+    sum = 0
+    for instance in instances:
+        sum += instance.ship.points * instance.number
+    return sum
 
 
 def get_sum_ships_costs(user_id):
-    cursor = connection.cursor()
-    cursor.execute(
-        "SELECT SUM(si.number * s.hour_costs) FROM helper_shipinstance AS si INNER JOIN helper_ship as s ON si.ship_id = s.id INNER JOIN helper_town as t ON si.town_id = t.id WHERE t.user_id = %s  ", [user_id])
-    results = cursor.fetchall()
-    if results[0][0] is None:
-        return 0
-    return results[0][0]
+    instances = ShipInstance.objects.filter(town__user__id=user_id)
+    sum = 0
+    for instance in instances:
+        sum += instance.ship.hour_costs * instance.number
+    return sum
 
 
 def save_ships(request, user_id):
