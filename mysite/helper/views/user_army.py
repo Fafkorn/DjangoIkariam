@@ -30,7 +30,7 @@ def get_user_army(request, user_id):
             "FROM helper_unitinstance AS ui "
             "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
             "INNER JOIN helper_town as t ON ui.town_id = t.id "
-            "WHERE t.user_id == %s  "
+            "WHERE t.user_id = %s  "
             "GROUP BY ui.unit_id",
                 [user_id]):
             sum_units.append(a[0])
@@ -96,7 +96,7 @@ def get_sum_units_points(user_id):
             "FROM helper_unitinstance AS ui "
             "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
             "INNER JOIN helper_town as t ON ui.town_id = t.id "
-            "WHERE t.user_id == %s  ", [user_id])
+            "WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
@@ -110,7 +110,7 @@ def get_sum_units_costs(user_id):
         "FROM helper_unitinstance AS ui "
         "INNER JOIN helper_unit as u ON ui.unit_id = u.id "
         "INNER JOIN helper_town as t ON ui.town_id = t.id "
-        "WHERE t.user_id == %s  ", [user_id])
+        "WHERE t.user_id = %s  ", [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
         return 0
@@ -134,7 +134,6 @@ def toggle_no_units(request, user_id):
     town.no_units = not town.no_units
     town.save()
     return HttpResponseRedirect(reverse('helper:user_army', args=(user_id,)))
-
 
 
 def get_sum_ships_points(user_id):
