@@ -102,7 +102,7 @@ def get_workers(user_id):
     cursor = connection.cursor()
     cursor.execute(
         "SELECT SUM(s.workers)"
-        "FROM helper_sawmillworkers AS s INNER JOIN helper_island as i ON i.wood_level == s.level INNER JOIN helper_town as t ON t.island_id == i.id WHERE t.user_id == %s"
+        "FROM helper_sawmillworkers AS s INNER JOIN helper_island as i ON i.wood_level = s.level INNER JOIN helper_town as t ON t.island_id = i.id WHERE t.user_id = %s"
         , [user_id])
     results = cursor.fetchall()
     if results[0][0] is None:
@@ -114,7 +114,7 @@ def get_mine_workers(user_id, mine_type):
     cursor = connection.cursor()
     cursor.execute(
         "SELECT SUM(m.workers)"
-        "FROM helper_mineworkers AS m INNER JOIN helper_island as i ON i.luxury_level == m.level INNER JOIN helper_town as t ON t.island_id == i.id WHERE t.user_id == %s AND i.luxury_resource_id == %s"
+        "FROM helper_mineworkers AS m INNER JOIN helper_island as i ON i.luxury_level = m.level INNER JOIN helper_town as t ON t.island_id = i.id WHERE t.user_id = %s AND i.luxury_resource_id = %s"
         , [user_id, mine_type])
     results = cursor.fetchall()
     if results[0][0] is None:
