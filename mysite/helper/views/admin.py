@@ -105,7 +105,7 @@ def web_scrap_island(request):
 
 
 def copy_data_base():
-    create_users()
+    # create_users()
     # user_statuses = UserStatus.objects.all()
     # user_statuses_to_save = []
     # print('user_statuses_to_save = []')
@@ -123,6 +123,7 @@ def copy_data_base():
     #     print(f'users_to_save.append(User(id={user.id}, user_name="{user.user_name}", user_status=UserStatus.objects.get(pk={user.user_status.id}), shipping_future="{user.shipping_future}"))')
     #     counter += 1
     # print('User.objects.bulk_create(users_to_save)')
+    print('')
 
 
 def create_user_statuses():
