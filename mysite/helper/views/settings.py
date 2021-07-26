@@ -6,15 +6,16 @@ from ..models import User, DefaultUsersConnection
 
 @login_required(login_url='helper:login')
 def get_settings(request):
+    if request.method == 'POST':
+        set_connection(request)
+
     connected_user = DefaultUsersConnection.objects.filter(auth_user=request.user.id)
     user = connected_user[0] if connected_user else User.objects.get(pk=1)
+    print(user)
     context = {
         'user': user,
         'title': 'Ustawienia'
     }
-
-    if request.method == 'POST':
-        set_connection(request)
     return render(request, 'helper/settings.html', context)
 
 
