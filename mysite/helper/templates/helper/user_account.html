@@ -13,8 +13,8 @@
     {% include "helper/navigation.html" %}
 
     <div id="content-div">
-        <div class="tile" style="width: 682px;">
-            <div class="row">
+        <div class="tile player-info-div">
+             <div class="row">
                 <div class="col">
                      <h5 style="font-weight: 700;">{{user.user_name}}</h5>
                 </div>
@@ -24,6 +24,7 @@
                 <div class="col">
                     <h5><img src="{% static "helper/icons/army.png" %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
                 </div>
+                {% if request.user.is_staff %}
                 <div class="col">
                     <form action="{% url 'helper:enable_towns' user.id %}" method="post">
                         {% csrf_token %}
@@ -44,9 +45,9 @@
                         </button>
                     </form>
                 </div>
+                {% endif %}
             </div>
-        </div>
-        <div class="tile player-info-div">
+
             <h5>Punkty</h5>
             <table>
                 <tr>

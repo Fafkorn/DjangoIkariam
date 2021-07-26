@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 import math
-from .filters import UserFilter
+from .filters import UserFilter, DefaultUsersConnection
 from django.contrib.auth.decorators import login_required
 
 from ..models import User
@@ -11,6 +11,8 @@ from ..models import User
 
 @login_required(login_url='helper:login')
 def get_users(request):
+    connected_user = DefaultUsersConnection.objects.filter(auth_user=request.user.id)
+    user = connected_user[0] if connected_user else User.objects.get(pk=1)
     visited_users = User.objects.order_by('last_visit').reverse()[:10]
     my_filter = UserFilter(request.GET, queryset=User.objects.order_by('score').reverse())
 
@@ -24,8 +26,6 @@ def get_users(request):
     paginator = Paginator(users_list, results_on_page)
     page_num = request.GET.get('page', 1)
     page = paginator.page(page_num)
-
-    user = User.objects.get(pk=1)
 
     has_pages = math.ceil(users_list.count() / results_on_page)
     buttons = []

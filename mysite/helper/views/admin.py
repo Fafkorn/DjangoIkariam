@@ -161,7 +161,7 @@ def web_scrap(request):
               'Gubernator', 'Kolekcjoner punktów', 'Postrach Oceanów', 'Ulubieniec Apollona', 'Admirał',
               'Supermózg', 'Miłośnik Sztuki', 'Szpieg', 'Pan Winorośli', 'Skarbnik Króla Midasa',
               'Pan Kopalni Siarki', 'Pan Tartaków', 'Reformator', 'Kapitan Piratów', 'Pogromca Herkulesa',
-              'Duma Hermesa', 'Szef Kuchni', 'Król Handlarzy Bronią']
+              'Duma Hermesa', 'Szef Kuchni', 'Król Handlarzy Bronią', '007']
     text = request.POST['textarea']
     soup = BeautifulSoup(text, 'html.parser')
 

@@ -1,6 +1,8 @@
 from django.db import connection
 from django.contrib.auth.decorators import login_required
-from ..models import User
+from django.db.models import Count
+
+from ..models import User, Island
 
 from django.shortcuts import get_object_or_404, render
 

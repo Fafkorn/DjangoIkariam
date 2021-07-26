@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import users, user_buildings, user_resources, user_army, user_account, island,\
     user_towns, islands, admin, resources_rank, units, ships, achievements, statistics, login, register, logout,\
-    key_manager
+    key_manager, settings
 
 app_name = 'helper'
 
@@ -40,11 +40,9 @@ urlpatterns = [
 
     path('users/island/<int:user_id>/<int:island_id>', island.get_island, name='island'),
     path('users/island/edit_island', island.edit_island, name='edit_island'),
-    path('users/island/add_town', island.add_town, name='add_town'),
-    path('users/island/delete_island', island.delete_island, name='delete_island'),
 
     path('users/towns/<int:user_id>', user_towns.get_user_towns, name='user_towns'),
-    path('users/towns/<int:user_id>/add_town', user_towns.add_town, name='add_town'),
+
     path('users/towns/<int:user_id>/update_town', user_towns.update_town, name='update_town'),
     path('users/towns/<int:user_id>/delete_town', user_towns.delete_town, name='delete_town'),
 
@@ -66,7 +64,9 @@ urlpatterns = [
     path('guide/achievements/level_up', achievements.level_up, name='achievements_level_up'),
     path('guide/achievements/confirm_progress', achievements.confirm_progress, name='confirm_progress'),
 
-    path('guide/statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
+    path('statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
+
+    path('settings/', settings.get_settings, name='settings')
 
 
 ]

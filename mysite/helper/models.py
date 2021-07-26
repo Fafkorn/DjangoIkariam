@@ -298,3 +298,8 @@ class AchievementLevel(models.Model):
 
 class RegisterKey(models.Model):
     key = models.CharField(max_length=20)
+
+
+class DefaultUsersConnection(models.Model):
+    auth_user = models.IntegerField(null=True)
+    game_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

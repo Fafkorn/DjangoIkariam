@@ -11,7 +11,7 @@ from ..models import RegisterKey
 @login_required(login_url='helper:login')
 @admin_only()
 def get_key_manager(request):
-    context = {}
+    context = {'title': 'Klucze'}
 
     if request.method == 'POST':
         register_key = RegisterKey()
