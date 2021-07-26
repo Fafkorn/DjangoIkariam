@@ -8,7 +8,9 @@ app_name = 'helper'
 
 
 urlpatterns = [
+    path('helper/login/', login.get_login, name='login'),
     path('login/', login.get_login, name='login'),
+    path('helper/register/', register.get_register, name='register'),
     path('register/', register.get_register, name='register'),
     path('logout/', logout.get_logout, name='logout'),
 
