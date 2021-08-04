@@ -82,29 +82,16 @@
                     <div class="single-level-div">
                         <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
                         <input type="hidden" name="user_id" value="{{user.id}}">
-                        Poziom:<input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
+                        <label>Poziom</label>
+                        <input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
+                        <label>
+                            W rozbudowie
+                        </label>
+                        <input type="checkbox" class="form-control" name="is_upgraded" {% if selected_building.is_upgraded %} checked {% endif %} value="True">
                         <button class="btn btn-success" type="submit">Zatwierdź</button>
                     </div>
                 </form>
             </div>
-
-            {% if not selected_building.is_upgraded %}
-            <form action="{% url 'helper:start_develop_building' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
-                <input type="hidden" name="user_id" value="{{user.id}}">
-                <button class="btn btn-success manage-building-btn" type="submit">Rozbuduj</button>
-            </form>
-            {% endif %}
-
-            {% if selected_building.is_upgraded %}
-            <form action="{% url 'helper:stop_develop_building' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
-                <input type="hidden" name="user_id" value="{{user.id}}">
-                <button type="submit" class="btn btn-success manage-building-btn">Zakończ</button>
-            </form>
-            {% endif %}
         </div>
     {% endif %}
 </div>

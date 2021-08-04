@@ -51,23 +51,7 @@ def update_building(request):
     user_id = request.POST.get('user_id')
     building_instance = get_object_or_404(BuildingInstance, pk=instance_building_id)
     building_instance.level = request.POST['level']
-    building_instance.save()
-    return redirect(reverse('helper:user_buildings', args=[user_id]))
-
-
-def start_develop_building(request):
-    instance_building_id = request.POST.get('building_instance_id')
-    user_id = request.POST.get('user_id')
-    building_instance = BuildingInstance.objects.get(pk=instance_building_id)
-    building_instance.is_upgraded = True
-    building_instance.save()
-    return redirect(reverse('helper:user_buildings', args=[user_id]))
-
-
-def stop_develop_building(request):
-    instance_building_id = request.POST.get('building_instance_id')
-    user_id = request.POST.get('user_id')
-    building_instance = get_object_or_404(BuildingInstance, pk=instance_building_id)
-    building_instance.is_upgraded = False
+    building_instance.is_upgraded = request.POST.get('is_upgraded', False)
+    print(building_instance.is_upgraded)
     building_instance.save()
     return redirect(reverse('helper:user_buildings', args=[user_id]))

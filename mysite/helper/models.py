@@ -303,3 +303,22 @@ class RegisterKey(models.Model):
 class DefaultUsersConnection(models.Model):
     auth_user = models.IntegerField(null=True)
     game_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+
+class UserHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time = models.DateTimeField()
+
+    score = models.IntegerField(default=0)
+    master_builders = models.IntegerField(default=0)
+    building_levels = models.IntegerField(default=0)
+    scientists = models.IntegerField(default=0)
+    research_level = models.IntegerField(default=0)
+    generals = models.IntegerField(default=0)
+    gold = models.BigIntegerField(default=0)
+    offensive = models.IntegerField(default=0)
+    defensive = models.IntegerField(default=0)
+    trading = models.IntegerField(default=0)
+    resources = models.IntegerField(default=0)
+    donations = models.IntegerField(default=0)
+    piracy = models.IntegerField(default=0)

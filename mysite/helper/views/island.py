@@ -31,7 +31,7 @@ def edit_island(request):
     island.miracle_level = request.POST['miracle_level']
     island.has_tower = request.POST['has_tower']
     island.save()
-    return HttpResponseRedirect(reverse('helper:island', args=(island_id, user_id)))
+    return HttpResponseRedirect(reverse('helper:island', args=(user_id, island_id)))
 
 
 def delete_island(request):

@@ -20,8 +20,6 @@ urlpatterns = [
 
     path('users/buildings/<int:user_id>', user_buildings.get_user_buildings, name='user_buildings'),
     path('users/update_building/', user_buildings.update_building, name='update_building'),
-    path('users/start_develop_building/', user_buildings.start_develop_building, name='start_develop_building'),
-    path('users/stop_develop_building/', user_buildings.stop_develop_building, name='stop_develop_building'),
 
     path('users/resources/<int:user_id>', user_resources.get_user_resources, name='user_resources'),
     path('users/resources/<int:user_id>/save_resources', user_resources.save_resources, name='save_resources'),
