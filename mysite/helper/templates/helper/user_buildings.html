@@ -59,7 +59,7 @@
                     {% csrf_token %}
                     <input class="form-control" type="text" name="html" placeholder="Wprowadź kod html" />
                     <input type="hidden" name="user_id" value="{{user.id}}" />
-                    <button class="btn btn-success" type="submit">Wprowadź</button>
+                    <button id="submit-html" class="btn btn-success" type="submit">Wprowadź</button>
                 </form>
             </div>
             <div id="sum-div">Suma poziomów {{level_sum}}</div>
@@ -69,28 +69,32 @@
     </div>
      {% if selected_building %}
         <div class="tile">
-            <img src="{{selected_building.building_type.image_path.url}}" alt="img">
-            <div class="div-box">
-                <div class="div-name">
-                    <p>{{ selected_building.building_type.building_name }}</p>
-                    <p>{% if selected_building.is_upgraded %} (W budowie) {% endif %}</p>
-                    <p>{{ selected_building.building_town.town_name }}</p>
-                </div>
-                <hr>
-                <form action="{% url 'helper:update_building' %}" method="post">
-                    {% csrf_token %}
-                    <div class="single-level-div">
+            <div id="tile-content">
+                {% if selected_building.is_upgraded %}
+                    <div id="is-upgraded-tile"></div>
+                {% endif %}
+                <img src="{{selected_building.building_type.image_path.url}}" alt="img">
+                <div class="div-box">
+                    <div class="div-name">
+                        <p>{{ selected_building.building_type.building_name }}</p>
+                        <p>{{ selected_building.building_town.town_name }}</p>
+                    </div>
+                    <hr>
+                    <form action="{% url 'helper:update_building' %}" method="post">
+                        {% csrf_token %}
                         <input type="hidden" name="building_instance_id" value="{{selected_building.id}}">
                         <input type="hidden" name="user_id" value="{{user.id}}">
-                        <label>Poziom</label>
-                        <input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
-                        <label>
-                            W rozbudowie
-                        </label>
-                        <input type="checkbox" class="form-control" name="is_upgraded" {% if selected_building.is_upgraded %} checked {% endif %} value="True">
-                        <button class="btn btn-success" type="submit">Zatwierdź</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label for="level-input">Poziom</label>
+                            <input id="level-input" class="form-control" type="number" name="level" value="{{selected_building.level}}">
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="is-upgraded-input" type="checkbox" name="is_upgraded" {% if selected_building.is_upgraded %} checked {% endif %} value="True">
+                            <label for="is-upgraded-input">W rozbudowie</label>
+                        </div>
+                        <button id="submit-building" class="btn btn-success" type="submit">Zatwierdź</button>
+                    </form>
+                </div>
             </div>
         </div>
     {% endif %}

@@ -120,7 +120,7 @@
 
     <div id="content-div">
             {% if towns %}
-            <div class="tile edit-towns-div">
+            <div class="tile" id="towns-div">
                 <h5>Robotnicy
                     {% if request.user.is_staff %}
                     <a  title="Ranking surowców" class="icon-btn btn-rank" href="{% url 'helper:resources_rank' user.id %}">
@@ -132,13 +132,15 @@
                 </h5>
 
                 <h6>
-                    Razem: {{all_workers|number_commas}} |
+                    Razem: {{all_workers|number_commas}}
+                </h6>
+                <h6>
                     <img title="Drewno" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{wood_workers|number_commas}}
                     <img title="Wino" src="{% static "helper/icons/icon_wine.png" %}" alt="" width="25px" height="20" > {{wine_workers|number_commas}}
                     <img title="Marmur" src="{% static "helper/icons/icon_marble.png" %}" alt="" width="25px" height="20" > {{marble_workers|number_commas}}
                     <img title="Kryształ" src="{% static "helper/icons/icon_glass.png" %}" alt="" width="25px" height="20" > {{crystal_workers|number_commas}}
                     <img title="Siarka" src="{% static "helper/icons/icon_sulfur.png" %}" alt="" width="25px" height="20" > {{sulfur_workers|number_commas}}
-                    </h6>
+                </h6>
                 <hr>
                 <h5>Miasta ({{towns.count}})</h5>
                 <table id="towns-table">
@@ -182,7 +184,7 @@
                 </table>
             </div>
             {% endif %}
-        <div class="tile">
+        <div class="tile" id="map-div">
             <div id="search-row">
                 <div class="search-col">
                     <form action="{% url 'helper:user_towns' user.id %}" method="get">

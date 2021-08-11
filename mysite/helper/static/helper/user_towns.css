@@ -101,4 +101,12 @@ hr {
     width: 100%;
 }
 
+#towns-div {
+    min-width: 420px;
+}
+
+#map-div {
+    min-width: 640px;
+}
+
 

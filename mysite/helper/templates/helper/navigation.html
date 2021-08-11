@@ -102,6 +102,12 @@
                     {{request.user}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                        Admin
+                    </a>
+                    <a class="dropdown-item" href="{% url 'helper:admin' %}">
+                        Panel
+                    </a>
                     <a class="dropdown-item" href="{% url 'helper:settings' %}">
                         Ustawienia
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
