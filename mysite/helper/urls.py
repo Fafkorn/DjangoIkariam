@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('users/resources_rank/<int:user_id>', resources_rank.get_resources_rank, name='resources_rank'),
 
-    path('admin', admin.admin_site, name='admin'),
+    path('panel', admin.admin_site, name='admin'),
     path('admin/web_scrap', admin.web_scrap, name='web_scrap'),
     path('admin/key_manager', key_manager.get_key_manager, name='key_manager'),
     path('admin/web_scrap_island', admin.web_scrap_island, name='web_scrap_island'),

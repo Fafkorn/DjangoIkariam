@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Count
+from django.utils.dateformat import DateFormat
 
-from ..models import User, Town, Island, Resource
+from ..models import User, Town, Island, Resource, UserHistory
 
 from .user_army import get_sum_units_points, get_sum_units_costs
 from .user_army import get_sum_ships_points, get_sum_ships_costs
@@ -34,6 +35,20 @@ def get_user_towns(request, user_id):
     search_type = request.GET.get('search_type', '')
     search_value = request.GET.get('search_value', 0)
 
+    rank_type = request.GET.get('rank_type', 'score')
+    compare_user_name = request.GET.get('compare_user', '')
+    selected_date = request.GET.get('selected_date', '')
+    if not selected_date:
+        selected_date = datetime.today() - timedelta(days=365)
+        df = DateFormat(selected_date)
+        selected_date = df.format('Y-m-d')
+    chart_data = get_chart_data(user.id, rank_type, selected_date)
+    compare_user = User.objects.filter(user_name=compare_user_name)
+    compare_data = []
+    if compare_user:
+        compare_user = compare_user[0]
+        compare_data = get_chart_data(compare_user.id, rank_type, selected_date)
+
     context = {
         'user': user,
         'user_id': user_id,
@@ -41,6 +56,8 @@ def get_user_towns(request, user_id):
         'alliance_tag': alliance_tag,
         'search_type': search_type,
         'search_type_display': get_displayable_search_name(search_type),
+        'selected_rank_type': rank_type,
+        'rank_types': get_displayable_rank_type_names(),
         'search_value': search_value,
         'towns': towns,
         'sum_points': int(get_sum_units_points(user_id) + get_sum_ships_points(user_id)),
@@ -57,9 +74,21 @@ def get_user_towns(request, user_id):
         'own_islands': get_coordinates_for_towns(towns),
         'searched_islands': get_searched_coordinates(username, alliance_tag, search_type, search_value),
         'nav_active': 'user_towns',
-        'title': 'Miasta - ' + user.user_name
+        'title': 'Miasta - ' + user.user_name,
+        'chart_data': chart_data,
+        'selected_date': selected_date,
+        'user_points_income': get_points_difference(chart_data),
+        'compare_data': compare_data,
+        'compare_user_name': compare_user_name,
+        'compare_points_income': get_points_difference(compare_data),
     }
     return render(request, 'helper/user_towns.html', context)
+
+
+def get_points_difference(data) -> int:
+    if data:
+        return data[len(data) - 1][1] - data[0][1]
+    return 0
 
 
 def add_town(request, user_id):
@@ -212,4 +241,59 @@ def get_displayable_search_name(search_name: str):
         "has_tower": "Wyspy z wieżą",
     }
     return names[search_name]
+
+
+def get_displayable_rank_type_names():
+    return [["score", "Całkowity wynik"],
+        ["master_builders", "Mistrzowie budowy"],
+        ["building_levels", "Poziomy budynków"],
+        ["scientists", "Naukowcy"],
+        ["research_level", "Poziomy badań"],
+        ["generals", "Generałowie"],
+        ["gold", "Złoto"],
+        ["offensive", "Punkty ofensywy"],
+        ["defensive", "Punkty obrony"],
+        ["trading", "Handlarz"],
+        ["resources", "Surowce"],
+        ["donations", "Datki"],
+        ["piracy", "Punkty abordażu"]]
+
+
+def get_chart_data(user_id, rank_type, selected_date):
+    chart_data = []
+    rows = UserHistory.objects.filter(user__id=user_id, time__range=[selected_date, datetime.today()]).order_by('time')
+    for row in rows:
+        points = get_points_from_rank(row, rank_type)
+        if points > 0:
+            chart_data.append([row.time, points])
+    return chart_data
+
+
+def get_points_from_rank(user_history, rank_type):
+    if rank_type == 'score':
+        return user_history.score
+    elif rank_type == 'master_builders':
+        return user_history.master_builders
+    elif rank_type == 'building_levels':
+        return user_history.building_levels
+    elif rank_type == 'scientists':
+        return user_history.scientists
+    elif rank_type == 'research_level':
+        return user_history.research_level
+    elif rank_type == 'generals':
+        return user_history.generals
+    elif rank_type == 'gold':
+        return user_history.gold
+    elif rank_type == 'offensive':
+        return user_history.offensive
+    elif rank_type == 'defensive':
+        return user_history.defensive
+    elif rank_type == 'trading':
+        return user_history.trading
+    elif rank_type == 'resources':
+        return user_history.resources
+    elif rank_type == 'donations':
+        return user_history.donations
+    elif rank_type == 'piracy':
+        return user_history.piracy
 

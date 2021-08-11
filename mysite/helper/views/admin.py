@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 import time
 from django.shortcuts import render, redirect
@@ -6,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from ..decorators import admin_only
-from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance, UserStatus
+from ..models import User, Town, Resource, Miracle, Island, Building, BuildingInstance, UserStatus, UserHistory
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 
@@ -191,45 +193,57 @@ def web_scrap(request):
         scores.append(element.text.replace(',', ''))
 
     data = zip(names, allies, scores, statuses)
+
     for entry in data:
         user = User.objects.filter(user_name=entry[0])
         if user:
             user = user[0]
             user.alliance = entry[1]
-            # user[0].save()
         else:
             user = User(user_name=entry[0], alliance=entry[1])
-            # user.save()
+            user.save()
+            user = User.objects.filter(user_name=entry[0])
+            user = user[0]
+            user.alliance = entry[1]
 
+        today = datetime.now()
+        user_history = UserHistory.objects.filter(user__id=user.id, time__year=today.year, time__month=today.month, time__day=today.day)
+        if user_history:
+            user_history = user_history[0]
+        else:
+            user_history = UserHistory()
+        user_history.time = datetime.now()
+        user_history.user = user
         if 'Całkowity wynik' in option:
-            user.score = entry[2]
+            user_history.score = entry[2]
         elif 'Mistrzowie budowy' in option:
-            user.master_builders = entry[2]
+            user_history.master_builders = entry[2]
         elif 'Poziomy budynków' in option:
-            user.building_levels = entry[2]
+            user_history.building_levels = entry[2]
         elif 'Naukowcy' in option:
-            user.scientists = entry[2]
+            user_history.scientists = entry[2]
         elif 'Poziomy badań' in option:
-            user.research_level = entry[2]
+            user_history.research_level = entry[2]
         elif 'Generałowie' in option:
-            user.generals = entry[2]
+            user_history.generals = entry[2]
         elif 'Zapas złota' in option:
-            user.gold = entry[2]
+            user_history.gold = entry[2]
         elif 'Punkty ofensywy' in option:
-            user.offensive = entry[2]
+            user_history.offensive = entry[2]
         elif 'Punkty obrony' in option:
-            user.defensive = entry[2]
+            user_history.defensive = entry[2]
         elif 'Handlarz' in option:
-            user.trading = entry[2]
+            user_history.trading = entry[2]
         elif 'Surowce' in option:
-            user.resources = entry[2]
+            user_history.resources = entry[2]
         elif 'Datki' in option:
-            user.donations = entry[2]
+            user_history.donations = entry[2]
         elif 'Punkty Abordażu' in option:
-            user.piracy = entry[2]
+            user_history.piracy = entry[2]
 
         user.user_status = UserStatus.objects.get(pk=entry[3])
         user.save()
+        user_history.save()
 
     return HttpResponseRedirect(reverse('helper:admin', args=()))
 
