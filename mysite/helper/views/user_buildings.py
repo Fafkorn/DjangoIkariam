@@ -52,6 +52,5 @@ def update_building(request):
     building_instance = get_object_or_404(BuildingInstance, pk=instance_building_id)
     building_instance.level = request.POST['level']
     building_instance.is_upgraded = request.POST.get('is_upgraded', False)
-    print(building_instance.is_upgraded)
     building_instance.save()
     return redirect(reverse('helper:user_buildings', args=[user_id]))

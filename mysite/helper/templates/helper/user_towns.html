@@ -9,12 +9,75 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
         <script type="text/javascript">
+            var users = [{% for user_name in compare_user_names %} '{{user_name}}', {% endfor %}];
+
+
             function numberWithSpaces(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
             }
 
+            function addUser() {
+                var userInput = document.getElementById("user-add-input");
+                var username = userInput.value;
+                userInput.value = '';
+
+                if(!users.includes(username)) {
+                    users.push(username);
+                    updateUsers();
+                }
+            }
+
+            function removeUser(username) {
+                users = users.filter(e => e !== username);
+                console.log(username);
+                console.log(users);
+                updateUsers();
+            }
+
+            function updateUsers() {
+                var usersForm = document.getElementById("users-div");
+
+                while (usersForm.hasChildNodes()) {
+                    usersForm.removeChild(usersForm.lastChild);
+                }
+
+                for(var i=0; i < users.length; i++) {
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "compare_user";
+                    input.value = users[i];
+                    usersForm.appendChild(input);
+
+                    var p = document.createElement("div");
+                    const name = users[i];
+                    p.onclick = function() { removeUser(name); };
+                    p.innerHTML = name;
+                    p.className = "compare-user";
+                    usersForm.appendChild(p);
+                }
+            }
+
+            var colors = [
+                "rgba(255, 255, 255, 1)",
+                "rgba(81, 205, 160, 1)",
+                "rgba(223, 121, 112, 1)",
+                "rgba(76, 156, 160, 1)",
+                "rgba(174, 125, 153, 1)",
+                "rgba(201, 212, 92, 1)"
+            ];
+            var backgroundColors = [
+                "rgba(255, 255, 255, 0.05)",
+                "rgba(81, 205, 160, 0.05)",
+                "rgba(223, 121, 112, 0.05)",
+                "rgba(76, 156, 160, 0.05)",
+                "rgba(174, 125, 153, 0.05)",
+                "rgba(201, 212, 92, 0.05)"
+            ];
+
 
             window.onload = function script() {
+
+            updateUsers();
             var all_islands = {{all_islands}};
                 var myTable = document.getElementById('islandTable');
                 for (var i = 0; i < all_islands.length; i++) {
@@ -49,23 +112,22 @@
                       labels: [{% for data in chart_data %} {{data.1}}, {% endfor %}],
                       lineTension: 0.3,
                       pointRadius: 3,
-                      pointBorderColor: "rgba(78, 115, 223, 1)",
-                      backgroundColor: "rgba(78, 115, 223, 0.05)",
-                      borderColor: "rgba(78, 115, 223, 1)"
+                      pointBorderColor: colors[0],
+                      backgroundColor: backgroundColors[0],
+                      borderColor: colors[0]
                     },
-                    {% if compare_data %}
+                    {% for compare_data in compare_datas %}
                     {
-                      data: [{% for data in compare_data %} { x: new Date({{data.0.year}}, {{data.0.month}}-1, {{data.0.day}}), y: {{data.1}} }, {% endfor %}],
-                      label: '{{compare_user_name}}' + ' + (' + numberWithSpaces({{compare_points_income}}) + ')',
-                      labels: [{% for data in compare_data %} {{data.1}}, {% endfor %}],
+                      data: [{% for data in compare_data.data %} { x: new Date({{data.0.year}}, {{data.0.month}}-1, {{data.0.day}}), y: {{data.1}} }, {% endfor %}],
+                      label: '{{compare_data.username}}' + ' + (' + numberWithSpaces({{compare_data.difference}}) + ')',
+                      labels: [{% for data in compare_data.data %} {{data.1}}, {% endfor %}],
                       lineTension: 0.3,
                       pointRadius: 3,
-                      pointBorderColor: "rgba(223, 115, 78, 1)",
-                      backgroundColor: "rgba(223, 115, 78, 0.05)",
-                      borderColor: "rgba(223, 115, 78, 1)"
-                    }
-                    {% endif %}
-
+                      pointBorderColor: colors[{{forloop.counter}} % colors.length],
+                      backgroundColor: backgroundColors[{{forloop.counter}} % backgroundColors.length],
+                      borderColor: colors[{{forloop.counter}} % colors.length]
+                    },
+                    {% endfor %}
                     ],
                   },
                   options: {
@@ -263,16 +325,24 @@
         <div class="tile" id="container" style="width: 800px">
             <div class="row">
                 <div class="col col-4">
-                    <form action="{% url 'helper:user_towns' user.id %}" method="get">
+
+
+
+                    <form id="chart-users-form" action="{% url 'helper:user_towns' user.id %}" method="get">
+                        <label>Użytkownicy</label>
+                        <div id="users-div"></div>
+                        <div class="input-group">
+                            <input class="form-control" id="user-add-input"/>
+                            <button class="btn btn-primary" onclick="addUser()">Dodaj</button>
+                        </div>
+
+
                         <label>Ranking</label>
                         <select class="form-control" name="rank_type">
                             {% for rank_type in rank_types %}
                             <option value="{{rank_type.0}}" {% ifequal selected_rank_type rank_type.0 %} selected {% endifequal %}>{{rank_type.1}}</option>
                             {% endfor %}
                         </select>
-
-                        <label>Użytkownik</label>
-                        <input class="form-control" name="compare_user" value="{{ compare_user_name }}"/>
 
                         <label>Od daty</label>
                         <input class="form-control" type="date" name="selected_date" value="{{ selected_date }}"/>

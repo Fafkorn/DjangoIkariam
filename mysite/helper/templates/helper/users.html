@@ -27,7 +27,7 @@
         </div>
 
         <div class="tile">
-            <div style="display: inline-block">
+            <div style="display: flex;">
                 <form action="{% url 'helper:users'%}" method="get" id="order-form" class="form-inline" >
                     {% csrf_token %}
                     {{ my_filter.form|crispy }}

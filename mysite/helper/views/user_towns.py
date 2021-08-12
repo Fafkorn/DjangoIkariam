@@ -36,18 +36,28 @@ def get_user_towns(request, user_id):
     search_value = request.GET.get('search_value', 0)
 
     rank_type = request.GET.get('rank_type', 'score')
-    compare_user_name = request.GET.get('compare_user', '')
+    compare_user_names = request.GET.getlist('compare_user', '')
+    selected_names = []
     selected_date = request.GET.get('selected_date', '')
     if not selected_date:
         selected_date = datetime.today() - timedelta(days=365)
         df = DateFormat(selected_date)
         selected_date = df.format('Y-m-d')
     chart_data = get_chart_data(user.id, rank_type, selected_date)
-    compare_user = User.objects.filter(user_name=compare_user_name)
+
+    compare_users = []
+    for compare_user_name in compare_user_names:
+        user_to_compare = User.objects.filter(user_name=compare_user_name)
+        if user_to_compare and len(compare_user_name) > 0:
+            selected_names.append(user_to_compare[0].user_name)
+            compare_users.append(user_to_compare[0])
     compare_data = []
-    if compare_user:
-        compare_user = compare_user[0]
-        compare_data = get_chart_data(compare_user.id, rank_type, selected_date)
+    for compare_user in compare_users:
+        data = get_chart_data(compare_user.id, rank_type, selected_date)
+        structure = {'data': data,
+                     'username': compare_user.user_name,
+                     'difference': get_points_difference(data)}
+        compare_data.append(structure)
 
     context = {
         'user': user,
@@ -78,9 +88,8 @@ def get_user_towns(request, user_id):
         'chart_data': chart_data,
         'selected_date': selected_date,
         'user_points_income': get_points_difference(chart_data),
-        'compare_data': compare_data,
-        'compare_user_name': compare_user_name,
-        'compare_points_income': get_points_difference(compare_data),
+        'compare_datas': compare_data,
+        'compare_user_names': selected_names,
     }
     return render(request, 'helper/user_towns.html', context)
 
@@ -226,7 +235,7 @@ def get_selected_islands(search_type, search_value):
 
 def get_displayable_search_name(search_name: str):
     if not search_name:
-        return None
+        return ''
     names = {
         "sawmill_above": "Tartak powyżej",
         "sawmill_below": "Tartak poniżej",

@@ -103,7 +103,6 @@ def web_scrap_island(request):
     return HttpResponseRedirect(reverse('helper:admin', args=()))
 
 
-@admin_only()
 def convert_island_script_to_data(scripts):
     for script in scripts:
         if "$(document).ready(function () {" in str(script) and "xCoord" in str(script):

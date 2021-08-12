@@ -20,7 +20,7 @@
           </tr>
          {% for town in building_instances %}
          <tr>
-                  <th>{{town.0.building_town.town_name}}</th>
+                  <th title="[{{town.0.building_town.island.x}}:{{town.0.building_town.island.y}}]">{{town.0.building_town.town_name}}</th>
                   {% for building_instance in town %}
                         {% if building_instance.level > 0%}
                             <td is_upgrading="{{building_instance.is_upgraded}}" class="developing_td"  style="text-align:center;">
