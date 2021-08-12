@@ -149,7 +149,7 @@ def delete_missing_towns(towns_script, towns_database):
             towns_script_ids.append(city['id'])
 
     for town in towns_database:
-        if town.in_game_id not in towns_script_ids:
+        if (town.in_game_id not in towns_script_ids) and (town.user.user_status.id != 3):
             print('Town id=' + str(town.in_game_id) + ' - DELETED')
             town.delete()
 
