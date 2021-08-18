@@ -7,12 +7,13 @@
 {% endblock %}
 
 {% block content %}
+{% include "helper/navigation.html" %}
 <div class="tile" style="width: 350px; float: left;">
     <h5>Ranking</h5>
     <form action="{% url 'helper:web_scrap' %}" method="post">
         {% csrf_token %}
         <label>HTML</label>
-        <textarea name="textarea"></textarea>
+        <input class="form-control" name="textarea">
         <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
     </form>
     <hr>
@@ -20,7 +21,7 @@
     <form action="{% url 'helper:web_scrap_island' %}" method="post">
         {% csrf_token %}
         <label>HTML</label>
-        <textarea name="textarea"></textarea>
+        <input class="form-control" name="textarea">
         <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
     </form>
     <hr>
@@ -28,7 +29,7 @@
     <form action="{% url 'helper:web_scrap_town' %}" method="post">
         {% csrf_token %}
         <label>HTML</label>
-        <textarea name="html"></textarea>
+        <input class="form-control" name="html">
         <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
     </form>
 </div>
@@ -45,7 +46,7 @@
     </form>
 </div>
 
-<div class="tile">
+<div class="tile"  style="width: 350px; float: left;">
     {{key}}
     <form action="{% url 'helper:set_all_users_deleted' %}" method="post">
         {% csrf_token %}
