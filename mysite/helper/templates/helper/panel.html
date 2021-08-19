@@ -9,29 +9,39 @@
 {% block content %}
 {% include "helper/navigation.html" %}
 <div class="tile" style="width: 350px; float: left;">
-    <h5>Ranking</h5>
-    <form action="{% url 'helper:web_scrap' %}" method="post">
-        {% csrf_token %}
-        <label>HTML</label>
-        <input class="form-control" name="html_data">
-        <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
-    </form>
+    <div class="form-div">
+        <h5>Ranking</h5>
+        <form action="{% url 'helper:web_scrap' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <img class="form-image" src="{% static 'helper/panel_images/ranking.jpg' %}" width="140px" height="55px">
+            <input class="form-control" name="html_data">
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+    </div>
+
     <hr>
+    <div class="form-div">
     <h5>Wyspa</h5>
-    <form action="{% url 'helper:web_scrap_island' %}" method="post">
-        {% csrf_token %}
-        <label>HTML</label>
-        <input class="form-control" name="textarea">
-        <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
-    </form>
+        <form action="{% url 'helper:web_scrap_island' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <img class="form-image" src="{% static 'helper/panel_images/island.jpg' %}" width="140px" height="55px">
+            <input class="form-control" name="textarea">
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+    </div>
     <hr>
-    <h5>Miasto</h5>
-    <form action="{% url 'helper:web_scrap_town' %}" method="post">
-        {% csrf_token %}
-        <label>HTML</label>
-        <input class="form-control" name="html">
-        <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
-    </form>
+    <div class="form-div">
+        <h5>Miasto</h5>
+        <form action="{% url 'helper:web_scrap_town' %}" method="post">
+            {% csrf_token %}
+            <label>HTML</label>
+            <img class="form-image" src="{% static 'helper/panel_images/town.jpg' %}" width="140px" height="55px">
+            <input class="form-control" name="html">
+            <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
+        </form>
+    </div>
 </div>
 <div class="tile" style="width: 350px; float: left;">
     <h5>Wszystkie wyspy</h5>

@@ -30,8 +30,7 @@ table {
 }
 
 .btn-action {
-    margin-left: 8px;
-    margin-right: 8px;
+    height: 100%;
 }
 
 .search-div {
@@ -66,4 +65,9 @@ table {
 
 .deleted-player {
     color: red;
+}
+
+.inline-form-group {
+    float: left;
+    margin-right: 5px;
 }

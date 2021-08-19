@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['https://django-ika.herokuapp.com']
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Application definition
 

@@ -93,7 +93,9 @@ def get_alliances(soup: BeautifulSoup):
     alliances = []
     td_ally = soup.find_all("td", {"class": "allytag"})
     for element in td_ally:
-        alliances.append(element.text.replace('\n', ''))
+        alliance = element.text.replace('\n', '')
+        alliance = alliance.strip()
+        alliances.append(alliance)
     return alliances
 
 

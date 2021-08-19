@@ -27,11 +27,34 @@
         </div>
 
         <div class="tile">
-            <div style="display: flex;">
-                <form action="{% url 'helper:users'%}" method="get" id="order-form" class="form-inline" >
+            <div style="width: 100%; display: flex;">
+                <form action="{% url 'helper:users'%}" method="get">
                     {% csrf_token %}
-                    {{ my_filter.form|crispy }}
-                    <button class="btn btn-success btn-action" type="submit" style="display: inline-block">Zastosuj</button>
+                    <!--{{ my_filter.form|crispy }}-->
+                    <div class="form-group inline-form-group">
+                        {{ my_filter.form.user_name.label }}
+                        {{ my_filter.form.user_name }}
+                    </div>
+
+                    <div class="form-group inline-form-group">
+                        {{ my_filter.form.alliance.label }}
+                        {{ my_filter.form.alliance }}
+                    </div>
+
+                    <div class="form-group inline-form-group">
+                        {{ my_filter.form.user_status.label }}
+                        {{ my_filter.form.user_status }}
+                    </div>
+
+                    <div class="form-group inline-form-group">
+                        {{ my_filter.form.order_by.label }}
+                        {{ my_filter.form.order_by }}
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-success btn-action" type="submit">Zastosuj</button>
+                    </div>
+
                 </form>
             </div>
         </div>
