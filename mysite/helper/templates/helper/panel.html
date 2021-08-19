@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'helper/admin.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/panel.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
     <form action="{% url 'helper:web_scrap' %}" method="post">
         {% csrf_token %}
         <label>HTML</label>
-        <input class="form-control" name="textarea">
+        <input class="form-control" name="html_data">
         <button type="submit" class="btn btn-success submit-btn">Wykonaj</button>
     </form>
     <hr>

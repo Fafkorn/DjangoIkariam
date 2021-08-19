@@ -1,8 +1,9 @@
 from django.urls import path
 
 from .views import users, user_buildings, user_resources, user_army, user_account, island,\
-    user_towns, islands, admin, resources_rank, units, ships, achievements, statistics, login, register, logout,\
+    user_towns, islands, resources_rank, units, ships, achievements, statistics, login, register, logout,\
     key_manager, settings
+from mysite.helper.views.panel import panel
 
 app_name = 'helper'
 
@@ -50,13 +51,13 @@ urlpatterns = [
 
     path('users/resources_rank/<int:user_id>', resources_rank.get_resources_rank, name='resources_rank'),
 
-    path('panel', admin.admin_site, name='admin'),
-    path('admin/web_scrap', admin.web_scrap, name='web_scrap'),
-    path('admin/key_manager', key_manager.get_key_manager, name='key_manager'),
-    path('admin/web_scrap_island', admin.web_scrap_island, name='web_scrap_island'),
-    path('admin/web_scrap_town', admin.web_scrap_town, name='web_scrap_town'),
-    path('admin/web_scrap_all_islands', admin.web_scrap_all_islands, name='web_scrap_all_islands'),
-    path('admin/set_all_users_deleted', admin.set_all_users_deleted, name='set_all_users_deleted'),
+    path('panel', panel.panel_site, name='admin'),
+    path('panel/web_scrap', panel.analyze_ranking_data, name='web_scrap'),
+    path('panel/key_manager', key_manager.get_key_manager, name='key_manager'),
+    path('panel/web_scrap_island', panel.analyze_island_data, name='web_scrap_island'),
+    path('panel/web_scrap_town', panel.analyze_town_data, name='web_scrap_town'),
+    path('panel/web_scrap_all_islands', panel.analyze_all_islands_data, name='web_scrap_all_islands'),
+    path('panel/set_all_users_deleted', panel.set_all_users_deleted, name='set_all_users_deleted'),
 
     path('guide/units', units.get_units, name='units'),
     path('guide/ships', ships.get_ships, name='ships'),
