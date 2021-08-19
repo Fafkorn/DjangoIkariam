@@ -107,13 +107,15 @@ def get_sum_units_costs(user_id):
 
 
 def save_units(request, user_id):
+    units_to_update = []
     unit_ids = request.POST.getlist('unit_id')
     numbers = request.POST.getlist('unit_number')
     for i, unit_id in enumerate(unit_ids):
         unit_instance = UnitInstance.objects.get(pk=unit_id)
         if unit_instance.number != numbers[i]:
             unit_instance.number = numbers[i]
-            unit_instance.save()
+            units_to_update.append(unit_instance)
+    UnitInstance.objects.bulk_update(units_to_update, ['number'])
     return HttpResponseRedirect(reverse('helper:user_army', args=(user_id,)))
 
 
@@ -142,13 +144,15 @@ def get_sum_ships_costs(user_id):
 
 
 def save_ships(request, user_id):
+    ships_to_update = []
     ship_ids = request.POST.getlist('ship_id')
     numbers = request.POST.getlist('ship_number')
     for i, unit_id in enumerate(ship_ids):
         ship_instance = ShipInstance.objects.get(pk=unit_id)
         if ship_instance.number != numbers[i]:
             ship_instance.number = numbers[i]
-            ship_instance.save()
+            ships_to_update.append(ship_instance)
+    ShipInstance.objects.bulk_update(ships_to_update, ['number'])
     return HttpResponseRedirect(reverse('helper:user_army', args=(user_id,)))
 
 

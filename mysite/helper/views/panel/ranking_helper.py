@@ -71,8 +71,9 @@ def get_status(element):
 def get_ranking_type(soup: BeautifulSoup) -> str:
     option_list = soup.find_all("span", {"class": "dropDownButton"})
     for option in option_list:
-        if option.text in ranking_types:
-            return option.text
+        for ranking_type in ranking_types:
+            if ranking_type in option.text:
+                return option.text
 
 
 def get_names_and_statuses(soup: BeautifulSoup):

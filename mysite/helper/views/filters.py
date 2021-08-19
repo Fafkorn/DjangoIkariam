@@ -17,7 +17,7 @@ class IslandFilter(FilterSet):
 
     class Meta:
         model = Island
-        fields = ['x', 'y', 'luxury_resource', 'has_tower']
+        fields = ['x', 'y', 'luxury_resource', 'has_tower', 'miracle']
 
 
 class UserFilter(FilterSet):

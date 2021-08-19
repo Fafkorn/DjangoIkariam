@@ -21,7 +21,7 @@
         <div class="paging-div">
             {% for button in buttons %}
                 {% if button > 0 %}
-                <a href="{% url 'helper:islands' user_id=user_id %}?page={{button}}&x={{x}}&y={{y}}&luxury_resource={{luxury_resource}}&wood_level={{wood_level}}&luxury_level={{luxury_level}}&order_by={{order_by}}" class="btn btn-success  {% if button == page_num %} disabled {% endif %}">{{button}}</a>
+                <a href="{% url 'helper:islands' user_id=user_id %}?page={{button}}&x={{x}}&y={{y}}&luxury_resource={{luxury_resource}}&wood_level={{wood_level}}&luxury_level={{luxury_level}}&has_tower={{has_tower}}&miracle={{miracle}}&order_by={{order_by}}" class="btn btn-success  {% if button == page_num %} disabled {% endif %}">{{button}}</a>
 
                 {% else %}
                 ...
@@ -41,7 +41,7 @@
             </tr>
             {% for island in islands_list%}
             <tr>
-                <td><a class="island-link" href="{% url 'helper:island' user_id island.id %}">{{island.name}}</a></td>
+                <td><a class="island-link" href="{% url 'helper:island' user_id island.id %}">{{island.name}} {% if island.has_tower %} <img src="{% static 'helper/icons/tower.png'%}" alt="" width="10px" height="20px"> {% endif %}</a></td>
                 <td>{{island.x}}</td>
                 <td>{{island.y}}</td>
                 <td>{{island.wood_level}} <img src="{{island.wood_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
@@ -99,9 +99,14 @@
                 {% render_field my_filter.form.has_tower class="form-control" %}
             </div>
             <div>
+                <label>Cud:</label>
+                {% render_field my_filter.form.miracle class="form-control" %}
+            </div>
+            <div>
                 <label>Sortuj według:</label>
                 {% render_field my_filter.form.order_by class="form-control" %}
             </div>
+
             <button class="btn btn-success btn-search" type="submit">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>

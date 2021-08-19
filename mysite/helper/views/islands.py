@@ -19,6 +19,7 @@ def get_islands(request, user_id):
     luxury_level = request.GET.get('luxury_level', '')
     order_by = request.GET.get('order_by', '')
     has_tower = request.GET.get('has_tower', '')
+    miracle = request.GET.get('miracle', '')
     islands_list = Island.objects.filter().order_by('wood_level', 'luxury_level').reverse().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3)))
     my_filter = IslandFilter(request.GET, queryset=islands_list)
     islands_list = my_filter.qs
@@ -45,6 +46,7 @@ def get_islands(request, user_id):
                'luxury_level': luxury_level,
                'order_by': order_by,
                'has_tower': has_tower,
+               'miracle': miracle,
                'islands_found': islands_found,
                'page_num': int(page_num),
                'has_pages': has_pages,
