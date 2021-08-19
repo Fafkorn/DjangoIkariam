@@ -45,7 +45,7 @@ def convert_island_script_to_data(scripts):
                     if 'ownerAllyTag' in city:
                         owner_ally_tag = city['ownerAllyTag']
                     user = get_user(city['ownerName'], owner_ally_tag)
-                    town = get_town(city['name'], user, island, city['id'])
+                    town = get_town(city['name'], user, island, city['id'], city['level'])
                     if town is not None:
                         towns_to_save.append(town)
                         print(town.town_name + ' added')
@@ -82,17 +82,18 @@ def get_user(user_name, alliance):
         return user
 
 
-def get_town(town_name, user, island, in_game_id):
+def get_town(town_name, user, island, in_game_id, town_level):
     town = Town.objects.filter(in_game_id=in_game_id)
     if town.count() == 1:
         print("Town %s (%s) exists" % (town_name, user))
         town = town[0]
         town.town_name = town_name
+        town.level = town_level
         town.user = user
         town.save()
         return None
     else:
-        town = Town(town_name=town_name, user=user, island=island, in_game_id=in_game_id)
+        town = Town(town_name=town_name, user=user, island=island, in_game_id=in_game_id, level=town_level)
         print("Town %s (%s) created" % (town_name, user))
         return town
 

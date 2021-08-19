@@ -207,7 +207,8 @@
                 <h5>Miasta ({{towns.count}})</h5>
                 <table id="towns-table">
                     <tr>
-                        <th>Nazwa</th>
+                        <th>Miasto</th>
+                        <th>Poziom</th>
                         <th>X Y</th>
                         <th>Wyspa</th>
                     </tr>
@@ -219,7 +220,27 @@
                         {% endifchanged %}
                         <tr>
                             <td>
+                                {% if town.level <= 1 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_1.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 3 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_2.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 6 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_3.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 9 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_4.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 12 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_5.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 15 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_6.png' %}" alt="" width="25px" height="25px" >
+                                {% elif town.level <= 17 %}
+                                    <img src="{% static 'helper/town_halls/town_hall_7.png' %}" alt="" width="25px" height="25px" >
+                                {% else %}
+                                    <img src="{% static 'helper/town_halls/town_hall_8.png' %}" alt="" width="25px" height="25px" >
+                                {% endif %}
                                 {{town.town_name}}
+                            </td>
+                            <td>
+                                {{town.level}}
                             </td>
                             <td>
                                 {% ifchanged town.island %}

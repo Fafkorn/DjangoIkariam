@@ -99,6 +99,7 @@ class Town(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     island = models.ForeignKey(Island, on_delete=models.CASCADE, null=True)
     in_game_id = models.IntegerField(default=0)
+    level = models.IntegerField(default=0, null=True)
     no_units = models.BooleanField(default=False)
     no_ships = models.BooleanField(default=False)
 
