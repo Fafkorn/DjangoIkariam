@@ -315,7 +315,7 @@ class UserHistory(models.Model):
     building_levels = models.IntegerField(null=True, blank=True, default='')
     scientists = models.IntegerField(null=True, blank=True, default='')
     research_level = models.IntegerField(null=True, blank=True, default='')
-    generals = models.IntegerField(null=True, blank=True, default=-1)
+    generals = models.IntegerField(null=True, blank=True, default='')
     gold = models.BigIntegerField(null=True, blank=True, default='')
     offensive = models.IntegerField(null=True, blank=True, default='')
     defensive = models.IntegerField(null=True, blank=True, default='')
