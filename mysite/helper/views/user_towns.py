@@ -273,7 +273,7 @@ def get_chart_data(user_id, rank_type, selected_date):
     rows = UserHistory.objects.filter(user__id=user_id, time__range=[selected_date, datetime.today()]).order_by('time')
     for row in rows:
         points = get_points_from_rank(row, rank_type)
-        if points > 0:
+        if points and points > 0:
             chart_data.append([row.time, points])
     return chart_data
 
