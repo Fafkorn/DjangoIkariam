@@ -13,8 +13,8 @@ hr {
 }
 
 .island-square {
-    width: 7px;
-    height: 6px;
+    width: 6px;
+    height: 5px;
     line-height: 0;
     padding: 0;
     margin: 0;
@@ -30,6 +30,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 2px;
 }
 
 .color-div {
@@ -123,5 +124,15 @@ hr {
 
 .compare-user:hover {
     color: red;
+}
+
+.rank-title {
+    font-size: 12px;
+    margin: 2px;
+}
+
+.rank-value {
+    font-size: 16px;
+    margin: 2px;
 }
 

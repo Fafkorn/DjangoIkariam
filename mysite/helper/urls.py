@@ -66,6 +66,7 @@ urlpatterns = [
     path('guide/achievements/confirm_progress', achievements.confirm_progress, name='confirm_progress'),
 
     path('statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
+    path('statistics/save_statistics', statistics.save_statistics, name='save_statistics'),
 
     path('settings/', settings.get_settings, name='settings')
 
@@ -74,8 +75,5 @@ urlpatterns = [
 
 
 # TODO
-#  budynki - design
 #  surowce - kolory, hover, 1 000
 #  robotnicy/poziom
-#  paging/wyszukiwanie
-#  zarządzanie id usera

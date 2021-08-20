@@ -4,6 +4,125 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'helper/statistics.css' %}">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script type="text/javascript">
+        var colors = [
+            "rgba(255, 255, 255, 1)",
+            "rgba(119, 119, 119, 1)",
+            "rgba(50, 200, 50, 1)",
+            "rgba(200, 50, 50, 1)",
+        ];
+        var backgroundColors = [
+            "rgba(255, 255, 255, 0.05)",
+            "rgba(119, 119, 119, 0.05)",
+            "rgba(50, 200, 50, 0.05)",
+            "rgba(200, 50, 50, 0.05)",
+        ];
+
+
+        window.onload = function script() {
+            var config = {
+                type: 'line',
+                data: {
+                    datasets: [
+                    {
+                      data: [{% for data in user_statistics_histories %}
+                        {% if data.active_users %}
+                            { x: new Date({{data.time.year}}, {{data.time.month}}-1, {{data.time.day}}), y: {{data.active_users}} },
+                        {% endif %}
+                      {% endfor %}],
+                      label: 'Aktywni',
+                      labels: [{% for data in user_statistics_histories %} {% if data.active_users %} {{data.active_users}}, {% endif %} {% endfor %}],
+                      lineTension: 0.3,
+                      pointRadius: 3,
+                      pointBorderColor: colors[0],
+                      backgroundColor: backgroundColors[0],
+                      borderColor: colors[0]
+                    },
+                    {
+                      data: [{% for data in user_statistics_histories %}
+                        {% if data.inactive_users %}
+                            { x: new Date({{data.time.year}}, {{data.time.month}}-1, {{data.time.day}}), y: {{data.inactive_users}} },
+                        {% endif %}
+                      {% endfor %}],
+                      label: 'Nieaktywni',
+                      labels: [{% for data in user_statistics_histories %} {% if data.inactive_users %} {{data.inactive_users}}, {% endif %} {% endfor %}],
+                      lineTension: 0.3,
+                      pointRadius: 3,
+                      pointBorderColor: colors[1],
+                      backgroundColor: backgroundColors[1],
+                      borderColor: colors[1]
+                    },
+                    {
+                      data: [{% for data in user_statistics_histories %}
+                        {% if data.on_vacation_users %}
+                            { x: new Date({{data.time.year}}, {{data.time.month}}-1, {{data.time.day}}), y: {{data.on_vacation_users}} },
+                        {% endif %}
+                      {% endfor %}],
+                      label: 'Na urlopie',
+                      labels: [{% for data in user_statistics_histories %} {% if data.on_vacation_users %} {{data.on_vacation_users}}, {% endif %} {% endfor %}],
+                      lineTension: 0.3,
+                      pointRadius: 3,
+                      pointBorderColor: colors[2],
+                      backgroundColor: backgroundColors[2],
+                      borderColor: colors[2]
+                    },
+                    {
+                      data: [{% for data in user_statistics_histories %}
+                        {% if data.deleted_users %}
+                            { x: new Date({{data.time.year}}, {{data.time.month}}-1, {{data.time.day}}), y: {{data.deleted_users}} },
+                        {% endif %}
+                      {% endfor %}],
+                      label: 'Usunięci',
+                      labels: [{% for data in user_statistics_histories %} {% if data.deleted_users %} {{data.deleted_users}}, {% endif %} {% endfor %}],
+                      lineTension: 0.3,
+                      pointRadius: 3,
+                      pointBorderColor: colors[3],
+                      backgroundColor: backgroundColors[3],
+                      borderColor: colors[3]
+                    },
+                    ],
+                  },
+                  options: {
+                    responsive: true,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var index = tooltipItem.index;
+                                return dataset.labels[index];
+                            }
+                        }
+                    },
+                    plugins: {
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Chart.js Line Chart'
+                      }
+                    },
+                  scales: {
+                    xAxes: [{
+                      type: 'time',
+                      autoSkip: false
+                    }],
+                    yAxes: {
+                      type: 'number',
+                      autoSkip: false
+                    },
+                  }
+
+                  },
+             };
+        var ctx = document.getElementById('chart').getContext('2d');
+        window.chart = new Chart(ctx, config);
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     {% load helper_extras %}
 {% endblock %}
 
@@ -11,14 +130,36 @@
 
 {% include "helper/navigation.html" %}
 <div class="tile">
-    <ul>
-        <li>Wszyscy użytkownicy: {{ all_users }}</li>
-        <li>Aktywni: {{ active_users }}</li>
-        <li>Niekatywni: {{ inactive_users }}</li>
-        <li>Na urlopie: {{ on_vacation__users }}</li>
-        <li>Usunięci: {{ deleted_users }}</li>
-    </ul>
+    <div class="row">
+        <div class="col">
+            <p class="title-p">Wszyscy użytkownicy</p>
+            <p class="value-p">{{ all_users }}</p>
+        </div>
+        <div class="col">
+            <p class="title-p">Aktywni <img src="{% static 'helper/icons/active_icon.png' %}" alt="" width="14px" height="21px" ></p>
+            <p class="value-p">{{ active_users }}</p>
+        </div>
+        <div class="col">
+            <p class="title-p">Niekatywni</p>
+            <p class="value-p" style="color: #777;">{{ inactive_users }}</p>
+        </div>
+        <div class="col">
+            <p class="title-p">Na urlopie  <img src="{% static 'helper/icons/vacation_icon.png' %}" alt="" width="16px" height="16px" ></p>
+            <p class="value-p">{{ on_vacation_users }}</p>
+        </div>
+        <div class="col">
+            <p class="title-p">Usunięci</p>
+            <p class="value-p" style="color: red;">{{ deleted_users }}</p>
+        </div>
+    </div>
+</div>
 
-
+<div class="tile">
+    <canvas id="chart"></canvas>
+    <form action="{% url 'helper:save_statistics' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{user.id}}">
+        <button class="btn btn-success">Zapisz statystyki</button>
+    </form>
 </div>
 {% endblock %}

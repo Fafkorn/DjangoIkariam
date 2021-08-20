@@ -23,4 +23,5 @@ admin.site.register(UserStatus)
 admin.site.register(RegisterKey)
 admin.site.register(DefaultUsersConnection)
 admin.site.register(UserHistory)
+admin.site.register(UserStatisticsHistory)
 

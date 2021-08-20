@@ -1,0 +1,14 @@
+.title-p {
+    text-align: center;
+}
+
+.value-p {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#chart {
+    max-height: 600px;
+    max-width: 1000px;
+}
