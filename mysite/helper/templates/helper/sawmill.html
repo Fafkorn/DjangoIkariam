@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/sawmill.css' %}">
+    {% load helper_extras %}
+{% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}
+
+    {% include "helper/navigation.html" %}
+    <div style="display: flex;">
+        <div class="tile container">
+            <h5>Tartak</h5>
+            <table class="table">
+                <tr>
+                    <th>Poziom</th>
+                    <th>Pracownicy</th>
+                    <th>Cena</th>
+                </tr>
+                {% for sawmill in sawmills %}
+                    <tr>
+                        <td>{{sawmill.level}}</td>
+                        <td>{{sawmill.workers|number_commas}}</td>
+                        <td>{{sawmill.cost|number_commas}}</td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="tile container">
+            <h5>Kopalnia</h5>
+            <table class="table">
+                <tr>
+                    <th>Poziom</th>
+                    <th>Pracownicy</th>
+                    <th>Cena</th>
+                </tr>
+                {% for mine in mines %}
+                    <tr>
+                        <td>{{mine.level}}</td>
+                        <td>{{mine.workers|number_commas}}</td>
+                        <td>{{mine.cost|number_commas}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
