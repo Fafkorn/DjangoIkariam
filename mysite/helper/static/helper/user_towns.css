@@ -1,11 +1,25 @@
 #content-div {
     display: flex;
+    flex-wrap: wrap;
 }
 
-.confirm-button {
-    font-size: 20px;
-    color: lightgreen;
-    margin: 2px;
+#towns-div {
+    min-width: 420px;
+    flex: 1;
+}
+
+#map-div {
+    min-width: 600px;
+    flex: 0;
+}
+
+#statistics-div {
+    min-width: 700px;
+    flex: 3;
+}
+
+#users-div {
+    display: flex;
 }
 
 hr {
@@ -23,7 +37,6 @@ hr {
 
 .confirm-btn {
     width: 100%;
-    margin-top: 4px;
 }
 
 .color-row {
@@ -102,18 +115,6 @@ hr {
     width: 100%;
 }
 
-#towns-div {
-    min-width: 420px;
-}
-
-#map-div {
-    min-width: 640px;
-}
-
-#users-div {
-    display: flex;
-}
-
 .compare-user {
     margin: 5px 10px 5px 0px;
     background: #343434;
@@ -136,5 +137,10 @@ hr {
     font-size: 16px;
     margin: 0px;
     text-align: center;
+}
+
+#chart {
+    max-height: 550px;
+    max-width: 850px;
 }
 

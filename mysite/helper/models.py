@@ -240,7 +240,7 @@ class UnitInstance(models.Model):
     number = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.unit.name + ' (' + str(self.town.town_name) + ')')
+        return str(self.id) + ' ' + str(self.unit.name + ' (' + str(self.town.user.user_name) + ', ' + str(self.town.town_name) + ')')
 
 
 class Ship(models.Model):
@@ -276,7 +276,8 @@ class ShipInstance(models.Model):
     number = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.ship.name + ' (' + str(self.town.town_name) + ')')
+        return str(self.id) + ' ' + str(self.ship.name + ' (' + str(self.town.user.user_name) + ', ' +
+                                        str(self.town.town_name) + ')')
 
 
 class AchievementCategory(models.Model):

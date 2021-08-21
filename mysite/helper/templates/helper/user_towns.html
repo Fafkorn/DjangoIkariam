@@ -175,11 +175,11 @@
 
 {% endblock %}
 {% block content %}
-
     {% load widget_tweaks %}
 
     {% include "helper/navigation.html" %}
-    <div class="tile" style="margin-bottom: 0px;">
+<div class="content">
+    <div class="tile" id="user-score-div">
         <div class="row" style="width: 100%">
             <div class="col">
                 <p class="rank-title">Ranking ogólny</p>
@@ -240,95 +240,93 @@
         </div>
     </div>
     <div id="content-div">
-
-
-            {% if towns %}
+        {% if towns %}
             <div class="tile" id="towns-div">
-                <h5>Robotnicy
-                    {% if request.user.is_staff %}
-                    <a  title="Ranking surowców" class="icon-btn btn-rank" href="{% url 'helper:resources_rank' user.id %}">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-graph-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                    </a>
-                    {% endif %}
-                </h5>
+            <h5>Robotnicy
+                {% if request.user.is_staff %}
+                <a  title="Ranking surowców" class="icon-btn btn-rank" href="{% url 'helper:resources_rank' user.id %}">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-graph-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                </a>
+                {% endif %}
+            </h5>
 
-                <h6>
-                    Razem: {{all_workers|number_commas}}
-                </h6>
-                <h6>
-                    <img title="Drewno" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{wood_workers|number_commas}}
-                    <img title="Wino" src="{% static "helper/icons/icon_wine.png" %}" alt="" width="25px" height="20" > {{wine_workers|number_commas}}
-                    <img title="Marmur" src="{% static "helper/icons/icon_marble.png" %}" alt="" width="25px" height="20" > {{marble_workers|number_commas}}
-                    <img title="Kryształ" src="{% static "helper/icons/icon_glass.png" %}" alt="" width="25px" height="20" > {{crystal_workers|number_commas}}
-                    <img title="Siarka" src="{% static "helper/icons/icon_sulfur.png" %}" alt="" width="25px" height="20" > {{sulfur_workers|number_commas}}
-                </h6>
-                <hr>
-                <h5>Miasta ({{towns.count}})</h5>
-                <table id="towns-table">
-                    <tr>
-                        <th>Miasto</th>
-                        <th>Poziom</th>
-                        <th>X Y</th>
-                        <th>Wyspa</th>
-                    </tr>
-                    {% for town in towns%}
-                        {% ifchanged town.island%}
-                        <tr class="break-line">
-                            <td colspan="100%"></td>
-                        </tr>
-                        {% endifchanged %}
-                        <tr>
-                            <td>
-                                {% if town.level <= 1 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_1.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 3 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_2.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 6 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_3.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 9 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_4.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 12 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_5.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 15 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_6.png' %}" alt="" width="25px" height="25px" >
-                                {% elif town.level <= 17 %}
-                                    <img src="{% static 'helper/town_halls/town_hall_7.png' %}" alt="" width="25px" height="25px" >
-                                {% else %}
-                                    <img src="{% static 'helper/town_halls/town_hall_8.png' %}" alt="" width="25px" height="25px" >
-                                {% endif %}
-                                {{town.town_name}}
-                            </td>
-                            <td>
-                                {{town.level}}
-                            </td>
-                            <td>
-                                {% ifchanged town.island %}
-                                    [{{town.island.x}}:{{town.island.y}}]
-                                {% endifchanged %}
-                            </td>
-                            <td>
-                                {% ifchanged town.island %}
-                                    {% if town.island %}
-                                        <a title="[{{town.island.x}}:{{town.island.y}}]" href="{% url 'helper:island' user.id town.island.id %}">
-                                            {{town.island.wood_level}}<img src="{{town.island.wood_resource.image_path.url}}" alt="Drewno" width="25px" height="20">
-                                            {{town.island.luxury_level}}<img src="{{town.island.luxury_resource.image_path.url}}" alt="{{town.island.luxury_resource.name}}" width="25px" height="20">
-                                            <img title="{{town.island.miracle.name}}" src="{{town.island.miracle.image_path.url}}" alt="{{town.island.miracle.name}}" width="20px" height="20px">
-                                            {% if town.island.has_tower %} <img src="{% static 'helper/icons/tower.png'%}" title="Wieża Helios" alt="" width="10px" height="20px"> {% endif %}
-                                        </a>
-
-                                    {% endif %}
-                                {% endifchanged %}
-                            </td>
-                        </tr>
-                    {% endfor %}
+            <h6>
+                Razem: {{all_workers|number_commas}}
+            </h6>
+            <h6>
+                <img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{wood_workers|number_commas}}
+                <img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20" > {{wine_workers|number_commas}}
+                <img title="Marmur" src="{% static 'helper/icons/icon_marble.png' %}" alt="" width="25px" height="20" > {{marble_workers|number_commas}}
+                <img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20" > {{crystal_workers|number_commas}}
+                <img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20" > {{sulfur_workers|number_commas}}
+            </h6>
+            <hr>
+            <h5>Miasta ({{towns.count}})</h5>
+            <table id="towns-table">
+                <tr>
+                    <th>Miasto</th>
+                    <th>Poziom</th>
+                    <th>X Y</th>
+                    <th>Wyspa</th>
+                </tr>
+                {% for town in towns%}
+                    {% ifchanged town.island%}
                     <tr class="break-line">
                         <td colspan="100%"></td>
                     </tr>
-                </table>
-            </div>
-            {% endif %}
+                    {% endifchanged %}
+                    <tr>
+                        <td>
+                            {% if town.level <= 1 %}
+                                <img src="{% static 'helper/town_halls/town_hall_1.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 3 %}
+                                <img src="{% static 'helper/town_halls/town_hall_2.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 6 %}
+                                <img src="{% static 'helper/town_halls/town_hall_3.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 9 %}
+                                <img src="{% static 'helper/town_halls/town_hall_4.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 12 %}
+                                <img src="{% static 'helper/town_halls/town_hall_5.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 15 %}
+                                <img src="{% static 'helper/town_halls/town_hall_6.png' %}" alt="" width="25px" height="25px" >
+                            {% elif town.level <= 17 %}
+                                <img src="{% static 'helper/town_halls/town_hall_7.png' %}" alt="" width="25px" height="25px" >
+                            {% else %}
+                                <img src="{% static 'helper/town_halls/town_hall_8.png' %}" alt="" width="25px" height="25px" >
+                            {% endif %}
+                            {{town.town_name}}
+                        </td>
+                        <td>
+                            {{town.level}}
+                        </td>
+                        <td>
+                            {% ifchanged town.island %}
+                                [{{town.island.x}}:{{town.island.y}}]
+                            {% endifchanged %}
+                        </td>
+                        <td>
+                            {% ifchanged town.island %}
+                                {% if town.island %}
+                                    <a title="[{{town.island.x}}:{{town.island.y}}]" href="{% url 'helper:island' user.id town.island.id %}">
+                                        {{town.island.wood_level}}<img src="{{town.island.wood_resource.image_path.url}}" alt="Drewno" width="25px" height="20">
+                                        {{town.island.luxury_level}}<img src="{{town.island.luxury_resource.image_path.url}}" alt="{{town.island.luxury_resource.name}}" width="25px" height="20">
+                                        <img title="{{town.island.miracle.name}}" src="{{town.island.miracle.image_path.url}}" alt="{{town.island.miracle.name}}" width="20px" height="20px">
+                                        {% if town.island.has_tower %} <img src="{% static 'helper/icons/tower.png'%}" title="Wieża Helios" alt="" width="10px" height="20px"> {% endif %}
+                                    </a>
+
+                                {% endif %}
+                            {% endifchanged %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr class="break-line">
+                    <td colspan="100%"></td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
         <div class="tile" id="map-div">
             <div id="search-row">
                 <div class="search-col">
@@ -337,10 +335,10 @@
                             <label>Zaznacz gracza</label>
                             <input class="form-control" name="username" placeholder="Nazwa gracza" value="{{username}}">
                         </div>
-
                         <button class="btn btn-success confirm-btn" type="submit">Zatwierdź</button>
                     </form>
                 </div>
+
                 <div class="search-col">
                     <form action="{% url 'helper:user_towns' user.id %}" method="get">
                         <div class="form-group">
@@ -350,6 +348,7 @@
                         <button class="btn btn-success confirm-btn" type="submit">Zatwierdź</button>
                     </form>
                 </div>
+
                 <div class="search-col">
                     <form action="{% url 'helper:user_towns' user.id %}" method="get">
                         <div class="form-group">
@@ -361,10 +360,6 @@
                                         <option value="sawmill_below" {% ifequal search_type 'sawmill_below' %} selected {% endifequal %}>Tartak poniżej</option>
                                         <option value="luxury_above" {% ifequal search_type 'luxury_above' %} selected {% endifequal %}>Kopalnia powyżej</option>
                                         <option value="luxury_below" {% ifequal search_type 'luxury_below' %} selected {% endifequal %}>Kopalnia poniżej</option>
-                                        <option value="luxury_wine" {% ifequal search_type 'luxury_wine' %} selected {% endifequal %}>Surowiec - Wino</option>
-                                        <option value="luxury_marble" {% ifequal search_type 'luxury_marble' %} selected {% endifequal %}>Surowiec - Marmur</option>
-                                        <option value="luxury_crystal" {% ifequal search_type 'luxury_crystal' %} selected {% endifequal %}>Surowiec - Kryształ</option>
-                                        <option value="luxury_sulfur" {% ifequal search_type 'luxury_sulfur' %} selected {% endifequal %}>Surowiec - Siarka</option>
                                         <option value="towns_above" {% ifequal search_type 'towns_above' %} selected {% endifequal %}>Miasta powyżej</option>
                                         <option value="towns_below" {% ifequal search_type 'luxury_below' %} selected {% endifequal %}>Miasta poniżej</option>
                                         <option value="has_tower" {% ifequal search_type 'has_tower' %} selected {% endifequal %}>Wyspy z wieżą</option>
@@ -412,10 +407,9 @@
 
         </div>
 
-        <div class="tile" id="container" style="width: 800px">
+        <div class="tile" id="statistics-div">
             <div class="row">
                 <div class="col col-4">
-
 
 
                     <form id="chart-users-form" action="{% url 'helper:user_towns' user.id %}" method="get">
@@ -426,16 +420,19 @@
                             <button class="btn btn-primary" onclick="addUser()">Dodaj</button>
                         </div>
 
+                        <div class="form-group">
+                            <label>Ranking</label>
+                            <select class="form-control" name="rank_type">
+                                {% for rank_type in rank_types %}
+                                <option value="{{rank_type.0}}" {% ifequal selected_rank_type rank_type.0 %} selected {% endifequal %}>{{rank_type.1}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                        <label>Ranking</label>
-                        <select class="form-control" name="rank_type">
-                            {% for rank_type in rank_types %}
-                            <option value="{{rank_type.0}}" {% ifequal selected_rank_type rank_type.0 %} selected {% endifequal %}>{{rank_type.1}}</option>
-                            {% endfor %}
-                        </select>
-
-                        <label>Od daty</label>
-                        <input class="form-control" type="date" name="selected_date" value="{{ selected_date }}"/>
+                        <div class="form-group">
+                            <label>Od daty</label>
+                            <input class="form-control" type="date" name="selected_date" value="{{ selected_date }}"/>
+                        </div>
                         <button type="submit" class="confirm-btn btn btn-success">Wybierz</button>
                     </form>
                 </div>
@@ -444,7 +441,16 @@
             </div>
 
              <hr>
-            <canvas id="chart"></canvas>
+            <div id="chart-div">
+                <div class="row">
+                    <div class="col">
+                        <canvas id="chart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
+</div>
 {% endblock %}

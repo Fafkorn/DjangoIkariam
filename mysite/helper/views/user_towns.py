@@ -213,14 +213,6 @@ def get_selected_islands(search_type, search_value):
         islands = Island.objects.all().filter(luxury_level__gt=search_value)
     elif search_type == 'luxury_below':
         islands = Island.objects.all().filter(luxury_level__lt=search_value)
-    elif search_type == 'luxury_wine':
-        islands = Island.objects.all().filter(luxury_resource=2)
-    elif search_type == 'luxury_marble':
-        islands = Island.objects.all().filter(luxury_resource=3)
-    elif search_type == 'luxury_crystal':
-        islands = Island.objects.all().filter(luxury_resource=4)
-    elif search_type == 'luxury_sulfur':
-        islands = Island.objects.all().filter(luxury_resource=5)
     elif search_type == 'towns_above':
         islands = Island.objects.all().annotate(towns=Count('town', 0)).filter(towns__gt=search_value)
     elif search_type == 'towns_below':
@@ -241,10 +233,6 @@ def get_displayable_search_name(search_name: str):
         "sawmill_below": "Tartak poniżej",
         "luxury_above": "Kopalnia powyżej",
         "luxury_below": "Kopalnia poniżej",
-        "luxury_wine": "Surowiec - wino",
-        "luxury_marble": "Surowiec - marmur",
-        "luxury_crystal": "Surowiec - kryształ",
-        "luxury_sulfur": "Surowiec - siarka",
         "towns_above": "Miasta powżej",
         "towns_below": "Miasta poniżej",
         "has_tower": "Wyspy z wieżą",

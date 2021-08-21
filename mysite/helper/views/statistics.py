@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db import connection
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -57,3 +58,13 @@ def save_statistics(request):
     user_statistics_history.save()
 
     return redirect(reverse('helper:statistics', args=[user_id]))
+
+
+def print_most_common_town_name():
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT town_name, COUNT(town_name) as val FROM helper_town GROUP BY town_name ORDER BY val ASC"
+    )
+    results = cursor.fetchall()
+    for result in results:
+        print(str(result[0]) + ' ' + str(result[1]))

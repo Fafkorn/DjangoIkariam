@@ -4,6 +4,11 @@ body {
     box-sizing: border-box;
 }
 
+.content {
+    margin-right: 4px;
+    margin-bottom: 10px;
+}
+
 .navbar .active {
     font-weight: bold;
 }
@@ -23,11 +28,13 @@ body {
 .tile {
     background: #242526;
     border: 1px solid #666;
-    margin: 4px;
+    margin-left: 4px;
+    margin-top: 4px;
+    margin-bottom: 0px;
+    margin-right: 0px;
     border-radius: 15px;
     padding: 10px;
     color: #e4e6eb;
-    margin-bottom: 10px;
 }
 
 .break-line {
