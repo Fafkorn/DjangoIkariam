@@ -17,3 +17,15 @@
     text-decoration: none;
     color: lightgreen;
 }
+
+#resources-rank {
+    max-width: 1200px;
+}
+
+table td {
+    line-height: 0.8;
+}
+
+.order {
+    color: lightgreen;
+}

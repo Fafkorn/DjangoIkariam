@@ -12,40 +12,33 @@
     {% include "helper/navigation.html" %}
 
 
-    <div class="tile">
+    <div class="tile" id="resources-rank">
         <h5>Ranking wydobycia surowców - TOP 100</h5>
         <p></p>
-        <table class="table" cellspacing="0" width="100%">
+        <table class="table" cellspacing="0">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Nazwa</th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=all_workers">Suma
-                        {% ifequal order 'all_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'all_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=all_workers">Suma
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=wood_workers">
+                    <th><a class="order-a {% ifequal order 'wood_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wood_workers">
                         <img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20">Drewno
-                        {% ifequal order 'wood_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=luxury_workers">
-                        <img title="Drewno" src="{% static 'helper/icons/icon_luxury.png' %}" alt="" width="25px" height="20">Luksusowe
-                        {% ifequal order 'luxury_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'luxury_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=luxury_workers">
+                        <img title="Luksusowe" src="{% static 'helper/icons/icon_luxury.png' %}" alt="" width="25px" height="20">Luksusowe
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=wine_workers">
-                        <img title="Drewno" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20">Wino
-                        {% ifequal order 'wine_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'wine_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wine_workers">
+                        <img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20">Wino
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=marble_workers">
-                        <img title="Drewno" src="{% static 'helper/icons/icon_marble.png' %}" alt="" width="25px" height="20">Marmur
-                        {% ifequal order 'marble_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'marble_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=marble_workers">
+                        <img title="Marmur" src="{% static 'helper/icons/icon_marble.png' %}" alt="" width="25px" height="20">Marmur
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=crystal_workers">
-                        <img title="Drewno" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20">Kryształ
-                        {% ifequal order 'crystal_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'crystal_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=crystal_workers">
+                        <img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20">Kryształ
                     </a></th>
-                    <th><a class="order-a" href="{% url 'helper:resources_rank' user_id %}?order=sulfur_workers">
-                        <img title="Drewno" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20">Siarka
-                        {% ifequal order 'sulfur_workers' %}<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>{% endifequal %}
+                    <th><a class="order-a {% ifequal order 'sulfur_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=sulfur_workers">
+                        <img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20">Siarka
                     </a></th>
                 </tr>
             </thead>
