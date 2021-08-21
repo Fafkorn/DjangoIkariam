@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -64,11 +65,20 @@ class Island(models.Model):
     y = models.IntegerField(default=0)
     name = models.CharField(max_length=50, default='Brak')
     wood_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='wood_resource_fk')
-    wood_level = models.IntegerField(default=0)
+    wood_level = models.IntegerField(default=1, validators=[
+            MaxValueValidator(60),
+            MinValueValidator(1)
+        ])
     luxury_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='luxury_resource_fk', null=True)
-    luxury_level = models.IntegerField(default=0)
+    luxury_level = models.IntegerField(default=1, validators=[
+            MaxValueValidator(60),
+            MinValueValidator(1)
+        ])
     miracle = models.ForeignKey(Miracle, on_delete=models.CASCADE, null=True)
-    miracle_level = models.IntegerField(default=0)
+    miracle_level = models.IntegerField(default=1, validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ])
     version = models.IntegerField(default=0)
     has_tower = models.BooleanField(default=False)
 

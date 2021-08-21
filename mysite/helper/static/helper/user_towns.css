@@ -128,13 +128,13 @@ hr {
 
 .rank-title {
     font-size: 11px;
-    margin: 1px;
+    margin: 0px;
     text-align: center;
 }
 
 .rank-value {
     font-size: 16px;
-    margin: 1px;
+    margin: 0px;
     text-align: center;
 }
 

@@ -6,7 +6,7 @@ from mysite.helper.decorators import admin_only
 from mysite.helper.models import User, UserHistory
 from django.contrib.auth.decorators import login_required
 
-from mysite.helper.views.panel import island_helper, ranking_helper, town_helper
+from mysite.helper.views.panel import island_helper, ranking_helper, town_helper, resources_helper
 
 
 @login_required(login_url='helper:login')
@@ -32,6 +32,13 @@ def analyze_island_data(request):
 def analyze_ranking_data(request):
     ranking_helper.web_scrap_ranking(request)
     return HttpResponseRedirect(reverse('helper:admin', args=()))
+
+
+@admin_only()
+def analyze_resources_data(request):
+    resources_helper.web_scrap_resources(request)
+    user_id = request.POST['user_id']
+    return HttpResponseRedirect(reverse('helper:user_resources', args=[user_id]))
 
 
 @login_required(login_url='helper:login')

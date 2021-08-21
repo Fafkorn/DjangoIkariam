@@ -132,7 +132,7 @@
             <input type="hidden" value="{{island.y}}" name="y">
 
             <label>Tartak poziom</label>
-            <input type="number" class="form-control" name="wood_level" value="{{island.wood_level}}">
+            <input type="number" class="form-control" name="wood_level" value="{{island.wood_level}}" max="60" min="1">
             <hr>
             <label>Surowiec luksusowy</label>
             <select class="form-control" name="luxury_resource">
@@ -143,7 +143,7 @@
             </select>
 
             <label>Kopalnia poziom</label>
-            <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level}}">
+            <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level}}" max="60" min="1">
             <hr>
             <label>Cud</label>
             <select class="form-control" name="miracle_type">
@@ -152,7 +152,7 @@
                 {% endfor %}
             </select>
             <label>Cud poziom</label>
-            <input type="number" class="form-control" name="miracle_level" value="{{island.miracle_level}}">
+            <input type="number" class="form-control" name="miracle_level" value="{{island.miracle_level}}" max="5" min="1">
 
             <label>Wieża</label>
             <select class="form-control" name="has_tower">

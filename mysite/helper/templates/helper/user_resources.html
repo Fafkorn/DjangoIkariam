@@ -18,72 +18,80 @@
     {% include "helper/navigation.html" %}
 
     <div id="content-div">
-        <div>
-            <div class="tile">
-                <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <th>Miasto</th>
-                                <th class="wood"><img src="{{resource_types.0.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.0.name}}</th>
-                                <th class="wood">+</th>
-                                <th class="wine"><img src="{{resource_types.1.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.1.name}}</th>
-                                <th class="wine">+</th>
-                                <th class="wine">-</th>
-                                <th class="marble"><img src="{{resource_types.2.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.2.name}}</th>
-                                <th class="marble">+</th>
-                                <th class="crystal"><img src="{{resource_types.3.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.3.name}}</th>
-                                <th class="crystal">+</th>
-                                <th class="sulfur"><img src="{{resource_types.4.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.4.name}}</th>
-                                <th class="sulfur">+</th>
-                                <th></th>
-                            </tr>
-                            {% for resource in resources %}
-                            <tr>
-                                <form action="{% url 'helper:save_resources' user.id %}" method="post">
-                                {% csrf_token %}
-                                    <td class="town-name">{{resource.town.town_name}}
-                                        <input type="hidden" value="{{resource.id}}" name="id" />
-                                        <input type="hidden" value="{{resource.town_id}}" name="town_id" />
-                                    </td>
+        <div class="tile">
+            <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>Miasto</th>
+                            <th class="wood"><img src="{{resource_types.0.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.0.name}}</th>
+                            <th class="wood">+</th>
+                            <th class="wine"><img src="{{resource_types.1.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.1.name}}</th>
+                            <th class="wine">+</th>
+                            <th class="wine">-</th>
+                            <th class="marble"><img src="{{resource_types.2.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.2.name}}</th>
+                            <th class="marble">+</th>
+                            <th class="crystal"><img src="{{resource_types.3.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.3.name}}</th>
+                            <th class="crystal">+</th>
+                            <th class="sulfur"><img src="{{resource_types.4.image_path.url}}" alt="img" width="25px" height="20"> {{resource_types.4.name}}</th>
+                            <th class="sulfur">+</th>
+                            <th></th>
+                        </tr>
+                        {% for resource in resources %}
+                        <tr>
+                            <form action="{% url 'helper:save_resources' user.id %}" method="post">
+                            {% csrf_token %}
+                                <td class="town-name">{{resource.town.town_name}}
+                                    <input type="hidden" value="{{resource.id}}" name="id" />
+                                    <input type="hidden" value="{{resource.town_id}}" name="town_id" />
+                                </td>
 
-                                    <td><input value="{{resource.wood}}" name="wood" maxlength="7"/></td>
-                                    <td><input style="color: lightgreen;" value="{{resource.wood_production}}" name="wood_production" maxlength="4" class="short-input"/></td>
-                                    <td title="{{resource.calc_time_left}}"><input  value="{{resource.wine}}" name="wine" maxlength="7"/></td>
-                                    <td><input style="color: lightgreen;" value="{{resource.wine_production}}" name="wine_production" maxlength="4" class="short-input"/></td>
-                                    <td><input style="color: #f22;" value="{{resource.tavern_expenses}}" name="tavern_expenses" maxlength="4" class="short-input expenses"/></td>
-                                    <td><input value="{{resource.marble}}" name="marble" maxlength="7"/></td>
-                                    <td><input style="color: lightgreen;" value="{{resource.marble_production}}" name="marble_production" maxlength="4" class="short-input"/></td>
-                                    <td><input value="{{resource.crystal}}" name="crystal" maxlength="7"/></td>
-                                    <td><input style="color: lightgreen;" value="{{resource.crystal_production}}" name="crystal_production" maxlength="4" class="short-input"/></td>
-                                    <td><input value="{{resource.sulfur}}" name="sulfur" maxlength="7"/></td>
-                                    <td><input style="color: lightgreen;" value="{{resource.sulfur_production}}" name="sulfur_production" maxlength="4" class="short-input"/></td>
-                                    <td>
-                                        <button class="icon-btn confirm-btn" type="submit">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                              <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                                              <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </form>
-                            </tr>
-                            {% endfor %}
-                            <tr class="sum-row">
-                                <th>&#8721;</th>
-                                <th>{{sum_wood}}</th>
-                                <th>+{{sum_wood_production}}</th>
-                                <th>{{sum_wine}}</th>
-                                <th>+{{sum_wine_production}}</th>
-                                <th>-{{sum_tavern_expenses}}</th>
-                                <th>{{sum_marble}}</th>
-                                <th>+{{sum_marble_production}}</th>
-                                <th>{{sum_crystal}}</th>
-                                <th>+{{sum_crystal_production}}</th>
-                                <th>{{sum_sulfur}}</th>
-                                <th>+{{sum_sulfur_production}}</th>
-                                <th></th>
-                            </tr>
-                        </table>
+                                <td><input value="{{resource.wood}}" name="wood" maxlength="7"/></td>
+                                <td><input style="color: lightgreen;" value="{{resource.wood_production}}" name="wood_production" maxlength="4" class="short-input"/></td>
+                                <td title="{{resource.calc_time_left}}"><input  value="{{resource.wine}}" name="wine" maxlength="7"/></td>
+                                <td><input style="color: lightgreen;" value="{{resource.wine_production}}" name="wine_production" maxlength="4" class="short-input"/></td>
+                                <td><input style="color: #f22;" value="{{resource.tavern_expenses}}" name="tavern_expenses" maxlength="4" class="short-input expenses"/></td>
+                                <td><input value="{{resource.marble}}" name="marble" maxlength="7"/></td>
+                                <td><input style="color: lightgreen;" value="{{resource.marble_production}}" name="marble_production" maxlength="4" class="short-input"/></td>
+                                <td><input value="{{resource.crystal}}" name="crystal" maxlength="7"/></td>
+                                <td><input style="color: lightgreen;" value="{{resource.crystal_production}}" name="crystal_production" maxlength="4" class="short-input"/></td>
+                                <td><input value="{{resource.sulfur}}" name="sulfur" maxlength="7"/></td>
+                                <td><input style="color: lightgreen;" value="{{resource.sulfur_production}}" name="sulfur_production" maxlength="4" class="short-input"/></td>
+                                <td>
+                                    <button class="icon-btn confirm-btn" type="submit">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                          <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                          <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                        {% endfor %}
+                        <tr class="sum-row">
+                            <th>&#8721;</th>
+                            <th>{{sum_wood}}</th>
+                            <th>+{{sum_wood_production}}</th>
+                            <th>{{sum_wine}}</th>
+                            <th>+{{sum_wine_production}}</th>
+                            <th>-{{sum_tavern_expenses}}</th>
+                            <th>{{sum_marble}}</th>
+                            <th>+{{sum_marble_production}}</th>
+                            <th>{{sum_crystal}}</th>
+                            <th>+{{sum_crystal_production}}</th>
+                            <th>{{sum_sulfur}}</th>
+                            <th>+{{sum_sulfur_production}}</th>
+                            <th></th>
+                        </tr>
+                    </table>
+            </div>
+            <div style="display: flex; margin-top: 10px; justify-content: space-between;">
+                <div>
+                    <form action="{% url 'helper:web_scrap_resources' %}" method="post" style="display: flex">
+                        {% csrf_token %}
+                        <input class="form-control" type="text" name="html_data" placeholder="Wprowadź kod html" />
+                        <input type="hidden" name="user_id" value="{{user.id}}" />
+                        <button id="submit-html" class="btn btn-success" type="submit">Wprowadź</button>
+                    </form>
                 </div>
             </div>
         </div>

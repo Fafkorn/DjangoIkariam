@@ -56,6 +56,7 @@ urlpatterns = [
     path('panel/key_manager', key_manager.get_key_manager, name='key_manager'),
     path('panel/web_scrap_island', panel.analyze_island_data, name='web_scrap_island'),
     path('panel/web_scrap_town', panel.analyze_town_data, name='web_scrap_town'),
+    path('panel/web_scrap_resources', panel.analyze_resources_data, name='web_scrap_resources'),
     path('panel/web_scrap_all_islands', panel.analyze_all_islands_data, name='web_scrap_all_islands'),
     path('panel/set_all_users_deleted', panel.set_all_users_deleted, name='set_all_users_deleted'),
     path('panel/update_users_ranking_score', panel.update_users_ranking_score, name='update_users_ranking_score'),
