@@ -81,10 +81,11 @@ def get_names_and_statuses(soup: BeautifulSoup):
     statuses = []
     td_name = soup.find_all("td", {"class": "name"})
     for element in td_name:
+        # removes titles
+        for i in element.find_all("i"):
+            i.extract()
         name = element.text
         statuses.append(get_status(element))
-        for title in titles:
-            name = name.replace(title, '')
         names.append(name.strip())
         print(f"{name.strip()} {get_status(element)}")
     return names, statuses

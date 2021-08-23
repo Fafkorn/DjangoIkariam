@@ -48,6 +48,28 @@
                 {% endfor %}
             </table>
         </div>
+
+        <div class="tile container">
+            <form action="{% url 'helper:sawmill' %}" method="GET">
+                <input class="form-control" name="town_name" type="text">
+                <button class="btn btn-success" type="submit">Znajdź</button>
+            </form>
+
+            <table class="table">
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Gracz</th>
+                    <th>Współrzędne</th>
+                </tr>
+                {% for town in towns %}
+                    <tr>
+                        <td>{{town.town_name}}</td>
+                        <td>{{town.user.user_name}}</td>
+                        <td>[{{town.island.x}}:{{town.island.y}}]</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
 {% endblock %}

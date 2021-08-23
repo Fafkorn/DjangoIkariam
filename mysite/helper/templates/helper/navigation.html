@@ -62,13 +62,6 @@
                     Statystyki
                 </a>
             </li>
-            {% if request.user.is_staff %}
-                <li class="nav-item {% if nav_active == 'key_manager' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'helper:key_manager' %}">
-                        Klucze
-                    </a>
-                </li>
-            {% endif %}
             <li class="nav-item dropdown  {% if nav_active == 'guide' %}active{% endif %}" >
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Poradnik
@@ -109,6 +102,11 @@
                     <a class="dropdown-item" href="{% url 'helper:admin' %}">
                         Panel
                     </a>
+                    {% if request.user.is_staff %}
+                    <a class="dropdown-item" href="{% url 'helper:key_manager' %}">
+                        Klucze
+                    </a>
+                    {% endif %}
                     <a class="dropdown-item" href="{% url 'helper:settings' %}">
                         Ustawienia
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
