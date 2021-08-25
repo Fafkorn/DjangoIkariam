@@ -25,10 +25,7 @@ def convert_town_script_to_data(scripts):
             city_id = json_object[0][1]['id']
             island = get_island(x, y)
             island.save()
-            alliance = ""
-            if 'alliance' in json_object[0][1]:
-                alliance = json_object[0][1]['alliance']
-            user = get_user(json_object[0][1]['ownerName'], alliance)
+            user = get_user(json_object[0][1]['ownerName'])
             town = get_town(json_object[0][1]['name'], user, island, city_id)
 
             if town is not None:
@@ -94,13 +91,9 @@ def get_island(x, y):
         return island
 
 
-def get_user(user_name, alliance):
+def get_user(user_name):
     users = User.objects.filter(user_name=user_name)
     if users.count() == 1:
-        if users[0].alliance != alliance:
-            user_to_save = users[0]
-            user_to_save.alliance = alliance
-            user_to_save.save()
         return users[0]
     else:
         user = User(user_name=user_name)

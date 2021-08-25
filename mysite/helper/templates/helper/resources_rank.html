@@ -20,24 +20,24 @@
                 <tr>
                     <th>#</th>
                     <th>Nazwa</th>
-                    <th><a class="order-a {% ifequal order 'all_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=all_workers">Suma
+                    <th><a class="order-a {% ifequal order 'all' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=all">Suma
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'wood_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wood_workers">
+                    <th><a class="order-a {% ifequal order 'wood' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wood">
                         <img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20">Drewno
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'luxury_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=luxury_workers">
+                    <th><a class="order-a {% ifequal order 'luxury' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=luxury">
                         <img title="Luksusowe" src="{% static 'helper/icons/icon_luxury.png' %}" alt="" width="25px" height="20">Luksusowe
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'wine_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wine_workers">
+                    <th><a class="order-a {% ifequal order 'wine' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=wine">
                         <img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20">Wino
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'marble_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=marble_workers">
+                    <th><a class="order-a {% ifequal order 'marble' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=marble">
                         <img title="Marmur" src="{% static 'helper/icons/icon_marble.png' %}" alt="" width="25px" height="20">Marmur
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'crystal_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=crystal_workers">
+                    <th><a class="order-a {% ifequal order 'crystal' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=crystal">
                         <img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20">Kryształ
                     </a></th>
-                    <th><a class="order-a {% ifequal order 'sulfur_workers' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=sulfur_workers">
+                    <th><a class="order-a {% ifequal order 'sulfur' %} order {% endifequal %}" href="{% url 'helper:resources_rank' user_id %}?order=sulfur">
                         <img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20">Siarka
                     </a></th>
                 </tr>
@@ -46,14 +46,15 @@
                 {% for row in resources_by_user %}
                     <tr>
                         <td>{{forloop.counter}}.</td>
-                        <td><a class="user-a" href="{% url 'helper:user_towns' row.0 %}">{{row.1}}</a></td>
-                        <td>{% ifequal row.2 None %}0{% else %}{{row.2|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.3 None %}0{% else %}{{row.3|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.4 None %}0{% else %}{{row.4|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.5 None %}0{% else %}{{row.5|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.6 None %}0{% else %}{{row.6|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.7 None %}0{% else %}{{row.7|number_commas}}{% endifequal %}</td>
-                        <td>{% ifequal row.8 None %}0{% else %}{{row.8|number_commas}}{% endifequal %}</td>
+                        <td><a href="{% url 'helper:user_towns' row.userid %}">{{row.user_name}}</a></td>
+                        <td>{{row.all}}</td>
+                        <td>{{row.wood}}</td>
+                        <td>{{row.luxury}}</td>
+                        <td>{% if row.wine %}{{row.wine}} {% else %} 0 {% endif %}</td>
+                        <td>{% if row.marble %}{{row.marble}} {% else %} 0 {% endif %}</td>
+                        <td>{% if row.crystal %}{{row.crystal}} {% else %} 0 {% endif %}</td>
+                        <td>{% if row.sulfur %}{{row.sulfur}} {% else %} 0 {% endif %}</td>
+
                     </tr>
                 {% endfor %}
             </tbody>

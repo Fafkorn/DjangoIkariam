@@ -23,7 +23,7 @@
                 <div>
                     <img src="{{island.wood_resource.mine_image_path.url}}" alt="img">
                     <div class="level level-resource">
-                        <p>{{island.wood_level}}</p>
+                        <p>{{island.wood_level.level}}</p>
                     </div>
                     <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_saw_mill_cost|number_commas}}</p>
                 </div>
@@ -31,7 +31,7 @@
             <div class="luxury-div">
                 <img src="{{island.luxury_resource.mine_image_path.url}}" alt="img">
                 <div class="level level-resource">
-                    <p>{{island.luxury_level}}</p>
+                    <p>{{island.luxury_level.level}}</p>
                 </div>
                 <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_mine_cost|number_commas}}</p>
             </div>
@@ -132,7 +132,7 @@
             <input type="hidden" value="{{island.y}}" name="y">
 
             <label>Tartak poziom</label>
-            <input type="number" class="form-control" name="wood_level" value="{{island.wood_level}}" max="60" min="1">
+            <input type="number" class="form-control" name="wood_level" value="{{island.wood_level.level}}" max="60" min="1">
             <hr>
             <label>Surowiec luksusowy</label>
             <select class="form-control" name="luxury_resource">
@@ -143,7 +143,7 @@
             </select>
 
             <label>Kopalnia poziom</label>
-            <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level}}" max="60" min="1">
+            <input type="number" class="form-control" name="luxury_level" value="{{island.luxury_level.level}}" max="60" min="1">
             <hr>
             <label>Cud</label>
             <select class="form-control" name="miracle_type">

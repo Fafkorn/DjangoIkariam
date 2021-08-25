@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from ..decorators import admin_only
-from ..models import AchievementLevel, AchievementCategory, User, Achievement, DefaultUsersConnection
+from ..models import AchievementLevel, AchievementCategory, User, DefaultUsersConnection, UserAchievement
 
 
 @login_required(login_url='helper:login')
@@ -13,19 +13,14 @@ from ..models import AchievementLevel, AchievementCategory, User, Achievement, D
 def get_achievements(request, category_id):
     connected_user = DefaultUsersConnection.objects.filter(auth_user=request.user.id)
     user = connected_user[0] if connected_user else User.objects.get(pk=1)
-    achievements = AchievementLevel.objects.raw('SELECT * FROM helper_achievementlevel as al INNER JOIN helper_achievement as a on a.id = al.achievement_id WHERE ((al.level = a.level and a.level = a.max_level) OR al.level = a.level+1) AND a.category_id = %s', [category_id])
+    all_achievements = UserAchievement.objects.filter(user__id=user.id)
+    achievements = UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category_id)
+    achievements = split_by_completion(achievements)
     achievement_categories = AchievementCategory.objects.all()
 
-    # init()
+    category_progress = get_category_progress(all_achievements, len(achievement_categories))
 
-    cursor = connection.cursor()
-    cursor.execute(
-        "SELECT SUM(a.level), SUM(a.max_level) FROM helper_achievement AS a GROUP BY a.category_id")
-    category_progress = cursor.fetchall()
-
-    achievements_to_do, achievements_done = split_achievements(achievements)
-    context = {'achievements_to_do': achievements_to_do,
-               'achievements_done': achievements_done,
+    context = {'achievements': achievements,
                'achievement_categories': zip(achievement_categories, category_progress),
                'user': user,
                'category': category_id,
@@ -35,52 +30,45 @@ def get_achievements(request, category_id):
     return render(request, 'helper/achievements/achievements.html', context)
 
 
-def init():
-    ach = Achievement.objects.filter(name='Niszczyciel: Balonowiec')
-    ach = ach[0]
-    levels = ['Zniszcz: 25 jednostek typu Balonowiec.',
-              'Zniszcz: 400 jednostek typu Balonowiec.',
-              'Zniszcz: 1,000 jednostek typu Balonowiec.',
-              'Zniszcz: 2,500 jednostek typu Balonowiec.',
-              'Zniszcz: 10,000 jednostek typu Balonowiec.',
-              'Zniszcz: 100,000 jednostek typu Balonowiec.'
-              ]
-    i = 1
-    for level in levels:
-        achLevel = AchievementLevel()
-        achLevel.level = i
-        achLevel.achievement = ach
-        achLevel.description = level
-        i += 1
+def split_by_completion(achievements):
+    done = []
+    undone = []
+    for achievement in achievements:
+        if achievement.achievement_level.level == achievement.achievement_level.achievement.max_level:
+            done.append(achievement)
+        else:
+            undone.append(achievement)
+    return undone + done
 
 
 def confirm_progress(request):
     achievement_id = request.POST['id']
     progress = request.POST['progress']
     category = request.POST['category']
-    achievement = Achievement.objects.get(pk=achievement_id)
-    achievement.progress = progress
-    achievement.save()
+    user_achievement = UserAchievement.objects.get(pk=achievement_id)
+    user_achievement.progress = progress
+    user_achievement.save()
     return HttpResponseRedirect(reverse('helper:achievements_category', args=(category,)))
 
 
-def split_achievements(achievements):
-    achievements_to_do = []
-    achievements_done = []
-    for achievement in achievements:
-        if achievement.achievement.level == achievement.achievement.max_level:
-            achievements_done.append(achievement)
-        else:
-            achievements_to_do.append(achievement)
-    return achievements_to_do, achievements_done
+def get_category_progress(all_achievements, categories_number):
+    category_values = [[0, 0] for _ in range(categories_number)]
+    for achievement in all_achievements:
+        category_values[achievement.achievement_level.achievement.category.id-1][0] += achievement.achievement_level.level
+        category_values[achievement.achievement_level.achievement.category.id-1][1] += achievement.achievement_level.achievement.max_level
+    return category_values
 
 
 @login_required(login_url='helper:login')
 @admin_only()
 def level_up(request):
-    achievement_id = request.POST['id']
-    category = request.POST['category_id']
-    achievement = Achievement.objects.get(pk=achievement_id)
-    achievement.level += 1
-    achievement.save()
-    return HttpResponseRedirect(reverse('helper:achievements_category', args=(category,)))
+    user_achievement_id = request.POST['id']
+    category_id = request.POST['category']
+    user_achievement = UserAchievement.objects.get(pk=user_achievement_id)
+
+    achievement_level = AchievementLevel.objects.get(achievement__id=user_achievement.achievement_level.achievement.id,
+                                                     level=user_achievement.achievement_level.level-1)
+
+    user_achievement.achievement_level = achievement_level
+    user_achievement.save()
+    return HttpResponseRedirect(reverse('helper:achievements_category', args=(category_id,)))

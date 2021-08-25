@@ -60,32 +60,6 @@ class Miracle(models.Model):
         return str(self.name)
 
 
-class Island(models.Model):
-    x = models.IntegerField(default=0)
-    y = models.IntegerField(default=0)
-    name = models.CharField(max_length=50, default='Brak')
-    wood_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='wood_resource_fk')
-    wood_level = models.IntegerField(default=1, validators=[
-            MaxValueValidator(60),
-            MinValueValidator(1)
-        ])
-    luxury_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='luxury_resource_fk', null=True)
-    luxury_level = models.IntegerField(default=1, validators=[
-            MaxValueValidator(60),
-            MinValueValidator(1)
-        ])
-    miracle = models.ForeignKey(Miracle, on_delete=models.CASCADE, null=True)
-    miracle_level = models.IntegerField(default=1, validators=[
-            MaxValueValidator(5),
-            MinValueValidator(1)
-        ])
-    version = models.IntegerField(default=0)
-    has_tower = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str('[' + str(self.x) + ':' + str(self.y) + ']')
-
-
 class SawMillWorkers(models.Model):
     level = models.IntegerField(default=0)
     workers = models.IntegerField(default=0)
@@ -102,6 +76,28 @@ class MineWorkers(models.Model):
 
     def __str__(self):
         return str('Level ' + str(self.level))
+
+
+class Island(models.Model):
+    x = models.IntegerField(default=0)
+    y = models.IntegerField(default=0)
+    name = models.CharField(max_length=50, default='Brak')
+    wood_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='wood_resource_fk')
+    wood_level = models.ForeignKey(SawMillWorkers, on_delete=models.CASCADE, related_name='wood_level_fk',
+                                    null=True, blank=True, default=None)
+    luxury_resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='luxury_resource_fk', null=True)
+    luxury_level = models.ForeignKey(MineWorkers, on_delete=models.CASCADE, related_name='luxury_level_fk',
+                                      null=True, blank=True, default=None)
+    miracle = models.ForeignKey(Miracle, on_delete=models.CASCADE, null=True)
+    miracle_level = models.IntegerField(default=1, validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ])
+    version = models.IntegerField(default=0)
+    has_tower = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str('[' + str(self.x) + ':' + str(self.y) + ']')
 
 
 class Town(models.Model):
@@ -290,8 +286,6 @@ class AchievementCategory(models.Model):
 class Achievement(models.Model):
     name = models.CharField(max_length=60)
     category = models.ForeignKey(AchievementCategory, on_delete=models.CASCADE)
-    level = models.IntegerField(default=0)
-    progress = models.CharField(max_length=100, null=True)
     image_path = models.ImageField(upload_to='img')
     max_level = models.IntegerField(default=0)
 
@@ -306,6 +300,15 @@ class AchievementLevel(models.Model):
 
     def __str__(self):
         return str(self.achievement.name + ' - ' + self.description)
+
+
+class UserAchievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achievement_level = models.ForeignKey(AchievementLevel, on_delete=models.CASCADE)
+    progress = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.achievement_level.achievement.name} {self.achievement_level.level}'
 
 
 class RegisterKey(models.Model):

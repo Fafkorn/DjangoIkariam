@@ -44,8 +44,8 @@
                 <td><a class="island-link" href="{% url 'helper:island' user_id island.id %}">{{island.name}} {% if island.has_tower %} <img src="{% static 'helper/icons/tower.png'%}" title="Wieża Helios" alt="" width="10px" height="20px"> {% endif %}</a></td>
                 <td>{{island.x}}</td>
                 <td>{{island.y}}</td>
-                <td>{{island.wood_level}} <img src="{{island.wood_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
-                <td>{{island.luxury_level}} <img src="{{island.luxury_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
+                <td>{{island.wood_level.level}} <img src="{{island.wood_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
+                <td>{{island.luxury_level.level}} <img src="{{island.luxury_resource.image_path.url}}" alt="img" width="25px" height="20"></td>
                 <td title="{{island.miracle.name}}">{{island.miracle_level}} <img src="{{island.miracle.image_path.url}}" alt="img" width="20px" height="20px"></td>
                 <td>{{island.towns}} <img src="{% static "helper/icons/town_icon.png" %}" alt="something" width="23px" height="20px" ></td>
             </tr>

@@ -1,7 +1,6 @@
-from django.db import connection
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime, timedelta
 from django.db.models import Count
@@ -137,27 +136,14 @@ def delete_town(request, user_id):
 
 
 def get_workers(user_id):
-    cursor = connection.cursor()
-    cursor.execute(
-        "SELECT SUM(s.workers)"
-        "FROM helper_sawmillworkers AS s INNER JOIN helper_island as i ON i.wood_level = s.level INNER JOIN helper_town as t ON t.island_id = i.id WHERE t.user_id = %s"
-        , [user_id])
-    results = cursor.fetchall()
-    if results[0][0] is None:
-        return 0
-    return results[0][0]
+    return Town.objects.filter(user__id=user_id).annotate(workers=Sum('island__wood_level__workers')).aggregate(sum=Sum('workers'))['sum']
 
 
 def get_mine_workers(user_id, mine_type):
-    cursor = connection.cursor()
-    cursor.execute(
-        "SELECT SUM(m.workers)"
-        "FROM helper_mineworkers AS m INNER JOIN helper_island as i ON i.luxury_level = m.level INNER JOIN helper_town as t ON t.island_id = i.id WHERE t.user_id = %s AND i.luxury_resource_id = %s"
-        , [user_id, mine_type])
-    results = cursor.fetchall()
-    if results[0][0] is None:
+    workers = Town.objects.filter(user__id=user_id, island__luxury_resource_id=mine_type).annotate(workers=Sum('island__luxury_level__workers')).aggregate(sum=Sum('workers'))['sum']
+    if not workers:
         return 0
-    return results[0][0]
+    return workers
 
 
 def get_coordinates(islands):
