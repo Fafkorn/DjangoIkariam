@@ -11,6 +11,11 @@ class UserStatus(models.Model):
         return self.user_status_name
 
 
+class Alliance(models.Model):
+    name = models.CharField(max_length=50)
+    tag = models.CharField(max_length=5)
+
+
 class User(models.Model):
     user_name = models.CharField(max_length=50)
     user_status = models.ForeignKey(UserStatus, on_delete=models.SET_NULL, default=None, null=True)
@@ -33,7 +38,7 @@ class User(models.Model):
     donations = models.IntegerField(default=0)
     piracy = models.IntegerField(default=0)
 
-    alliance = models.CharField(max_length=50, default='', null=True)
+    alliance = models.ForeignKey(Alliance, on_delete=models.SET_NULL, default=None, null=True)
     last_visit = models.DateTimeField(default=datetime(2015, 10, 9, 23, 55, 59, 342380))
 
     def __str__(self):
@@ -346,3 +351,10 @@ class UserStatisticsHistory(models.Model):
     inactive_users = models.IntegerField(null=True, blank=True, default=None)
     on_vacation_users = models.IntegerField(null=True, blank=True, default=None)
     deleted_users = models.IntegerField(null=True, blank=True, default=None)
+
+
+class AllianceHistory(models.Model):
+    time = models.DateTimeField()
+    alliance = models.ForeignKey(Alliance, on_delete=models.CASCADE, null=True, default=None)
+    members = models.IntegerField()
+    points = models.BigIntegerField()

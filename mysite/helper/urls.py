@@ -72,7 +72,8 @@ urlpatterns = [
     path('guide/user_achievements/confirm_progress', user_achievements.confirm_progress, name='confirm_progress'),
 
     path('statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
-    path('statistics/save_statistics', statistics.save_statistics, name='save_statistics'),
+    path('statistics/save_users_statistics', statistics.save_users_statistics, name='save_users_statistics'),
+    path('statistics/save_alliances_statistics', statistics.save_alliances_statistics, name='save_alliances_statistics'),
 
     path('settings/', settings.get_settings, name='settings')
 

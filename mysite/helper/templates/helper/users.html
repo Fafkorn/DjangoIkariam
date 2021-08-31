@@ -97,11 +97,11 @@
                             <td>{{forloop.counter|get_pos:page_num }}</td>
                             <td><a class="player-a" href="{% url 'helper:user_towns' user.id %}">
                                 {% if user.user_status.id == 4 %}
-                                    <img src="{% static "helper/icons/vacation_icon.png" %}" alt="something" width="16px" height="16" >
+                                    <img src="{% static 'helper/icons/vacation_icon.png' %}" alt="something" width="16px" height="16" >
                                 {% endif %}
                                 {{ user.user_name }}
                                 {% if user.alliance %}
-                                    [{{user.alliance}}]
+                                    [{{user.alliance.tag}}]
                                 {% endif %}
                             </a></td>
                             <td>{{user.score|number_commas}}</td>

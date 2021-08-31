@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from ..models import User, Town, Island, Resource, BuildingInstance, UserStatus
+from ..models import User, Town, Island, Resource, BuildingInstance, UserStatus, Alliance
 
 from .user_army import get_sum_units_points, get_sum_units_costs
 from .user_army import get_sum_ships_points, get_sum_ships_costs
@@ -82,11 +82,19 @@ def save_researches(request, user_id):
 
 def edit_user_info(request, user_id):
     user_name = request.POST['user_name']
-    alliance = request.POST['alliance']
+    alliance_tag = request.POST['alliance']
     user_status = request.POST['user_status']
     user = User.objects.get(pk=user_id)
     user.user_name = user_name
-    user.alliance = alliance
+
+    alliance = Alliance.objects.filter(tag=alliance_tag)
+    if alliance:
+        user.alliance = alliance
+    else:
+        alliance = Alliance()
+        alliance.tag = alliance_tag
+        alliance.name = 'x'
+        user.alliance = alliance
     user.user_status = UserStatus.objects.get(pk=user_status)
     user.save()
     return HttpResponseRedirect(reverse('helper:user_account', args=(user_id,)))

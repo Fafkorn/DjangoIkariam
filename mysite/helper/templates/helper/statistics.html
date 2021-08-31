@@ -8,22 +8,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script type="text/javascript">
-        var colors = [
+       var colors = [
             "rgba(255, 255, 255, 1)",
             "rgba(119, 119, 119, 1)",
             "rgba(50, 200, 50, 1)",
             "rgba(200, 50, 50, 1)",
+            "rgba(81, 205, 160, 1)",
+            "rgba(223, 121, 112, 1)",
+            "rgba(76, 156, 160, 1)",
+            "rgba(174, 125, 153, 1)",
+            "rgba(201, 212, 92, 1)"
         ];
         var backgroundColors = [
             "rgba(255, 255, 255, 0.05)",
             "rgba(119, 119, 119, 0.05)",
             "rgba(50, 200, 50, 0.05)",
             "rgba(200, 50, 50, 0.05)",
+            "rgba(81, 205, 160, 0.05)",
+            "rgba(223, 121, 112, 0.05)",
+            "rgba(76, 156, 160, 0.05)",
+            "rgba(174, 125, 153, 0.05)",
+            "rgba(201, 212, 92, 0.05)"
         ];
 
-
         window.onload = function script() {
-            var config = {
+            var users_config = {
                 type: 'line',
                 data: {
                     datasets: [
@@ -118,8 +127,63 @@
 
                   },
              };
-        var ctx = document.getElementById('chart').getContext('2d');
-        window.chart = new Chart(ctx, config);
+            var ctx = document.getElementById('users_chart').getContext('2d');
+            window.users_chart = new Chart(ctx, users_config);
+
+            var alliances_config = {
+                type: 'line',
+                data: {
+                    datasets:
+                    [
+                        {% for alliance in alliance_histories %}
+                        {
+                            data: [{% for data in alliance %} { x: new Date({{data.time.year}}, {{data.time.month}}-1, {{data.time.day}}), y: {{data.points}} }, {% endfor %}],
+                            label: '{{alliance.0.alliance.tag}}',
+                            labels: [{% for data in alliance %} {{data.points}}, {% endfor %}],
+                            lineTension: 0.3,
+                            pointRadius: 3,
+                            pointBorderColor: colors[{{forloop.counter}} % colors.length],
+                            backgroundColor: backgroundColors[{{forloop.counter}} % backgroundColors.length],
+                            borderColor: colors[{{forloop.counter}} % colors.length]
+                        },
+                        {% endfor %}
+                    ],
+                  },
+                  options: {
+                    responsive: true,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var index = tooltipItem.index;
+                                return dataset.labels[index];
+                            }
+                        }
+                    },
+                    plugins: {
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Chart.js Line Chart'
+                      }
+                    },
+                  scales: {
+                    xAxes: [{
+                      type: 'time',
+                      autoSkip: false
+                    }],
+                    yAxes: {
+                      type: 'number',
+                      autoSkip: false
+                    },
+                  }
+
+                  },
+             };
+            var ctx = document.getElementById('alliances_chart').getContext('2d');
+             window.alliances_chart = new Chart(ctx, alliances_config);
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -155,8 +219,30 @@
 </div>
 
 <div class="tile">
-    <canvas id="chart"></canvas>
-    <form action="{% url 'helper:save_statistics' %}" method="POST">
+    <div class="row center">
+        <h3>Gracze</h3>
+    </div>
+    <div class="row center">
+         <canvas id="users_chart"></canvas>
+    </div>
+
+    <form action="{% url 'helper:save_users_statistics' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{user.id}}">
+        <button class="btn btn-success">Zapisz statystyki</button>
+    </form>
+</div>
+
+<div class="tile">
+    <div class="row center">
+        <h3>Sojusze</h3>
+    </div>
+
+    <div class="row center">
+        <canvas id="alliances_chart"></canvas>
+    </div>
+
+    <form action="{% url 'helper:save_alliances_statistics' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="user_id" value="{{user.id}}">
         <button class="btn btn-success">Zapisz statystyki</button>

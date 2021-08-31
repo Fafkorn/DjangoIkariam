@@ -19,10 +19,10 @@
                      <h5 style="font-weight: 700;">{{user.user_name}}</h5>
                 </div>
                 <div class="col">
-                    <h5><img src="{% static "helper/icons/upkeep.png" %}" alt="something" width="16px" height="16"> {{sum_costs|number_commas}}</h5>
+                    <h5><img src="{% static 'helper/icons/upkeep.png' %}" alt="something" width="16px" height="16"> {{sum_costs|number_commas}}</h5>
                 </div>
                 <div class="col">
-                    <h5><img src="{% static "helper/icons/army.png" %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
+                    <h5><img src="{% static 'helper/icons/army.png' %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
                 </div>
                 {% if request.user.is_staff %}
                 <div class="col">
@@ -56,7 +56,7 @@
                     <input class="form-control"  maxlength="50" type="text" name="user_name" value="{{ user.user_name }}"/>
 
                     <label>Nazwa sojuszu</label>
-                    <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance }}"/>
+                    <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance.tag }}"/>
 
                     <label>Status</label>
                     <select class="form-control" name="user_status">

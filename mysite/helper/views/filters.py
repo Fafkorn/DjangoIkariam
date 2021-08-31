@@ -26,7 +26,7 @@ class UserFilter(FilterSet):
                           label="Nazwa użytkownika",
                           widget=TextInput(attrs={'class': 'form-control'}))
 
-    alliance = CharFilter(field_name='alliance',
+    alliance = CharFilter(field_name='alliance__tag',
                           lookup_expr='icontains',
                           label="Sojusz",
                           widget=TextInput(attrs={'class': 'form-control'}))
