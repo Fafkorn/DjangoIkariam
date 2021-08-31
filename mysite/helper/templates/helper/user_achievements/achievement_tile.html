@@ -1,0 +1,51 @@
+{% load static %}
+
+<div class="card-div">
+    <div class="level-info-div level-color" about="{{achievement.achievement_level.level}}">
+        {{achievement.achievement_level.level}}
+    </div>
+
+    <div class="row" style="text-align: center; width: 100%" >
+        <div class="col" style="font-weight: 700;">{{achievement.achievement_level.achievement.name}}</div>
+    </div>
+
+    <div class="row">
+        <div class="col col-3">
+            <table style="margin-left: 8px;">
+                <tr>
+                    <td>
+                        <img src="{{achievement.achievement_level.achievement.image_path.url}}" alt="img">
+                        <img style="margin-left: -73px;" src="{% static 'helper/achievement_borders/rahmen_0' %}{{achievement.achievement_level.level}}.png" alt="">
+                    </td>
+                </tr>
+                <tr><td><p style="margin-left: -4px;">Poziom {{achievement.achievement_level.level}}</p></td></tr>
+            </table>
+        </div>
+        <div class="col col-9">
+            <p style="text-align: right; margin-top: 30px;"></p>
+            <p class="description-p">{{achievement.achievement_level.description}}</p>
+            <div>
+                <form style="float: left" action="{% url 'helper:achievements_level_up' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ active_category }}" name="category">
+                    <input type="hidden" value="{{achievement.id}}" name="id">
+                    <input type="hidden" value="{{user.id}}" name="user_id">
+                    <button class="next-level-btn" title="Następny poziom" type="submit">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                        </svg>
+                    </button>
+                </form>
+                <form style="float: right" action="{% url 'helper:confirm_progress' %}" method="post">
+                    {% csrf_token %}
+                    <label style="float:left; margin-right: 4px;">Postęp</label>
+                    <input class="progress-input" value="{{achievement.progress}}" name="progress"/>
+                    <input type="hidden" value="{{achievement.id}}" name="id">
+                    <input type="hidden" value="{{user.id}}" name="user_id">
+                    <input type="hidden" value="{{active_category}}" name="category">
+                    <button type="submit" hidden></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

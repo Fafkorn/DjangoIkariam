@@ -81,7 +81,10 @@
                     </div>
                 </div>
             </div>
-
+            <div>
+                <label>Nazwa</label>
+                {% render_field my_filter.form.name class="form-control" %}
+            </div>
             <div>
                 <label>Rodzaj kopalni:</label>
                 {% render_field my_filter.form.luxury_resource class="form-control" %}

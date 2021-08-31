@@ -1,8 +1,8 @@
 from django.urls import path
 
 from .views import users, user_buildings, user_resources, user_army, user_account, island,\
-    user_towns, islands, resources_rank, units, ships, achievements, statistics, login, register, logout,\
-    key_manager, settings, sawmill
+    user_towns, islands, resources_rank, units, ships, user_achievements, statistics, login, register, logout,\
+    key_manager, settings, sawmill, achievements
 from mysite.helper.views.panel import panel
 
 app_name = 'helper'
@@ -64,9 +64,12 @@ urlpatterns = [
     path('guide/units', units.get_units, name='units'),
     path('guide/ships', ships.get_ships, name='ships'),
     path('guide/sawmill', sawmill.get_sawmill, name='sawmill'),
-    path('guide/achievements/<int:category_id>', achievements.get_achievements, name='achievements_category'),
-    path('guide/achievements/level_up', achievements.level_up, name='achievements_level_up'),
-    path('guide/achievements/confirm_progress', achievements.confirm_progress, name='confirm_progress'),
+
+    path('guide/achievements/', achievements.get_achievements, name='achievements'),
+    path('guide/achievements/web_scrap_achievements', achievements.analyze_achievements_data, name='web_scrap_achievements'),
+    path('guide/user_achievements/<int:user_id>/<int:category_id>', user_achievements.get_user_achievements, name='achievements_category'),
+    path('guide/user_achievements/level_up', user_achievements.level_up, name='achievements_level_up'),
+    path('guide/user_achievements/confirm_progress', user_achievements.confirm_progress, name='confirm_progress'),
 
     path('statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
     path('statistics/save_statistics', statistics.save_statistics, name='save_statistics'),

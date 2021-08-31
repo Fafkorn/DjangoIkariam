@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/achievements.css' %}">
+    {% load helper_extras %}
+{% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}
+
+    {% include "helper/navigation.html" %}
+
+    <div class="tile">
+        <form method="POST" action="{% url 'helper:web_scrap_achievements' %}">
+            {% csrf_token %}
+            <input class="form-control" name="html_data" placeholder="Wprowadź kod HTML">
+            <button class="btn btn-success">Wprowadź</button>
+        </form>
+        <table class="table">
+            {% for user in users_with_achievements %}
+                <tr>
+                    <td>{% ifchanged user.achievements %} {{forloop.counter}}. {% endifchanged %}</td>
+                    <td><a href="{% url 'helper:achievements_category' user.id 1 %}">{{user.user_name}}</a></td>
+                    <td>{{user.achievements}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
+
+    </div>
+{% endblock %}
