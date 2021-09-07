@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from mysite.helper.models import UserStatus, UserHistory, User
+from mysite.helper.models import UserStatus, UserHistory, User, Alliance
 from datetime import datetime
 
 titles = ['Pan Cieni', 'Imperator', 'Mistrz Sztuk Pięknych', 'Geniusz', 'Korsarz', 'Ambasador', 'Mecenas',
@@ -97,7 +97,11 @@ def get_alliances(soup: BeautifulSoup):
     for element in td_ally:
         alliance = element.text.replace('\n', '')
         alliance = alliance.strip()
-        alliances.append(alliance)
+        alliance = Alliance.objects.filter(tag=alliance)
+        if alliance:
+            alliances.append(alliance[0])
+        else:
+            alliances.append(None)
     return alliances
 
 

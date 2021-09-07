@@ -5,7 +5,7 @@ import json
 
 from django.contrib.sites import requests
 from django.http import HttpResponseRedirect
-from mysite.helper.models import User, Town, Island, Resource, Miracle
+from mysite.helper.models import User, Town, Island, Resource, Miracle, SawMillWorkers, MineWorkers, Alliance
 import time
 
 
@@ -29,9 +29,9 @@ def convert_island_script_to_data(scripts):
 
             island = get_island(x, y)
             island.name = json_object[0][1]['name']
-            island.wood_level = json_object[0][1]['resourceLevel']
+            island.wood_level = SawMillWorkers.objects.filter(level=json_object[0][1]['resourceLevel'])[0]
             island.luxury_resource = Resource.objects.get(pk=int(json_object[0][1]['tradegood'])+1)
-            island.luxury_level = json_object[0][1]['tradegoodLevel']
+            island.luxury_level = MineWorkers.objects.filter(level=json_object[0][1]['tradegoodLevel'])[0]
             island.miracle = Miracle.objects.get(pk=json_object[0][1]['wonder'])
             island.miracle_level = json_object[0][1]['wonderLevel']
             island.has_tower = json_object[0][1]['isHeliosTowerBuilt']
@@ -44,7 +44,7 @@ def convert_island_script_to_data(scripts):
                     owner_ally_tag = ''
                     if 'ownerAllyTag' in city:
                         owner_ally_tag = city['ownerAllyTag']
-                    user = get_user(city['ownerName'], owner_ally_tag)
+                    user = get_user(city['ownerName'], owner_ally_tag, city['ownerId'])
                     town = get_town(city['name'], user, island, city['id'], city['level'])
                     if town is not None:
                         towns_to_save.append(town)
@@ -68,18 +68,34 @@ def get_island(x, y):
         return island
 
 
-def get_user(user_name, alliance):
+def get_user(user_name, alliance, owner_id):
     users = User.objects.filter(user_name=user_name)
     if users.count() == 1:
         if users[0].alliance != alliance:
             user_to_save = users[0]
-            user_to_save.alliance = alliance
+            user_to_save.alliance = get_alliance(alliance)
+            print(user_to_save.alliance)
+            user_to_save.in_game_id = owner_id
             user_to_save.save()
         return users[0]
     else:
         user = User(user_name=user_name)
+        user.in_game_id = owner_id
+        user.alliance = get_alliance(alliance)
         user.save()
         return user
+
+
+def get_alliance(alliance_tag):
+    alliance = Alliance.objects.filter(tag=alliance_tag)
+    if alliance:
+        return alliance[0]
+    elif alliance_tag:
+        alliance = Alliance()
+        alliance.name = alliance_tag
+        alliance.save()
+        return alliance
+    return None
 
 
 def get_town(town_name, user, island, in_game_id, town_level):

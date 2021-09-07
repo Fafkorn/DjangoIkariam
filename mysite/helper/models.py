@@ -15,6 +15,9 @@ class Alliance(models.Model):
     name = models.CharField(max_length=50)
     tag = models.CharField(max_length=5)
 
+    def __str__(self):
+        return f"{self.name} [{self.tag}]"
+
 
 class User(models.Model):
     user_name = models.CharField(max_length=50)
@@ -39,6 +42,7 @@ class User(models.Model):
     piracy = models.IntegerField(default=0)
 
     alliance = models.ForeignKey(Alliance, on_delete=models.SET_NULL, default=None, null=True)
+    in_game_id = models.IntegerField(default=None, null=True, blank=True)
     last_visit = models.DateTimeField(default=datetime(2015, 10, 9, 23, 55, 59, 342380))
 
     def __str__(self):

@@ -25,7 +25,7 @@
                     <div class="level level-resource">
                         <p>{{island.wood_level.level}}</p>
                     </div>
-                    <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_saw_mill_cost|number_commas}}</p>
+                    <p style="text-align: center"><img title="Następny poziom" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{next_level_saw_mill_cost|number_commas}}</p>
                 </div>
             </div>
             <div class="luxury-div">
@@ -33,7 +33,7 @@
                 <div class="level level-resource">
                     <p>{{island.luxury_level.level}}</p>
                 </div>
-                <p style="text-align: center"><img title="Następny poziom" src="{% static "helper/icons/icon_wood.png" %}" alt="" width="25px" height="20" > {{next_level_mine_cost|number_commas}}</p>
+                <p style="text-align: center"><img title="Następny poziom" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{next_level_mine_cost|number_commas}}</p>
             </div>
             {% if island.miracle %}
             <div class="miracle-div">
@@ -89,7 +89,7 @@
                             {% ifchanged town.user.user_name %}
                                 <a class="user-a" href="{% url 'helper:user_towns' town.user.id %}">{{town.user.user_name}}
                                     {% if town.user.alliance %}
-                                    [{{town.user.alliance}}]
+                                    [{{town.user.alliance.tag}}]
                                     {% endif %}
                                 </a>
                             {% endifchanged %}

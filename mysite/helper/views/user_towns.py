@@ -136,7 +136,10 @@ def delete_town(request, user_id):
 
 
 def get_workers(user_id):
-    return Town.objects.filter(user__id=user_id).annotate(workers=Sum('island__wood_level__workers')).aggregate(sum=Sum('workers'))['sum']
+    workers = Town.objects.filter(user__id=user_id).annotate(workers=Sum('island__wood_level__workers')).aggregate(sum=Sum('workers'))['sum']
+    if not workers:
+        return 0
+    return workers
 
 
 def get_mine_workers(user_id, mine_type):
@@ -279,4 +282,3 @@ def get_points_from_rank(user_history, rank_type):
         return user_history.donations
     elif rank_type == 'piracy':
         return user_history.piracy
-

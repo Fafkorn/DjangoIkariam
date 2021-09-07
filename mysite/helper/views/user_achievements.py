@@ -67,7 +67,7 @@ def level_up(request):
     user_achievement = UserAchievement.objects.get(pk=user_achievement_id)
 
     achievement_level = AchievementLevel.objects.get(achievement__id=user_achievement.achievement_level.achievement.id,
-                                                     level=user_achievement.achievement_level.level-1)
+                                                     level=user_achievement.achievement_level.level+1)
 
     user_achievement.achievement_level = achievement_level
     user_achievement.save()
