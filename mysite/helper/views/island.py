@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Island, User, Town, Miracle, Resource, SawMillWorkers, MineWorkers
 
+server = "Gamma"
+
 
 @login_required(login_url='helper:login')
 def get_island(request, user_id, island_id):

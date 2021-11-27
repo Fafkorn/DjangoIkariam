@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Subquery, OuterRef
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime, timedelta
 from django.db.models import Count
@@ -179,13 +179,14 @@ def get_player_coords(username):
 
 
 def get_alliance_coords(alliance_tag):
-    towns = Town.objects.filter(Q(user__alliance=alliance_tag))
+    towns = Town.objects.filter(Q(user__alliance__tag=alliance_tag))
     return get_coordinates_for_towns(towns)
 
 
 def get_occupied_islands():
-    occupied_islands = Island.objects.all().annotate(towns=Count('town')).filter(towns__gt=0)
+    occupied_islands = Island.objects.all().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3))).filter(towns__gt=0)
     coords = []
+
     for island in occupied_islands:
         coords.append([island.x, island.y])
     return coords

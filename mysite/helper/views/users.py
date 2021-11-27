@@ -3,10 +3,15 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 import math
+
+from mysite import settings
 from .filters import UserFilter, DefaultUsersConnection
 from django.contrib.auth.decorators import login_required
 
 from ..models import User
+
+
+server_name = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -19,6 +24,7 @@ def get_users(request):
     user_name = request.GET.get('user_name', '')
     alliance = request.GET.get('alliance', '')
     user_status = request.GET.get('user_status', '')
+    server = request.GET.get('server_name', server_name)
     order_by = request.GET.get('order_by', '')
 
     users_list = my_filter.qs
@@ -38,6 +44,7 @@ def get_users(request):
                'alliance': alliance,
                'user_status': user_status,
                'order_by': order_by,
+               'server': server,
                'visited_users': visited_users,
                'buttons': buttons, 'page_num': int(page_num),
                'nav_active': 'users',

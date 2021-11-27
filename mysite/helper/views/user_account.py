@@ -89,8 +89,8 @@ def edit_user_info(request, user_id):
 
     alliance = Alliance.objects.filter(tag=alliance_tag)
     if alliance:
-        user.alliance = alliance
-    else:
+        user.alliance = alliance[0]
+    elif alliance_tag:
         alliance = Alliance()
         alliance.tag = alliance_tag
         alliance.name = 'x'

@@ -5,8 +5,12 @@ import json
 
 from django.contrib.sites import requests
 from django.http import HttpResponseRedirect
+
+from mysite import settings
 from mysite.helper.models import User, Town, Island, Resource, Miracle, SawMillWorkers, MineWorkers, Alliance
 import time
+
+server = settings.ACTIVE_SERVER
 
 
 def web_scrap_island(request):
@@ -56,14 +60,12 @@ def convert_island_script_to_data(scripts):
 
 
 def get_island(x, y):
-    island = Island.objects.filter(x=x, y=y)
+    island = Island.objects.filter(x=x, y=y, server=server)
     resource = Resource.objects.get(pk=1)
     if island.count() == 1:
         return island[0]
     else:
-        island = Island(x=x, y=y,
-                        wood_level=1, wood_resource=resource,
-                        luxury_level=1, luxury_resource=resource)
+        island = Island(x=x, y=y, wood_resource=resource, luxury_resource=resource)
         island.save()
         return island
 
@@ -79,7 +81,7 @@ def get_user(user_name, alliance, owner_id):
             user_to_save.save()
         return users[0]
     else:
-        user = User(user_name=user_name)
+        user = User(user_name=user_name, server=server)
         user.in_game_id = owner_id
         user.alliance = get_alliance(alliance)
         user.save()
@@ -87,12 +89,12 @@ def get_user(user_name, alliance, owner_id):
 
 
 def get_alliance(alliance_tag):
-    alliance = Alliance.objects.filter(tag=alliance_tag)
+    alliance = Alliance.objects.filter(tag=alliance_tag, server=server)
     if alliance:
         return alliance[0]
     elif alliance_tag:
         alliance = Alliance()
-        alliance.name = alliance_tag
+        alliance.tag = alliance_tag
         alliance.save()
         return alliance
     return None
@@ -123,7 +125,8 @@ def delete_missing_towns(towns_script, towns_database):
     for town in towns_database:
         if (town.in_game_id not in towns_script_ids) and (town.user.user_status.id != 3):
             print('Town id=' + str(town.in_game_id) + ' - DELETED')
-            town.delete()
+            town.is_deleted = True
+            town.save()
 
 
 def web_scrap_all_islands(request):

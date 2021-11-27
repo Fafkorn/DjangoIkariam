@@ -2,6 +2,7 @@ body {
     background: #18191a;
     text-decoration:none;
     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 .content {

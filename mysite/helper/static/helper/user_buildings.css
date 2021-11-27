@@ -1,5 +1,6 @@
 .content-div {
     display: flex;
+    flex-wrap: wrap;
 }
 
 table {
@@ -106,6 +107,5 @@ hr {
     color: black;
     border: 1px solid #666;
 }
-
 
 

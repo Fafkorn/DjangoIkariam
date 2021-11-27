@@ -1,0 +1,9 @@
+#alliances_chart {
+    max-height: 600px;
+    max-width: 1000px;
+}
+
+.center {
+    justify-content: center;
+    width: 100%;
+}

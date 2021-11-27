@@ -8,12 +8,13 @@ class UserStatus(models.Model):
     user_status_name = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.user_status_name
+        return f"{self.user_status_name} ({self.id})"
 
 
 class Alliance(models.Model):
     name = models.CharField(max_length=50)
     tag = models.CharField(max_length=5)
+    server = models.CharField(max_length=25, default='Zeta')
 
     def __str__(self):
         return f"{self.name} [{self.tag}]"
@@ -43,6 +44,7 @@ class User(models.Model):
 
     alliance = models.ForeignKey(Alliance, on_delete=models.SET_NULL, default=None, null=True)
     in_game_id = models.IntegerField(default=None, null=True, blank=True)
+    server = models.CharField(max_length=25, default='Zeta')
     last_visit = models.DateTimeField(default=datetime(2015, 10, 9, 23, 55, 59, 342380))
 
     def __str__(self):
@@ -104,9 +106,10 @@ class Island(models.Model):
         ])
     version = models.IntegerField(default=0)
     has_tower = models.BooleanField(default=False)
+    server = models.CharField(max_length=25, default='Gamma')
 
     def __str__(self):
-        return str('[' + str(self.x) + ':' + str(self.y) + ']')
+        return str('[' + str(self.x) + ':' + str(self.y) + ']' + ' ' + str(self.id))
 
 
 class Town(models.Model):
@@ -117,6 +120,7 @@ class Town(models.Model):
     level = models.IntegerField(default=0, null=True)
     no_units = models.BooleanField(default=False)
     no_ships = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         is_new = True if not self.id else False
@@ -125,7 +129,7 @@ class Town(models.Model):
             self.create_related_objects()
 
     def __str__(self):
-        return str(self.town_name + '(' + self.user.user_name + ')')
+        return f"{self.town_name} ({self.user.user_name})"
 
     def create_related_objects(self):
         buildings_to_save = []

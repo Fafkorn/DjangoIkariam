@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
         <a class="navbar-brand" href="{% url 'helper:users' %}">
-            <img style="margin: 0px;" src="{% static "helper/icons/icon.png" %}" alt="something" width="30px" height="30" >
+            <img style="margin: 0px;" src="{% static 'helper/icons/icon.png' %}" alt="something" width="30px" height="30" >
             Helper
         </a>
         <ul class="navbar-nav mr-auto">
@@ -57,16 +57,22 @@
                     Wyspy
                 </a>
             </li>
-            <li class="nav-item {% if nav_active == 'statistics' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'helper:statistics' user.id %}">
-                    Statystyki
+            <li class="nav-item dropdown {% if nav_active == 'statistics' %}active{% endif %}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownStatistics" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Statystyki
                 </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownStatistics">
+                    <a class="dropdown-item" href="{% url 'helper:statistics_players' user.id %}">Gracze</a>
+                    <a class="dropdown-item" href="{% url 'helper:statistics_alliances' user.id %}">Sojusze</a>
+                    <a class="dropdown-item" href="{% url 'helper:statistics_scores' user.id %}">Punkty</a>
+                    <a class="dropdown-item" href="{% url 'helper:resources_rank' user.id %}">Surowce</a>
+                </div>
             </li>
             <li class="nav-item dropdown  {% if nav_active == 'guide' %}active{% endif %}" >
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGuide" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Poradnik
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownGuide">
                     <a class="dropdown-item" href="{% url 'helper:units' %}">Jednostki</a>
                     <a class="dropdown-item" href="{% url 'helper:ships' %}">Statki</a>
                     <a class="dropdown-item" href="{% url 'helper:sawmill' %}">Tartak/Kopalnia</a>

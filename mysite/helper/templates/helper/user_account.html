@@ -24,6 +24,9 @@
                 <div class="col">
                     <h5><img src="{% static 'helper/icons/army.png' %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
                 </div>
+		<div class="col">
+                    <h5>ID {{user.in_game_id}}</h5>
+                </div>
                 {% if request.user.is_staff %}
                 <div class="col">
                     <form action="{% url 'helper:enable_towns' user.id %}" method="post">

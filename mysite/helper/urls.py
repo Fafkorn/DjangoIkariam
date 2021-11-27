@@ -1,9 +1,10 @@
 from django.urls import path
 
 from .views import users, user_buildings, user_resources, user_army, user_account, island,\
-    user_towns, islands, resources_rank, units, ships, user_achievements, statistics, login, register, logout,\
+    user_towns, islands, resources_rank, units, ships, user_achievements, login, register, logout,\
     key_manager, settings, sawmill, achievements
 from mysite.helper.views.panel import panel
+from mysite.helper.views.statistics import statistics_alliances, statistics_players, statistics_scores
 
 app_name = 'helper'
 
@@ -71,9 +72,11 @@ urlpatterns = [
     path('guide/user_achievements/level_up', user_achievements.level_up, name='achievements_level_up'),
     path('guide/user_achievements/confirm_progress', user_achievements.confirm_progress, name='confirm_progress'),
 
-    path('statistics/<int:user_id>', statistics.get_statistics, name='statistics'),
-    path('statistics/save_users_statistics', statistics.save_users_statistics, name='save_users_statistics'),
-    path('statistics/save_alliances_statistics', statistics.save_alliances_statistics, name='save_alliances_statistics'),
+    path('statistics/players/<int:user_id>', statistics_players.get_statistics_players, name='statistics_players'),
+    path('statistics/alliances/<int:user_id>', statistics_alliances.get_statistics_alliances, name='statistics_alliances'),
+    path('statistics/scores/<int:user_id>', statistics_scores.get_statistics_scores, name='statistics_scores'),
+    path('statistics/save_users_statistics', statistics_players.save_users_statistics, name='save_users_statistics'),
+    path('statistics/save_alliances_statistics', statistics_alliances.save_alliances_statistics, name='save_alliances_statistics'),
 
     path('settings/', settings.get_settings, name='settings')
 

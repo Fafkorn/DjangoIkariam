@@ -31,6 +31,16 @@ class UserFilter(FilterSet):
                           label="Sojusz",
                           widget=TextInput(attrs={'class': 'form-control'}))
 
+    in_game_id = CharFilter(field_name='in_game_id',
+                          lookup_expr='icontains',
+                          label="ID",
+                          widget=TextInput(attrs={'class': 'form-control'}))
+
+    server = CharFilter(field_name='server',
+                        lookup_expr='icontains',
+                        label="Serwer",
+                        widget=TextInput(attrs={'class': 'form-control'}))
+
     user_status = ModelChoiceFilter(queryset=UserStatus.objects.all(),
                                     label="Status",
                                     widget=Select(attrs={'class': 'form-control'}))

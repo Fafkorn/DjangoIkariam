@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+from mysite import settings
 from mysite.helper.models import UserStatus, UserHistory, User, Alliance
 from datetime import datetime
 
@@ -14,6 +15,8 @@ titles = ['Pan Cieni', 'Imperator', 'Mistrz Sztuk Pięknych', 'Geniusz', 'Korsar
 ranking_types = ['Całkowity wynik', 'Mistrzowie budowy', 'Poziomy budynków', 'Naukowcy', 'Poziomy badań',
                  'Generałowie', 'Zapas złota', 'Punkty ofensywy', 'Punkty obrony', 'Handlarz', 'Surowce',
                  'Datki', 'Punkty Abordażu']
+
+server = settings.ACTIVE_SERVER
 
 
 def web_scrap_ranking(request):
@@ -97,6 +100,9 @@ def get_alliances(soup: BeautifulSoup):
     for element in td_ally:
         alliance = element.text.replace('\n', '')
         alliance = alliance.strip()
+        if not alliance:
+            alliances.append(None)
+            continue
         alliance = Alliance.objects.filter(tag=alliance)
         if alliance:
             alliances.append(alliance[0])
@@ -125,7 +131,7 @@ def save_data(data, ranking_type):
             user = user[0]
             user.alliance = entry[1]
         else:
-            user = User(user_name=entry[0], alliance=entry[1])
+            user = User(user_name=entry[0], alliance=entry[1], server=server)
             user.alliance = entry[1]
             user.save()
             user = User.objects.filter(user_name=entry[0])
