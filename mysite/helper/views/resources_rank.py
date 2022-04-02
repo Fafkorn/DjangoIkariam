@@ -1,10 +1,12 @@
-from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, F, Q
 
+from mysite import settings
 from ..models import User, Town
 
 from django.shortcuts import get_object_or_404, render
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -23,5 +25,5 @@ def get_resources_rank(request, user_id):
 
 
 def get_resources_by_user(order):
-    return Town.objects.all().annotate(user_name=F('user__user_name'), userid=F('user__id')).values('user_name', 'userid').annotate(wood=Sum('island__wood_level__workers')).annotate(luxury=Sum('island__luxury_level__workers')).annotate(all=F('wood') + F('luxury')).annotate(wine=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=2))).annotate(marble=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=3))).annotate(crystal=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=4))).annotate(sulfur=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=5))).order_by(f'-{order}')
+    return Town.objects.filter(user__server=server, is_deleted=False, island__server=server).annotate(user_name=F('user__user_name'), userid=F('user__id')).values('user_name', 'userid').annotate(wood=Sum('island__wood_level__workers')).annotate(luxury=Sum('island__luxury_level__workers')).annotate(all=F('wood') + F('luxury')).annotate(wine=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=2))).annotate(marble=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=3))).annotate(crystal=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=4))).annotate(sulfur=Sum('island__luxury_level__workers', filter=Q(island__luxury_resource__id=5))).order_by(f'-{order}')
 

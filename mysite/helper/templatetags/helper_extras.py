@@ -1,3 +1,4 @@
+import math
 from django import template
 import re
 
@@ -14,8 +15,18 @@ def get_pos(position, page_num):
 
 @register.filter
 def get_time(seconds):
-    minutes = int(seconds/60)
+    days = int(seconds/86400)
+    hours = int(seconds % 86400 / 3600)
+    minutes = int(seconds % 3600 / 60)
     seconds = seconds % 60
+    if days > 0 and hours > 0:
+        return str(days) + 'D ' + str(hours) + 'h'
+    elif days > 0:
+        return str(days) + 'D'
+    elif hours > 0 and minutes > 0:
+        return str(hours) + 'h ' + str(minutes) + 'm'
+    elif hours > 0:
+        return str(hours) + 'h'
     if minutes > 0 and seconds > 0:
         return str(minutes) + 'm ' + str(seconds) + 's'
     elif minutes > 0 and seconds == 0:

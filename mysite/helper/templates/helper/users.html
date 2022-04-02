@@ -73,7 +73,7 @@
             <div>
                 {% if buttons %}
                 {% for button in buttons %}
-                    <a href="{% url 'helper:users' %}?page={{button.1}}&user_name={{user_name}}&alliance={{alliance}}&user_status={{user_status}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
+                    <a style="margin: 2px;" href="{% url 'helper:users' %}?page={{button.1}}&user_name={{user_name}}&alliance={{alliance}}&user_status={{user_status}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
                 {% endfor %}
 
                 {% else %}

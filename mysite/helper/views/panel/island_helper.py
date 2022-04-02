@@ -7,7 +7,8 @@ from django.contrib.sites import requests
 from django.http import HttpResponseRedirect
 
 from mysite import settings
-from mysite.helper.models import User, Town, Island, Resource, Miracle, SawMillWorkers, MineWorkers, Alliance
+from mysite.helper.models import User, Town, Island, Resource, Miracle, SawMillWorkers, MineWorkers, Alliance, \
+    UserStatus
 import time
 
 server = settings.ACTIVE_SERVER
@@ -48,14 +49,14 @@ def convert_island_script_to_data(scripts):
                     owner_ally_tag = ''
                     if 'ownerAllyTag' in city:
                         owner_ally_tag = city['ownerAllyTag']
-                    user = get_user(city['ownerName'], owner_ally_tag, city['ownerId'])
+                    user = get_user(city['ownerName'], owner_ally_tag, city['ownerId'], city['state'])
                     town = get_town(city['name'], user, island, city['id'], city['level'])
                     if town is not None:
                         towns_to_save.append(town)
                         print(town.town_name + ' added')
             Town.objects.bulk_create(towns_to_save)
 
-            towns_database = Town.objects.filter(island__id=island.id)
+            towns_database = Town.objects.filter(island__id=island.id, is_deleted=False)
             delete_missing_towns(cities, towns_database)
 
 
@@ -70,16 +71,16 @@ def get_island(x, y):
         return island
 
 
-def get_user(user_name, alliance, owner_id):
-    users = User.objects.filter(user_name=user_name)
-    if users.count() == 1:
-        if users[0].alliance != alliance:
-            user_to_save = users[0]
+def get_user(user_name, alliance, owner_id, state):
+    users = User.objects.filter(user_name=user_name, server=server)
+    if users.count() > 0:
+        user_to_save = users[0]
+        if user_to_save.alliance != alliance:
             user_to_save.alliance = get_alliance(alliance)
-            print(user_to_save.alliance)
-            user_to_save.in_game_id = owner_id
-            user_to_save.save()
-        return users[0]
+        user_to_save.in_game_id = owner_id
+        user_to_save.user_status = get_state(state)
+        user_to_save.save(update_fields=["alliance", "in_game_id", "user_status"])
+        return user_to_save
     else:
         user = User(user_name=user_name, server=server)
         user.in_game_id = owner_id
@@ -101,12 +102,13 @@ def get_alliance(alliance_tag):
 
 
 def get_town(town_name, user, island, in_game_id, town_level):
-    town = Town.objects.filter(in_game_id=in_game_id)
+    town = Town.objects.filter(in_game_id=in_game_id, is_deleted=False)
     if town.count() == 1:
-        print("Town %s (%s) exists" % (town_name, user))
+        print(f'Town {town_name} ({user}) Island: {island} exists')
         town = town[0]
         town.town_name = town_name
         town.level = town_level
+        town.island = island
         town.user = user
         town.save()
         return None
@@ -116,6 +118,14 @@ def get_town(town_name, user, island, in_game_id, town_level):
         return town
 
 
+def get_state(state):
+    if state == 'inactive' or state == 'inactive_banned':
+        return UserStatus.objects.get(id=2)
+    elif state == 'vacation':
+        return UserStatus.objects.get(id=4)
+    return UserStatus.objects.get(id=1)
+
+
 def delete_missing_towns(towns_script, towns_database):
     towns_script_ids = []
     for city in towns_script:
@@ -123,7 +133,7 @@ def delete_missing_towns(towns_script, towns_database):
             towns_script_ids.append(city['id'])
 
     for town in towns_database:
-        if (town.in_game_id not in towns_script_ids) and (town.user.user_status.id != 3):
+        if (town.in_game_id not in towns_script_ids) and (town.user.user_status and town.user.user_status.id != 3):
             print('Town id=' + str(town.in_game_id) + ' - DELETED')
             town.is_deleted = True
             town.save()

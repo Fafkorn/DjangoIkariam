@@ -12,7 +12,7 @@ from ..models import AchievementLevel, AchievementCategory, User, DefaultUsersCo
 def get_user_achievements(request, category_id, user_id):
     user = get_object_or_404(User, pk=user_id)
     all_achievements = UserAchievement.objects.filter(user__id=user.id)
-    achievements = UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category_id)
+    achievements = UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category_id).order_by('achievement_level__achievement__order')
     achievements = split_by_completion(achievements)
     achievement_categories = AchievementCategory.objects.all()
 

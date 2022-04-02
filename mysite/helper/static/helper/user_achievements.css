@@ -76,29 +76,31 @@
 }
 
 .level-color[about="0"] {
-    background: #990000;
+    background: #F8696B;
+    color: black;
 }
 
 .level-color[about="1"] {
-    background: #993300;
+    background: #FA8370;
+    color: black;
 }
 
 .level-color[about="2"] {
-    background: #996600;
-
+    background: #FB9D75;
+    color: black;
 }
 
 .level-color[about="3"] {
-    background: #999900;
+    background: #FDB87B;
     color: black;
 }
 
 .level-color[about="4"] {
-    background: #99CC00;
+    background: #FDD280;
     color: black;
 }
 
 .level-color[about="5"] {
-    background: #99FF66;
+    background: #63BE7B;
     color: black;
 }

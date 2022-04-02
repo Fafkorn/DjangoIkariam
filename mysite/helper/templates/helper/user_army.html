@@ -30,7 +30,7 @@
                         <tr>
                             <form action="{% url 'helper:save_units' user.id %}" method="post">
                                 {% csrf_token %}
-                                <td title="[{{town_units.0.town.island.x}}:{{town_units.0.town.island.y}}]">{{town_units.0.town.town_name}}</td>
+                                <td title="[{{town_units.0.town.island.x}}:{{town_units.0.town.island.y}}]"><img src="{{town_units.0.town.island.luxury_resource.image_path.url}}" alt="{{town_units.0.town.island.luxury_resource.name}}" width="20px" height="16"> {{town_units.0.town.town_name}}</td>
                                 {% for unit in town_units %}
                                 <td><input class="units-number-input"  value="{{unit.number}}" maxlength="5" name="unit_number" {% if unit.number == 0 %} style="color: #565656;" {% endif %}/></td>
                                 <input type="hidden" value={{unit.id}} name="unit_id" />
@@ -120,7 +120,7 @@
                         <tr>
                             <form action="{% url 'helper:save_ships' user.id %}" method="post">
                                 {% csrf_token %}
-                                <td title="[{{town_ships.0.town.island.x}}:{{town_ships.0.town.island.y}}]">{{town_ships.0.town.town_name}}</td>
+                                <td title="[{{town_ships.0.town.island.x}}:{{town_ships.0.town.island.y}}]"><img src="{{town_ships.0.town.island.luxury_resource.image_path.url}}" alt="{{town_ships.0.town.island.luxury_resource.name}}" width="20px" height="16"> {{town_ships.0.town.town_name}}</td>
                                 {% for ship in town_ships %}
                                     <td><input class="units-number-input" value="{{ship.number}}" maxlength="5" name="ship_number" {% if ship.number == 0 %} style="color: #565656;" {% endif %}/></td>
                                     <input type="hidden" value={{ship.id}} name="ship_id"  />

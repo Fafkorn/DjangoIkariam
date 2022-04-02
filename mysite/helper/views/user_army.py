@@ -4,6 +4,9 @@ from ..models import User, Unit, Ship, UnitInstance, ShipInstance, Town
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from mysite import settings
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -11,7 +14,7 @@ def get_user_army(request, user_id):
     context = {}
     context['ships'] = Ship.objects.all()
     context['units'] = Unit.objects.all()
-    context['towns'] = Town.objects.filter(user__id=user_id)
+    context['towns'] = Town.objects.filter(user__id=user_id, island__server=server).order_by('in_game_id')
 
     context['user'] = User.objects.get(pk=user_id)
 
@@ -24,7 +27,7 @@ def get_user_army(request, user_id):
     units_discount = 1.0 - context['user'].military_future*0.02 - 0.14
     unit_types = Unit.objects.all()
     for unit in unit_types:
-        unit_instances2 = UnitInstance.objects.filter(town__user__id=user_id, unit_id=unit.id)
+        unit_instances2 = UnitInstance.objects.filter(town__user__id=user_id, unit_id=unit.id, town__island__server=server)
         liczba_jednostek = 0
         koszty_jednostek = 0
         punkty_jednostek = 0
@@ -50,7 +53,7 @@ def get_user_army(request, user_id):
     ships_discount = 1.0 - context['user'].shipping_future * 0.02 - 0.14
     ship_types = Ship.objects.all()
     for ship in ship_types:
-        ship_instances2 = ShipInstance.objects.filter(town__user__id=user_id, ship_id=ship.id)
+        ship_instances2 = ShipInstance.objects.filter(town__user__id=user_id, ship_id=ship.id, town__island__server=server)
         liczba_statkow = 0
         koszty_statkow = 0
         punkty_statkow = 0
@@ -91,7 +94,7 @@ def get_ship_instances(towns):
 
 
 def get_sum_units_points(user_id):
-    instances = UnitInstance.objects.filter(town__user__id=user_id)
+    instances = UnitInstance.objects.filter(town__user__id=user_id, town__island__server=server)
     sum = 0
     for instance in instances:
         sum += instance.unit.points * instance.number
@@ -99,7 +102,7 @@ def get_sum_units_points(user_id):
 
 
 def get_sum_units_costs(user_id):
-    instances = UnitInstance.objects.filter(town__user__id=user_id)
+    instances = UnitInstance.objects.filter(town__user__id=user_id, town__island__server=server)
     sum = 0
     for instance in instances:
         sum += instance.unit.hour_costs * instance.number
@@ -128,7 +131,7 @@ def toggle_no_units(request, user_id):
 
 
 def get_sum_ships_points(user_id):
-    instances = ShipInstance.objects.filter(town__user__id=user_id)
+    instances = ShipInstance.objects.filter(town__user__id=user_id, town__island__server=server)
     sum = 0
     for instance in instances:
         sum += instance.ship.points * instance.number
@@ -136,7 +139,7 @@ def get_sum_ships_points(user_id):
 
 
 def get_sum_ships_costs(user_id):
-    instances = ShipInstance.objects.filter(town__user__id=user_id)
+    instances = ShipInstance.objects.filter(town__user__id=user_id, town__island__server=server)
     sum = 0
     for instance in instances:
         sum += instance.ship.hour_costs * instance.number

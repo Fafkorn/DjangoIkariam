@@ -22,7 +22,7 @@ class Alliance(models.Model):
 
 class User(models.Model):
     user_name = models.CharField(max_length=50)
-    user_status = models.ForeignKey(UserStatus, on_delete=models.SET_NULL, default=None, null=True)
+    user_status = models.ForeignKey(UserStatus, on_delete=models.SET_NULL, default=1, null=True)
     shipping_future = models.IntegerField(default=0)
     economy_future = models.IntegerField(default=0)
     science_future = models.IntegerField(default=0)
@@ -44,7 +44,7 @@ class User(models.Model):
 
     alliance = models.ForeignKey(Alliance, on_delete=models.SET_NULL, default=None, null=True)
     in_game_id = models.IntegerField(default=None, null=True, blank=True)
-    server = models.CharField(max_length=25, default='Zeta')
+    server = models.CharField(max_length=25, default='Gamma')
     last_visit = models.DateTimeField(default=datetime(2015, 10, 9, 23, 55, 59, 342380))
 
     def __str__(self):
@@ -301,6 +301,7 @@ class Achievement(models.Model):
     category = models.ForeignKey(AchievementCategory, on_delete=models.CASCADE)
     image_path = models.ImageField(upload_to='img')
     max_level = models.IntegerField(default=0)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.name)
@@ -310,6 +311,7 @@ class AchievementLevel(models.Model):
     achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
     description = models.CharField(max_length=120)
     level = models.IntegerField(default=0)
+    requirements = models.IntegerField(default=None, blank=True, null=True)
 
     def __str__(self):
         return str(self.achievement.name + ' - ' + self.description)
@@ -354,6 +356,7 @@ class UserHistory(models.Model):
 
 class UserStatisticsHistory(models.Model):
     time = models.DateTimeField()
+    server = models.CharField(max_length=25, default='Zeta')
 
     active_users = models.IntegerField(null=True, blank=True, default=None)
     inactive_users = models.IntegerField(null=True, blank=True, default=None)

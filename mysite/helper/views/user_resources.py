@@ -5,13 +5,16 @@ from ..models import TownResources, Resource, User
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from datetime import datetime
+from mysite import settings
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
 def get_user_resources(request, user_id):
     context = {}
     context['user'] = User.objects.get(pk=user_id)
-    context['resources'] = TownResources.objects.filter(town__user_id=user_id)
+    context['resources'] = TownResources.objects.filter(town__user_id=user_id, town__island__server=server).order_by('town__in_game_id')
     context['resource_types'] = Resource.objects.all()
     wood = 0
     wood_production = 0
@@ -112,7 +115,7 @@ def send_resources(request, user_id):
 
 
 def add_all(request, user_id):
-    resources = TownResources.objects.filter(town__user_id=user_id)
+    resources = TownResources.objects.filter(town__user_id=user_id, town__island__server=server)
     increase_value = int(request.POST['increase_all'])
     for resource in resources:
         resource.wood += increase_value

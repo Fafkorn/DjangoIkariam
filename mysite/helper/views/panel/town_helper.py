@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 
 import json
 from mysite.helper.models import BuildingInstance, User, Building, Resource, Island, Town
+from mysite import settings
+
+server = settings.ACTIVE_SERVER
 
 
 def web_scrap_town(request):
@@ -20,25 +23,32 @@ def convert_town_script_to_data(scripts):
             script_string = script_string[start:last+1]
             json_object = json.loads(script_string)
 
-            x = json_object[0][1]['islandXCoord']
-            y = json_object[0][1]['islandYCoord']
-            city_id = json_object[0][1]['id']
+            # czasami w json_object[0] jest kolejka budowy
+            # x - określa index
+            array_index = 0
+            for index, item in enumerate(json_object):
+                if str(item).startswith('[\'updateBackgroundData\''):
+                    array_index = index
+                    break
+            x = json_object[array_index][1]['islandXCoord']
+            y = json_object[array_index][1]['islandYCoord']
+            city_id = json_object[array_index][1]['id']
             island = get_island(x, y)
             island.save()
-            user = get_user(json_object[0][1]['ownerName'])
-            town = get_town(json_object[0][1]['name'], user, island, city_id)
+            user = get_user(json_object[array_index][1]['ownerName'])
+            town = get_town(json_object[array_index][1]['name'], user, island, city_id)
 
             if town is not None:
                 town.save()
             else:
-                town = Town.objects.filter(in_game_id=city_id)[0]
+                town = Town.objects.filter(in_game_id=city_id, is_deleted=False)[0]
 
             BuildingInstance.objects.filter(building_town=town).delete()
             buildings_to_save = []
             all_buildings = get_all_building_instances(town)
             warehouses_count = 0
             trading_posts_count = 0
-            buildings = json_object[0][1]['position']
+            buildings = json_object[array_index][1]['position']
             for building in buildings:
                 if 'name' in building:
                     building_obj = Building.objects.filter(building_name=building['name'])
@@ -79,14 +89,14 @@ def find_first_and_delete(buildings_list, building_instance):
 
 
 def get_island(x, y):
-    island = Island.objects.filter(x=x, y=y)
+    island = Island.objects.filter(x=x, y=y, server=server)
     resource = Resource.objects.get(pk=1)
     if island.count() == 1:
         return island[0]
     else:
         island = Island(x=x, y=y,
-                        wood_level=1, wood_resource=resource,
-                        luxury_level=1, luxury_resource=resource)
+                        wood_level=None, wood_resource=resource,
+                        luxury_level=None, luxury_resource=resource)
         island.save()
         return island
 
@@ -102,9 +112,18 @@ def get_user(user_name):
 
 
 def get_town(town_name, user, island, in_game_id):
-    town = Town.objects.filter(in_game_id=in_game_id)
+    town = Town.objects.filter(in_game_id=in_game_id, user__server=server, island__server=server)
+    for a in town:
+        print(a.id)
     if town.count() == 1:
         print("Town %s (%s) exists" % (town_name, user))
+        town = town[0]
+        town.town_name = town_name
+        town.user = user
+        town.save()
+        return None
+    elif town.count() > 1:
+        print("There are more than 1 town with that ID")
         town = town[0]
         town.town_name = town_name
         town.user = user

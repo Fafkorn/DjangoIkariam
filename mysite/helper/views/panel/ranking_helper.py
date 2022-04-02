@@ -90,7 +90,6 @@ def get_names_and_statuses(soup: BeautifulSoup):
         name = element.text
         statuses.append(get_status(element))
         names.append(name.strip())
-        print(f"{name.strip()} {get_status(element)}")
     return names, statuses
 
 
@@ -103,11 +102,14 @@ def get_alliances(soup: BeautifulSoup):
         if not alliance:
             alliances.append(None)
             continue
-        alliance = Alliance.objects.filter(tag=alliance)
-        if alliance:
-            alliances.append(alliance[0])
+        alliance_obj = Alliance.objects.filter(tag=alliance, server=server)
+        if alliance_obj:
+            alliances.append(alliance_obj[0])
         else:
-            alliances.append(None)
+            print(f'{alliance} trzeba nowy')
+            new_alliance = Alliance(tag=alliance, server=server)
+            new_alliance.save()
+            alliances.append(new_alliance)
     return alliances
 
 
@@ -126,10 +128,11 @@ def save_data(data, ranking_type):
     users_to_update = []
     for entry in data:
         create_flag = False
-        user = User.objects.filter(user_name=entry[0])
+        user = User.objects.filter(user_name=entry[0], server=server)
         if user:
             user = user[0]
             user.alliance = entry[1]
+            user.server = server
         else:
             user = User(user_name=entry[0], alliance=entry[1], server=server)
             user.alliance = entry[1]
@@ -155,7 +158,7 @@ def save_data(data, ranking_type):
         else:
             user_histories_to_update.append(user_history)
 
-    User.objects.bulk_update(users_to_update, ['alliance', 'user_status'])
+    User.objects.bulk_update(users_to_update, ['alliance', 'user_status', 'server'])
     UserHistory.objects.bulk_create(user_histories_to_create)
     UserHistory.objects.bulk_update(user_histories_to_update, ['time', 'score', 'master_builders', 'building_levels',
                                                                'scientists', 'research_level', 'generals', 'gold',

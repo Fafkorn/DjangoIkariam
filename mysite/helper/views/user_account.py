@@ -6,6 +6,9 @@ from ..models import User, Town, Island, Resource, BuildingInstance, UserStatus,
 
 from .user_army import get_sum_units_points, get_sum_units_costs
 from .user_army import get_sum_ships_points, get_sum_ships_costs
+from mysite import settings
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -58,7 +61,7 @@ def get_island(x, y):
 
 
 def enable_towns(request, user_id):
-    user_towns = Town.objects.filter(user__id=user_id)
+    user_towns = Town.objects.filter(user__id=user_id, island__server=server, is_deleted=False)
     for town in user_towns:
         if len(BuildingInstance.objects.filter(building_town__id=town.id)) == 0:
             town.create_related_objects()

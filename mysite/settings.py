@@ -15,7 +15,7 @@ from django.contrib.messages import constants as messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ACTIVE_SERVER = "Zeta"
+ACTIVE_SERVER = "Gamma"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

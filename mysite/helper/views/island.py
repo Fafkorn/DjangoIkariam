@@ -13,7 +13,7 @@ def get_island(request, user_id, island_id):
     context = {}
     context['user'] = get_object_or_404(User, pk=user_id)
     island = Island.objects.get(pk=island_id)
-    context['towns'] = Town.objects.filter(island__id=island_id).exclude(user__user_status__id=3).order_by('user')
+    context['towns'] = Town.objects.filter(island__id=island_id, is_deleted=False).exclude(user__user_status__id=3).order_by('user')
     context['miracle_types'] = Miracle.objects.all()
     context['island'] = island
     context['next_level_saw_mill_cost'] = SawMillWorkers.objects.get(level=island.wood_level.level+1).cost

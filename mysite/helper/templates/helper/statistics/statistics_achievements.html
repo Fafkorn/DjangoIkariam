@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'helper/statistics/statistics_achievements.css' %}">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<style>
+    .a {
+    text-align: center;
+    margin: 4px;
+    background: #444;
+    width: 400px;
+    height: ;
+    position: relative;
+    }
+</style>
+    {% load helper_extras %}
+{% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}
+    {% include "helper/navigation.html" %}
+
+<div class="tile" style="max-width: 1000px;">
+    <table>
+        {% for unit_achievement in unit_achievements %}
+        <tr>
+            <td><img src="{{unit_achievement.unit.image_path.url}}" alt="" width="34px" height="35"></td>
+            <td><div class="a" style="{% if not unit_achievement.remains %} background: green; {% endif %}">
+
+                <div style="background: green; position: absolute; left: 0; height: 100%; width: {{unit_achievement.remains.units_percentage}}%"></div>
+
+                {% ifequal unit_achievement.achievement.achievement_level.level unit_achievement.achievement.achievement_level.achievement.max_level %}
+                Ukończono
+                {% else %}
+                <div style="position: relative;" >{{unit_achievement.achievement.progress}}/{{unit_achievement.achievement.achievement_level.requirements}}</div>
+                {% endifequal %}</div></td>
+            <td>
+                {% if unit_achievement.remains %}
+                {% if unit_achievement.remains.wood_costs != 0 %}<img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{unit_achievement.remains.wood_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if unit_achievement.remains %}
+                {% if unit_achievement.remains.wine_costs != 0 %}<img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20" > {{unit_achievement.remains.wine_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if unit_achievement.remains %}
+                 {% if unit_achievement.remains.crystal_costs != 0 %}<img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20" > {{unit_achievement.remains.crystal_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if unit_achievement.remains %}
+                {% if unit_achievement.remains.sulfur_costs != 0 %}<img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20" > {{unit_achievement.remains.sulfur_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if unit_achievement.remains %}
+                {% if unit_achievement.remains.men_costs != 0 %}<img title="Ludzie" src="{% static 'helper/icons/icon_citizen.png' %}" alt="" width="19px" height="20" > {{unit_achievement.remains.men_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if unit_achievement.remains %}
+                {% if unit_achievement.remains.time_costs != 0 %}<img title="Czas budowy" src="{% static 'helper/icons/icon_time.png' %}" alt="" width="19px" height="20" > {{unit_achievement.remains.time_costs|get_time}} {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+
+
+        {% endfor %}
+        <tr style="border-top: 1px solid white">
+            <td>SUMA</td>
+            <td>
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{units_sum.resources_costs_percentage}}%"></div>
+                    <div style="position: relative;">Surowce {{units_sum.resources_costs_percentage}}%</div>
+                </div>
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{units_sum.men_costs_percentage}}%"></div>
+                    <div style="position: relative;">Populacja {{units_sum.men_costs_percentage}}%</div>
+                </div>
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{units_sum.time_costs_percentage}}%"></div>
+                    <div style="position: relative;">Czas {{units_sum.time_costs_percentage}}%</div>
+                </div>
+            </td>
+            <td>
+                {% if units_sum.wood_costs != 0 %}<img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{units_sum.wood_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if units_sum.wine_costs != 0 %}<img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20" > {{units_sum.wine_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                 {% if units_sum.crystal_costs != 0 %}<img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20" > {{units_sum.crystal_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if units_sum.sulfur_costs != 0 %}<img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20" > {{units_sum.sulfur_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if units_sum.men_costs != 0 %}<img title="Ludzie" src="{% static 'helper/icons/icon_citizen.png' %}" alt="" width="19px" height="20" > {{units_sum.men_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if units_sum.time_costs != 0 %}<img title="Czas budowy" src="{% static 'helper/icons/icon_time.png' %}" alt="" width="19px" height="20" > {{units_sum.time_costs|get_time}} {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<!--Statki-->
+
+<div class="tile" style="max-width: 1000px;">
+    <table>
+        {% for ship_achievement in ship_achievements %}
+        <tr>
+            <td><img src="{{ship_achievement.ship.image_path.url}}" alt="" width="34px" height="35"></td>
+            <td><div class="a" style="{% if not ship_achievement.remains %} background: green; {% endif %}">
+                {% ifequal ship_achievement.achievement.achievement_level.level ship_achievement.achievement.achievement_level.achievement.max_level %}
+                Ukończono
+                {% else %}
+                <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ship_achievement.remains.ships_percentage}}%"></div>
+                <div style="position: relative;" >{{ship_achievement.achievement.progress}}/{{ship_achievement.achievement.achievement_level.requirements}}</div>
+                {% endifequal %}</div></td>
+            <td>
+                {% if ship_achievement.remains %}
+                {% if ship_achievement.remains.wood_costs != 0 %}<img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{ship_achievement.remains.wood_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if ship_achievement.remains %}
+                {% if ship_achievement.remains.wine_costs != 0 %}<img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20" > {{ship_achievement.remains.wine_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if ship_achievement.remains %}
+                 {% if ship_achievement.remains.crystal_costs != 0 %}<img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20" > {{ship_achievement.remains.crystal_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if ship_achievement.remains %}
+                {% if ship_achievement.remains.sulfur_costs != 0 %}<img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20" > {{ship_achievement.remains.sulfur_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if ship_achievement.remains %}
+                {% if ship_achievement.remains.men_costs != 0 %}<img title="Ludzie" src="{% static 'helper/icons/icon_citizen.png' %}" alt="" width="19px" height="20" > {{ship_achievement.remains.men_costs|number_commas}} {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if ship_achievement.remains %}
+                {% if ship_achievement.remains.time_costs != 0 %}<img title="Czas budowy" src="{% static 'helper/icons/icon_time.png' %}" alt="" width="19px" height="20" > {{ship_achievement.remains.time_costs|get_time}} {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+
+
+        {% endfor %}
+        <tr style="border-top: 1px solid white">
+            <td>SUMA</td>
+            <td>
+
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ships_sum.resources_costs_percentage}}%"></div>
+                    <div style="position: relative;">Surowce {{ships_sum.resources_costs_percentage}}%</div>
+                </div>
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ships_sum.men_costs_percentage}}%"></div>
+                    <div style="position: relative;">Populacja {{ships_sum.men_costs_percentage}}%</div>
+                </div>
+                <div class="a">
+                    <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ships_sum.time_costs_percentage}}%"></div>
+                    <div style="position: relative;">Czas {{ships_sum.time_costs_percentage}}%</div>
+                </div>
+            </td>
+            <td>
+                {% if ships_sum.wood_costs != 0 %}<img title="Drewno" src="{% static 'helper/icons/icon_wood.png' %}" alt="" width="25px" height="20" > {{ships_sum.wood_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if ships_sum.wine_costs != 0 %}<img title="Wino" src="{% static 'helper/icons/icon_wine.png' %}" alt="" width="25px" height="20" > {{ships_sum.wine_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                 {% if ships_sum.crystal_costs != 0 %}<img title="Kryształ" src="{% static 'helper/icons/icon_glass.png' %}" alt="" width="25px" height="20" > {{ships_sum.crystal_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if ships_sum.sulfur_costs != 0 %}<img title="Siarka" src="{% static 'helper/icons/icon_sulfur.png' %}" alt="" width="25px" height="20" > {{ships_sum.sulfur_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if ships_sum.men_costs != 0 %}<img title="Ludzie" src="{% static 'helper/icons/icon_citizen.png' %}" alt="" width="19px" height="20" > {{ships_sum.men_costs|number_commas}} {% endif %}
+            </td>
+            <td>
+                {% if ships_sum.time_costs != 0 %}<img title="Czas budowy" src="{% static 'helper/icons/icon_time.png' %}" alt="" width="19px" height="20" > {{ships_sum.time_costs|get_time}} {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

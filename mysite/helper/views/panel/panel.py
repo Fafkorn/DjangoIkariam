@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from mysite import settings
 from mysite.helper.decorators import admin_only
 from mysite.helper.models import User, UserHistory
 from django.contrib.auth.decorators import login_required
 
 from mysite.helper.views.panel import island_helper, ranking_helper, town_helper, resources_helper
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -51,7 +53,7 @@ def analyze_town_data(request):
 @login_required(login_url='helper:login')
 @admin_only()
 def set_all_users_deleted(request):
-    User.objects.update(user_status=3)
+    User.objects.filter(server=server).update(user_status=3)
     return HttpResponseRedirect(reverse('helper:admin', args=()))
 
 

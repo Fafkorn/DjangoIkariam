@@ -24,7 +24,7 @@
                 <div class="col">
                     <h5><img src="{% static 'helper/icons/army.png' %}" alt="something" width="16px" height="16"> {{sum_points|number_commas}}</h5>
                 </div>
-		<div class="col">
+		        <div class="col">
                     <h5>ID {{user.in_game_id}}</h5>
                 </div>
                 {% if request.user.is_staff %}
@@ -50,52 +50,52 @@
                 </div>
                 {% endif %}
             </div>
+            <hr>
+            <div id="user-forms">
+                {% if request.user.is_staff %}
+                <div class="form-div">
+                    <form action="{% url 'helper:edit_user_info' user.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Nazwa gracza</label>
+                        <input class="form-control"  maxlength="50" type="text" name="user_name" value="{{ user.user_name }}"/>
 
-            {% if request.user.is_staff %}
-            <div class="edit-name-div">
-                <form action="{% url 'helper:edit_user_info' user.id %}" method="post">
-                    {% csrf_token %}
-                    <label>Nazwa gracza</label>
-                    <input class="form-control"  maxlength="50" type="text" name="user_name" value="{{ user.user_name }}"/>
+                        <label>Nazwa sojuszu</label>
+                        <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance.tag }}"/>
 
-                    <label>Nazwa sojuszu</label>
-                    <input class="form-control"  maxlength="50" type="text" name="alliance" value="{{ user.alliance.tag }}"/>
+                        <label>Status</label>
+                        <select class="form-control" name="user_status">
+                            {% for status in user_statuses %}
+                                <option value="{{ status.id }}" {% ifequal user.user_status.id status.id %} selected {% endifequal %} >{{ status.user_status_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-success add-button" type="submit" >Zmień</button>
+                    </form>
+                </div>
+                {% endif %}
 
-                    <label>Status</label>
-                    <select class="form-control" name="user_status">
-                        {% for status in user_statuses %}
-                            <option value="{{ status.id }}" {% ifequal user.user_status.id status.id %} selected {% endifequal %} >{{ status.user_status_name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button class="btn btn-success add-button" type="submit" >Zmień</button>
-                </form>
+                <div class="form-div">
+                    <form action="{% url 'helper:save_researches' user.id %}" method="post">
+                        {% csrf_token %}
+                        <input  type="hidden" value="{{user.id}}"/>
+                        <label >Przyszłość żeglugi</label>
+                        <input class="form-control" type="number" value="{{user.shipping_future}}" name="shipping_future"/>
+
+                        <label >Przyszłość gospodarki</label>
+                        <input class="form-control" type="number" value="{{user.economy_future}}" name="economy_future"/>
+
+                        <label >Przyszłość nauki</label>
+                        <input class="form-control" type="number" value="{{user.science_future}}" name="science_future"/>
+
+                        <label >Przyszłość wojska</label>
+                        <input class="form-control" type="number" value="{{user.military_future}}" name="military_future"/>
+
+                        <button  class="btn btn-success add-button" type="submit">Zapisz</button>
+                    </form>
+                </div>
             </div>
-            {% endif %}
-
 
         </div>
 
-        <div class="add-town-edit-user-div">
 
-            <div class="tile">
-                <form action="{% url 'helper:save_researches' user.id %}" method="post">
-                    {% csrf_token %}
-                    <input  type="hidden" value="{{user.id}}"/>
-                    <label >Przyszłość żeglugi</label>
-                    <input class="form-control" type="number" value="{{user.shipping_future}}" name="shipping_future"/>
-
-                    <label >Przyszłość gospodarki</label>
-                    <input class="form-control" type="number" value="{{user.economy_future}}" name="economy_future"/>
-
-                    <label >Przyszłość nauki</label>
-                    <input class="form-control" type="number" value="{{user.science_future}}" name="science_future"/>
-
-                    <label >Przyszłość wojska</label>
-                    <input class="form-control" type="number" value="{{user.military_future}}" name="military_future"/>
-
-                    <button  class="btn btn-success add-button" type="submit">Zapisz</button>
-                </form>
-            </div>
-        </div>
     </div>
 {% endblock %}

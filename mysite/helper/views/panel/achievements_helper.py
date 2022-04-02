@@ -23,6 +23,8 @@ def web_scrap_achievements(request):
         ua.achievement_level = achievement
         ua.user = user
         user_achievements.append(ua)
+    print(user)
+    print(category)
     UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category.id).delete()
     UserAchievement.objects.bulk_create(user_achievements)
 

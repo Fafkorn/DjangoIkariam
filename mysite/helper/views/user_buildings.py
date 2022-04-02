@@ -2,15 +2,18 @@ from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from mysite import settings
 
 from ..models import User, Building, BuildingInstance, Town
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
 def get_user_buildings(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     buildings = Building.objects.order_by('order')
-    towns = Town.objects.filter(user__id=user_id)
+    towns = Town.objects.filter(user__id=user_id, is_deleted=False, island__server=server).order_by('in_game_id')
     level_sum = get_sum_of_buildings_level(towns)
     building_instances = get_building_instances(towns)
 
@@ -33,7 +36,7 @@ def get_building_instances(towns):
 
 def get_sum_of_buildings_level(towns):
     if len(towns) > 0:
-        return BuildingInstance.objects.filter(building_town__user__id=towns[0].user.id).aggregate(Sum('level'))['level__sum']
+        return BuildingInstance.objects.filter(building_town__user__id=towns[0].user.id, building_town__island__server=server).aggregate(Sum('level'))['level__sum']
     else:
         return 0
 

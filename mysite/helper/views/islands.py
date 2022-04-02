@@ -24,7 +24,7 @@ def get_islands(request, user_id):
     order_by = request.GET.get('order_by', '')
     has_tower = request.GET.get('has_tower', '')
     miracle = request.GET.get('miracle', '')
-    islands_list = Island.objects.filter(server=server).order_by('wood_level', 'luxury_level').reverse().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3)))
+    islands_list = Island.objects.filter(server=server).order_by('wood_level', 'luxury_level').reverse().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3) & Q(town__is_deleted=False)))
     my_filter = IslandFilter(request.GET, queryset=islands_list)
     islands_list = my_filter.qs
     towns = islands_list.aggregate(sum=Sum('towns'))['sum']

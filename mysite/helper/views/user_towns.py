@@ -8,9 +8,12 @@ from django.utils.dateformat import DateFormat
 
 from ..models import User, Town, Island, Resource, UserHistory
 
+from mysite import settings
 from .user_army import get_sum_units_points, get_sum_units_costs
 from .user_army import get_sum_ships_points, get_sum_ships_costs
 from django.contrib.auth.decorators import login_required
+
+server = settings.ACTIVE_SERVER
 
 
 @login_required(login_url='helper:login')
@@ -21,7 +24,7 @@ def get_user_towns(request, user_id):
 
     costs_units_discount = 1.0 - user.military_future * 0.02 - 0.14
     costs_ships_discount = 1.0 - user.shipping_future * 0.02 - 0.14
-    towns = Town.objects.filter(user__id=user_id).order_by('island')
+    towns = Town.objects.filter(user__id=user_id, island__server=server, is_deleted=False).order_by('island')
 
     wood_workers = get_workers(user_id)
     wine_workers = get_mine_workers(user_id, 2)
@@ -125,7 +128,7 @@ def get_island(x, y):
     else:
         island = Island(x=x, y=y,
                         wood_level=1, wood_resource=resource,
-                        luxury_level=1, luxury_resource=resource)
+                        luxury_level=1, luxury_resource=resource, server=server)
         island.save()
         return island
 
@@ -136,14 +139,14 @@ def delete_town(request, user_id):
 
 
 def get_workers(user_id):
-    workers = Town.objects.filter(user__id=user_id).annotate(workers=Sum('island__wood_level__workers')).aggregate(sum=Sum('workers'))['sum']
+    workers = Town.objects.filter(user__id=user_id, island__server=server).annotate(workers=Sum('island__wood_level__workers')).aggregate(sum=Sum('workers'))['sum']
     if not workers:
         return 0
     return workers
 
 
 def get_mine_workers(user_id, mine_type):
-    workers = Town.objects.filter(user__id=user_id, island__luxury_resource_id=mine_type).annotate(workers=Sum('island__luxury_level__workers')).aggregate(sum=Sum('workers'))['sum']
+    workers = Town.objects.filter(user__id=user_id, island__luxury_resource_id=mine_type, island__server=server).annotate(workers=Sum('island__luxury_level__workers')).aggregate(sum=Sum('workers'))['sum']
     if not workers:
         return 0
     return workers
@@ -174,17 +177,17 @@ def get_searched_coordinates(username, alliance_tag, search_type, search_value):
 
 
 def get_player_coords(username):
-    towns = Town.objects.filter(Q(user__user_name=username))
+    towns = Town.objects.filter(Q(user__user_name=username, user__server=server))
     return get_coordinates_for_towns(towns)
 
 
 def get_alliance_coords(alliance_tag):
-    towns = Town.objects.filter(Q(user__alliance__tag=alliance_tag))
+    towns = Town.objects.filter(Q(user__alliance__tag=alliance_tag, user__server=server, island__server=server))
     return get_coordinates_for_towns(towns)
 
 
 def get_occupied_islands():
-    occupied_islands = Island.objects.all().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3))).filter(towns__gt=0)
+    occupied_islands = Island.objects.all().annotate(towns=Count('town', filter=~Q(town__user__user_status__id=3, town__is_deleted=False))).filter(towns__gt=0, server=server)
     coords = []
 
     for island in occupied_islands:
@@ -196,19 +199,19 @@ def get_selected_islands(search_type, search_value):
     islands = []
     coords = []
     if search_type == 'sawmill_above':
-        islands = Island.objects.all().filter(wood_level__gt=search_value)
+        islands = Island.objects.all().filter(wood_level__gt=search_value, server=server)
     elif search_type == 'sawmill_below':
-        islands = Island.objects.all().filter(wood_level__lt=search_value)
+        islands = Island.objects.all().filter(wood_level__lt=search_value, server=server)
     elif search_type == 'luxury_above':
-        islands = Island.objects.all().filter(luxury_level__gt=search_value)
+        islands = Island.objects.all().filter(luxury_level__gt=search_value, server=server)
     elif search_type == 'luxury_below':
-        islands = Island.objects.all().filter(luxury_level__lt=search_value)
+        islands = Island.objects.all().filter(luxury_level__lt=search_value, server=server)
     elif search_type == 'towns_above':
-        islands = Island.objects.all().annotate(towns=Count('town', 0)).filter(towns__gt=search_value)
+        islands = Island.objects.all().annotate(towns=Count('town', 0)).filter(towns__gt=search_value, server=server)
     elif search_type == 'towns_below':
-        islands = Island.objects.all().annotate(towns=Count('town', 0)).filter(towns__lt=search_value)
+        islands = Island.objects.all().annotate(towns=Count('town', 0)).filter(towns__lt=search_value, server=server)
     elif search_type == 'has_tower':
-        islands = Island.objects.all().filter(has_tower=True)
+        islands = Island.objects.all().filter(has_tower=True, server=server)
 
     for island in islands:
         coords.append([island.x, island.y])

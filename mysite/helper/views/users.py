@@ -19,13 +19,14 @@ def get_users(request):
     connected_user = DefaultUsersConnection.objects.filter(auth_user=request.user.id)
     user = connected_user[0] if connected_user else User.objects.get(pk=1)
     visited_users = User.objects.order_by('last_visit').reverse()[:10]
-    my_filter = UserFilter(request.GET, queryset=User.objects.order_by('score').reverse())
 
     user_name = request.GET.get('user_name', '')
     alliance = request.GET.get('alliance', '')
     user_status = request.GET.get('user_status', '')
     server = request.GET.get('server_name', server_name)
     order_by = request.GET.get('order_by', '')
+
+    my_filter = UserFilter(request.GET, queryset=User.objects.filter(server=server).order_by('score').reverse())
 
     users_list = my_filter.qs
     results_on_page = 100

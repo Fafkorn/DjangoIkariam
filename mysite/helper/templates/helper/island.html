@@ -87,7 +87,11 @@
                         </td>
                         <td>
                             {% ifchanged town.user.user_name %}
-                                <a class="user-a" href="{% url 'helper:user_towns' town.user.id %}">{{town.user.user_name}}
+                                <a class="user-a" {% if town.user.user_status.id == 2 %} style="color: gray" {% endif %} href="{% url 'helper:user_towns' town.user.id %}">
+                                    {% if town.user.user_status.id == 4 %}
+                                        <img src="{% static 'helper/icons/vacation_icon.png' %}" alt="something" width="16px" height="16" >
+                                    {% endif %}
+                                    {{town.user.user_name}}
                                     {% if town.user.alliance %}
                                     [{{town.user.alliance.tag}}]
                                     {% endif %}
