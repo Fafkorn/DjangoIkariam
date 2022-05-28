@@ -6,6 +6,8 @@ table {
 
 .users-div {
     width: 100%;
+    margin-top: 10px;
+    margin-bottom: 100px;
 }
 
 .player-a {
@@ -70,4 +72,13 @@ table {
 .inline-form-group {
     float: left;
     margin-right: 5px;
+}
+
+#scrollToTopBtn {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: none;
 }

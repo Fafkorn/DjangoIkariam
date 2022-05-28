@@ -61,24 +61,22 @@
                         {{ my_filter.form.order_by }}
                     </div>
 
+                    <div class="form-group inline-form-group">
+                        Strona
+                        <select class="form-control" style="width: 200px" name="page">
+                        {% for button in buttons %}
+                                <option value="{{button.2}}" {% if button.2 == page_num %} selected {% endif %}>
+                                    {{button.0}} - {{button.1}}
+                               </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <br>
                     <div class="form-group">
                         <button class="btn btn-success btn-action" type="submit">Zastosuj</button>
                     </div>
 
                 </form>
-            </div>
-        </div>
-
-        <div class="page-div">
-            <div>
-                {% if buttons %}
-                {% for button in buttons %}
-                    <a style="margin: 2px;" href="{% url 'helper:users' %}?page={{button.1}}&user_name={{user_name}}&alliance={{alliance}}&user_status={{user_status}}&order_by={{order_by}}" class="btn btn-success  {% if button.1 == page_num %} disabled {% endif %}">{{button.0}}</a>
-                {% endfor %}
-
-                {% else %}
-                <h5>Nie znaleziono graczy</h5>
-                {% endif %}
             </div>
         </div>
 
@@ -105,15 +103,19 @@
                     {% for user in users_list %}
                         <tr class="{% ifequal user.user_status.id 2 %} inactive-player {% endifequal%} {% ifequal user.user_status.id 3 %} deleted-player {% endifequal%}">
                             <td>{{forloop.counter|get_pos:page_num }}</td>
-                            <td><a class="player-a" href="{% url 'helper:user_towns' user.id %}">
+                            <td>
+                                <a class="player-a" href="{% url 'helper:user_towns' user.id %}" title="ID: {{user.in_game_id}}">
                                 {% if user.user_status.id == 4 %}
                                     <img src="{% static 'helper/icons/vacation_icon.png' %}" alt="something" width="16px" height="16" >
                                 {% endif %}
                                 {{ user.user_name }}
+                                </a>
                                 {% if user.alliance %}
+                                <a class="player-a" href="{% url 'helper:users' %}?alliance={{user.alliance.tag}}">
                                     [{{user.alliance.tag}}]
-                                {% endif %}
-                            </a></td>
+                                </a>
+                            {% endif %}
+                            </td>
                             <td>{{user.score|number_commas}}</td>
                             <td>{{user.master_builders|number_commas}}</td>
                             <td>{{user.building_levels|number_commas}}</td>
@@ -132,4 +134,26 @@
                 </table>
             {% endif %}
         </div>
+
+        <button class="btn btn-action" id="scrollToTopBtn" onclick="topFunction()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M374.6 246.6C368.4 252.9 360.2 256 352 256s-16.38-3.125-22.62-9.375L224 141.3V448c0 17.69-14.33 31.1-31.1 31.1S160 465.7 160 448V141.3L54.63 246.6c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0l160 160C387.1 213.9 387.1 234.1 374.6 246.6z"/></svg></button>
+        <script>
+                        mybutton = document.getElementById("scrollToTopBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+        </script>
 {% endblock %}

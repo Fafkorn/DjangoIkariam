@@ -20,7 +20,7 @@
             {% for user in users_with_achievements %}
                 <tr>
                     <td>{% ifchanged user.achievements %} {{forloop.counter}}. {% endifchanged %}</td>
-                    <td><a href="{% url 'helper:achievements_category' user.id 1 %}">{{user.user_name}}</a></td>
+                    <td><a href="{% url 'helper:achievements_category' user.id 0 %}">{{user.user_name}}</a></td>
                     <td>{{user.achievements}}</td>
                 </tr>
             {% endfor %}

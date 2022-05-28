@@ -59,6 +59,10 @@ td, tr {
     /*line-height: 0.8;*/
 }
 
+th, td {
+    padding-right: 15px;
+}
+
 .edit-div {
     float: left;
 }

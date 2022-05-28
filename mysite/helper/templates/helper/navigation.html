@@ -80,7 +80,7 @@
                     {% if request.user.is_staff %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'helper:achievements' %}">Osiągnięcia</a>
-                        <a class="dropdown-item" href="{% url 'helper:achievements_category' user.id 1 %}">Osiągnięcia gracza</a>
+                        <a class="dropdown-item" href="{% url 'helper:achievements_category' user.id 0 %}">Osiągnięcia gracza</a>
                     {% endif %}
                 </div>
             </li>
@@ -134,7 +134,7 @@
 
         <form class="form-inline my-2 my-lg-0" action="{% url 'helper:users'%}" method="get">
             {% csrf_token %}
-            <input type="search" class="form-control mr-sm-2" name="user_name" placeholder="Nazwa użytkownika">
+            <input id="nav-username-input" type="search" class="form-control mr-sm-2" name="user_name" placeholder="Nazwa użytkownika">
             <button type="submit" class="btn btn-success btn-action">Szukaj</button>
         </form>
     </nav>

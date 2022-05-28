@@ -53,7 +53,6 @@ def convert_island_script_to_data(scripts):
                     town = get_town(city['name'], user, island, city['id'], city['level'])
                     if town is not None:
                         towns_to_save.append(town)
-                        print(town.town_name + ' added')
             Town.objects.bulk_create(towns_to_save)
 
             towns_database = Town.objects.filter(island__id=island.id, is_deleted=False)
@@ -134,7 +133,7 @@ def delete_missing_towns(towns_script, towns_database):
 
     for town in towns_database:
         if (town.in_game_id not in towns_script_ids) and (town.user.user_status and town.user.user_status.id != 3):
-            print('Town id=' + str(town.in_game_id) + ' - DELETED')
+            print('Town id=' + str(town.in_game_id) + ' ' + str(town.user.user_name) + ' - DELETED')
             town.is_deleted = True
             town.save()
 

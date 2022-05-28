@@ -32,7 +32,7 @@ body {
     margin-left: 4px;
     margin-top: 4px;
     margin-bottom: 0px;
-    margin-right: 0px;
+    margin-right: 4px;
     border-radius: 15px;
     padding: 10px;
     color: #e4e6eb;
@@ -63,4 +63,8 @@ a {
 a:hover {
     text-decoration: none;
     color: lightgreen;
+}
+
+#nav-username-input {
+    width: 180px;
 }

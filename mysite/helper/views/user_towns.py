@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.db.models import Q, Sum, Subquery, OuterRef
+from django.db.models import Q, Sum
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime, timedelta
 from django.db.models import Count
@@ -9,8 +9,6 @@ from django.utils.dateformat import DateFormat
 from ..models import User, Town, Island, Resource, UserHistory
 
 from mysite import settings
-from .user_army import get_sum_units_points, get_sum_units_costs
-from .user_army import get_sum_ships_points, get_sum_ships_costs
 from django.contrib.auth.decorators import login_required
 
 server = settings.ACTIVE_SERVER
@@ -22,8 +20,6 @@ def get_user_towns(request, user_id):
     user.last_visit = datetime.now()
     user.save()
 
-    costs_units_discount = 1.0 - user.military_future * 0.02 - 0.14
-    costs_ships_discount = 1.0 - user.shipping_future * 0.02 - 0.14
     towns = Town.objects.filter(user__id=user_id, island__server=server, is_deleted=False).order_by('island')
 
     wood_workers = get_workers(user_id)
@@ -72,16 +68,13 @@ def get_user_towns(request, user_id):
         'rank_types': get_displayable_rank_type_names(),
         'search_value': search_value,
         'towns': towns,
-        'sum_points': int(get_sum_units_points(user_id) + get_sum_ships_points(user_id)),
-        'sum_costs': int(get_sum_units_costs(user_id)*costs_units_discount +
-                               get_sum_ships_costs(user_id)*costs_ships_discount),
         'wood_workers': wood_workers,
         'wine_workers': wine_workers,
         'marble_workers': marble_workers,
         'crystal_workers': crystal_workers,
         'sulfur_workers': sulfur_workers,
         'all_workers': wood_workers + wine_workers + marble_workers + crystal_workers + sulfur_workers,
-        'all_islands': get_coordinates(Island.objects.all()),
+        'all_islands': get_coordinates(Island.objects.filter(server=server)),
         'occupied_islands': get_occupied_islands(),
         'own_islands': get_coordinates_for_towns(towns),
         'searched_islands': get_searched_coordinates(username, alliance_tag, search_type, search_value),
@@ -92,6 +85,7 @@ def get_user_towns(request, user_id):
         'user_points_income': get_points_difference(chart_data),
         'compare_datas': compare_data,
         'compare_user_names': selected_names,
+        'clipboard': get_towns_as_text(towns)
     }
     return render(request, 'helper/user_towns.html', context)
 
@@ -286,3 +280,20 @@ def get_points_from_rank(user_history, rank_type):
         return user_history.donations
     elif rank_type == 'piracy':
         return user_history.piracy
+
+
+def get_towns_as_text(towns) -> str:
+    text = ""
+    previous_town = None
+    for town in towns:
+        if previous_town is not None and town.island != previous_town.island:
+            text += '----------------------------------------------------------\n'
+        text += f'{town.town_name} {get_island_info(town, previous_town)}\n'
+        previous_town = town
+    return text
+
+
+def get_island_info(town, previous_town):
+    if previous_town is not None and town.island == previous_town.island:
+        return ""
+    return f'[{town.island.x}:{town.island.y}] Tartak {town.island.wood_level.level} {town.island.luxury_resource.name} {town.island.luxury_level.level} {town.island.miracle.name}'

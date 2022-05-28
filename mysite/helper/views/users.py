@@ -37,7 +37,7 @@ def get_users(request):
     has_pages = math.ceil(users_list.count() / results_on_page)
     buttons = []
     for i, val in enumerate(range(has_pages)):
-        buttons.append([int((i+1)*results_on_page), int(i+1)])
+        buttons.append([int(i*results_on_page), int((i+1)*results_on_page), int(i+1)])
     context = {'users_list': page,
                'user': user,
                'my_filter': my_filter,

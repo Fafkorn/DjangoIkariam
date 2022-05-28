@@ -1,3 +1,4 @@
+from django.db.models import F, Sum
 from django.shortcuts import render
 
 from ..models import User, Unit, Ship, UnitInstance, ShipInstance, Town
@@ -94,19 +95,17 @@ def get_ship_instances(towns):
 
 
 def get_sum_units_points(user_id):
-    instances = UnitInstance.objects.filter(town__user__id=user_id, town__island__server=server)
-    sum = 0
-    for instance in instances:
-        sum += instance.unit.points * instance.number
-    return sum
+    return int((UnitInstance.objects
+                .filter(town__user__id=user_id, town__island__server=server)
+                .annotate(points_sum=F('unit__points')*F('number'))
+                .aggregate(Sum('points_sum'))['points_sum__sum']) or 0)
 
 
 def get_sum_units_costs(user_id):
-    instances = UnitInstance.objects.filter(town__user__id=user_id, town__island__server=server)
-    sum = 0
-    for instance in instances:
-        sum += instance.unit.hour_costs * instance.number
-    return sum
+    return int((UnitInstance.objects
+                .filter(town__user__id=user_id, town__island__server=server)
+                .annotate(costs_sum=F('unit__hour_costs') * F('number'))
+                .aggregate(Sum('costs_sum'))['costs_sum__sum']) or 0)
 
 
 def save_units(request, user_id):
@@ -116,6 +115,10 @@ def save_units(request, user_id):
     for i, unit_id in enumerate(unit_ids):
         unit_instance = UnitInstance.objects.get(pk=unit_id)
         if unit_instance.number != numbers[i]:
+            try:
+                int(numbers[i])
+            except ValueError:
+                numbers[i] = 0
             unit_instance.number = numbers[i]
             units_to_update.append(unit_instance)
     UnitInstance.objects.bulk_update(units_to_update, ['number'])
@@ -131,19 +134,17 @@ def toggle_no_units(request, user_id):
 
 
 def get_sum_ships_points(user_id):
-    instances = ShipInstance.objects.filter(town__user__id=user_id, town__island__server=server)
-    sum = 0
-    for instance in instances:
-        sum += instance.ship.points * instance.number
-    return sum
+    return int((ShipInstance.objects
+                .filter(town__user__id=user_id, town__island__server=server)
+                .annotate(points_sum=F('ship__points')*F('number'))
+                .aggregate(Sum('points_sum'))['points_sum__sum']) or 0)
 
 
 def get_sum_ships_costs(user_id):
-    instances = ShipInstance.objects.filter(town__user__id=user_id, town__island__server=server)
-    sum = 0
-    for instance in instances:
-        sum += instance.ship.hour_costs * instance.number
-    return sum
+    return int((ShipInstance.objects
+                .filter(town__user__id=user_id, town__island__server=server)
+                .annotate(costs_sum=F('ship__hour_costs') * F('number'))
+                .aggregate(Sum('costs_sum'))['costs_sum__sum']) or 0)
 
 
 def save_ships(request, user_id):
@@ -153,6 +154,10 @@ def save_ships(request, user_id):
     for i, unit_id in enumerate(ship_ids):
         ship_instance = ShipInstance.objects.get(pk=unit_id)
         if ship_instance.number != numbers[i]:
+            try:
+                int(numbers[i])
+            except ValueError:
+                numbers[i] = 0
             ship_instance.number = numbers[i]
             ships_to_update.append(ship_instance)
     ShipInstance.objects.bulk_update(ships_to_update, ['number'])

@@ -41,7 +41,7 @@ def convert_town_script_to_data(scripts):
             if town is not None:
                 town.save()
             else:
-                town = Town.objects.filter(in_game_id=city_id, is_deleted=False)[0]
+                town = Town.objects.filter(in_game_id=city_id, is_deleted=False, server=server)[0]
 
             BuildingInstance.objects.filter(building_town=town).delete()
             buildings_to_save = []

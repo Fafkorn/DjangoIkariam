@@ -12,7 +12,7 @@ from ..models import AchievementLevel, AchievementCategory, User, DefaultUsersCo
 def get_user_achievements(request, category_id, user_id):
     user = get_object_or_404(User, pk=user_id)
     all_achievements = UserAchievement.objects.filter(user__id=user.id)
-    achievements = UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category_id).order_by('achievement_level__achievement__order')
+    achievements = get_achievements(user, category_id)
     achievements = split_by_completion(achievements)
     achievement_categories = AchievementCategory.objects.all()
 
@@ -37,6 +37,13 @@ def split_by_completion(achievements):
         else:
             undone.append(achievement)
     return undone + done
+
+
+def get_achievements(user, category_id):
+    if category_id == 0:
+        return UserAchievement.objects.filter(user__id=user.id).order_by('achievement_level__achievement__category__id', 'achievement_level__achievement__order')
+    else:
+        return UserAchievement.objects.filter(user__id=user.id, achievement_level__achievement__category__id=category_id).order_by('achievement_level__achievement__order')
 
 
 def confirm_progress(request):

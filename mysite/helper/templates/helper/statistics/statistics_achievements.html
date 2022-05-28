@@ -31,11 +31,9 @@
         <tr>
             <td><img src="{{unit_achievement.unit.image_path.url}}" alt="" width="34px" height="35"></td>
             <td><div class="a" style="{% if not unit_achievement.remains %} background: green; {% endif %}">
-
                 <div style="background: green; position: absolute; left: 0; height: 100%; width: {{unit_achievement.remains.units_percentage}}%"></div>
-
                 {% ifequal unit_achievement.achievement.achievement_level.level unit_achievement.achievement.achievement_level.achievement.max_level %}
-                Ukończono
+                <div style="position: relative;" >Ukończono</div>
                 {% else %}
                 <div style="position: relative;" >{{unit_achievement.achievement.progress}}/{{unit_achievement.achievement.achievement_level.requirements}}</div>
                 {% endifequal %}</div></td>
@@ -70,8 +68,6 @@
                 {% endif %}
             </td>
         </tr>
-
-
         {% endfor %}
         <tr style="border-top: 1px solid white">
             <td>SUMA</td>
@@ -111,7 +107,6 @@
     </table>
 </div>
 
-
 <!--Statki-->
 
 <div class="tile" style="max-width: 1000px;">
@@ -120,8 +115,9 @@
         <tr>
             <td><img src="{{ship_achievement.ship.image_path.url}}" alt="" width="34px" height="35"></td>
             <td><div class="a" style="{% if not ship_achievement.remains %} background: green; {% endif %}">
+                <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ship_achievement.remains.ships_percentage}}%"></div>
                 {% ifequal ship_achievement.achievement.achievement_level.level ship_achievement.achievement.achievement_level.achievement.max_level %}
-                Ukończono
+                <div style="position: relative;" >Ukończono</div>
                 {% else %}
                 <div style="background: green; position: absolute; left: 0; height: 100%; width: {{ship_achievement.remains.ships_percentage}}%"></div>
                 <div style="position: relative;" >{{ship_achievement.achievement.progress}}/{{ship_achievement.achievement.achievement_level.requirements}}</div>

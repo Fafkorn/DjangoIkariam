@@ -83,6 +83,7 @@
                 for (var i = 0; i < all_islands.length; i++) {
                     myTable.rows[all_islands[i][1]].cells[all_islands[i][0]].title  = '[' + all_islands[i][0] + ':' + all_islands[i][1] + ']';
                     myTable.rows[all_islands[i][1]].cells[all_islands[i][0]].style.background  = '#444';
+		    myTable.rows[all_islands[i][1]].cells[all_islands[i][0]].style.border  = '1px solid black';
                 }
             var occupied_islands = {{occupied_islands}};
                 var myTable = document.getElementById('islandTable');
@@ -264,6 +265,7 @@
             </h6>
             <hr>
             <h5>Miasta ({{towns.count}})</h5>
+                Kopiuj <textarea class="form-control" style="width: 50px; display: inline-block; height: 24px; resize: none;" onClick="this.select();">{{clipboard}}</textarea>
             <table id="towns-table">
                 <tr>
                     <th>Miasto</th>

@@ -46,12 +46,17 @@ def get_correct_unit_type(achievement, unit_types):
 
 
 def get_remaining_units(unit_achievement, correct_unit_type):
-    if not unit_achievement.progress:
+    if unit_achievement.achievement_level.level == unit_achievement.achievement_level.achievement.max_level:
+        units_left = 0
+        units_percentage = 100
+    elif not unit_achievement.progress:
         return None
-    units_left = unit_achievement.achievement_level.requirements - int(unit_achievement.progress)
+    else:
+        units_left = unit_achievement.achievement_level.requirements - int(unit_achievement.progress)
+        units_percentage = math.floor(int(unit_achievement.progress) * 100 / unit_achievement.achievement_level.requirements)
     units_required = unit_achievement.achievement_level.requirements
     return {'units': units_left,
-            'units_percentage': math.floor(int(unit_achievement.progress) * 100 / unit_achievement.achievement_level.requirements),
+            'units_percentage': units_percentage,
             'wood_costs': units_left * correct_unit_type.wood_costs,
             'wood_costs_all': units_left * correct_unit_type.wood_costs,
             'wine_costs': units_left * correct_unit_type.wine_costs,
@@ -125,12 +130,17 @@ def get_correct_ship_type(achievement, ship_types):
 
 
 def get_remaining_ships(ship_achievement, correct_ship_type):
-    if not ship_achievement.progress:
+    if ship_achievement.achievement_level.level == ship_achievement.achievement_level.achievement.max_level:
+        ships_left = 0
+        ships_percentage = 100
+    elif not ship_achievement.progress:
         return None
-    ships_left = ship_achievement.achievement_level.requirements - int(ship_achievement.progress)
+    else:
+        ships_left = ship_achievement.achievement_level.requirements - int(ship_achievement.progress)
+        ships_percentage = math.floor(int(ship_achievement.progress) * 100 / ship_achievement.achievement_level.requirements)
     ships_required = ship_achievement.achievement_level.requirements
     return {'ships': ships_left,
-            'ships_percentage': math.floor(int(ship_achievement.progress) * 100 / ship_achievement.achievement_level.requirements),
+            'ships_percentage': ships_percentage,
             'wood_costs': ships_left * correct_ship_type.wood_costs,
             'wood_costs_all': ships_left * correct_ship_type.wood_costs,
             'wine_costs': ships_left * correct_ship_type.wine_costs,

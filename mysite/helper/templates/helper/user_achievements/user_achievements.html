@@ -12,6 +12,7 @@
 
     <div class="tile">
         <div class="categories-div">
+            <a class="btn btn-info {% if active_category == 0 %} disabled {% endif %}" href="{% url 'helper:achievements_category' user.id 0 %}">Wszystkie</a>
             {% for category, progress in achievement_categories %}
                 <a  class="btn btn-info {% if category.id == active_category %} disabled {% endif %}" href="{% url 'helper:achievements_category' user.id category.id %}" >{{category.name}} {{progress.0}}/{{progress.1}}</a>
             {% endfor %}
